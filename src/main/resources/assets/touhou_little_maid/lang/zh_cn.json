@@ -1070,5 +1070,12 @@
   "patchouli.touhou_little_maid.book.entries.overview.vanilla_change.pages.0.text": "我们把史莱姆模型修改成了油库里。",
   "patchouli.touhou_little_maid.book.entries.overview.vanilla_change.pages.1.text": "我们还修改了经验球、附魔之瓶和不死图腾的纹理。$(br2)这些都可以在配置文件中关闭。",
   "patchouli.touhou_little_maid.book.entries.overview.favorability.name": "好感度",
-  "patchouli.touhou_little_maid.book.entries.overview.favorability.pages.0.text": "好感度能够增加女仆的生命值和攻击力。$(br2)提升女仆好感度：$(li)女仆在空闲日程，玩耍电子琴、电脑、书架和五子棋。$(li)女仆睡觉。$(br2)减少女仆好感度：$(li)女仆死亡。"
+  "patchouli.touhou_little_maid.book.entries.overview.favorability.pages.0.text": "好感度能够增加女仆的生命值和攻击力。$(br2)提升女仆好感度：$(li)女仆在空闲日程，玩耍电子琴、电脑、书架和五子棋。$(li)女仆睡觉。$(br2)减少女仆好感度：$(li)女仆死亡。",
+
+  "advancements.touhou_little_maid.favorability.win_jchess.title": "将棋大师",
+  "advancements.touhou_little_maid.favorability.win_jchess.description": "在日本将棋中赢得一局",
+  "block.touhou_little_maid.jchess": "日本将棋",
+  "message.touhou_little_maid.jchess.move_limit": "二百手限制！",
+  "message.touhou_little_maid.jchess.reset": "右击棋墩左右任意一侧进行重置",
+  "gui.touhou_little_maid.jchess.promote": "是否晋升？"
 }

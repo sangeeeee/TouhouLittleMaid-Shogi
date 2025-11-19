@@ -784,5 +784,12 @@
   "patchouli.touhou_little_maid.book.entries.overview.vanilla_change.pages.0.text": "スライムのモデルをゆっくりに変更しました。",
   "patchouli.touhou_little_maid.book.entries.overview.vanilla_change.pages.1.text": "また、経験値オーブ、エンチャントの瓶、不死のトーテムのテクスチャも変更しました。 $(br2)これらはすべて設定ファイルでオフにできます。",
   "patchouli.touhou_little_maid.book.entries.overview.favorability.name": "好感度",
-  "patchouli.touhou_little_maid.book.entries.overview.favorability.pages.0.text": "好感度はメイドの体力と攻撃力を高めることができます。$(br2)メイドの好感度を向上させる:$(li)メイドが暇なときにキーボード、コンピューター、本棚、五目並べで遊ぶ。$(li)メイドが睡眠を取る。$(br2))メイドの好感度低下:$(li)メイドの死亡。"
+  "patchouli.touhou_little_maid.book.entries.overview.favorability.pages.0.text": "好感度はメイドの体力と攻撃力を高めることができます。$(br2)メイドの好感度を向上させる:$(li)メイドが暇なときにキーボード、コンピューター、本棚、五目並べで遊ぶ。$(li)メイドが睡眠を取る。$(br2))メイドの好感度低下:$(li)メイドの死亡。",
+
+  "advancements.touhou_little_maid.favorability.win_jchess.title": "将棋マスター",
+  "advancements.touhou_little_maid.favorability.win_jchess.description": "日本将棋で1勝する",
+  "block.touhou_little_maid.jchess": "日本将棋",
+  "message.touhou_little_maid.jchess.move_limit": "200手制限！",
+  "message.touhou_little_maid.jchess.reset": "盤の左右どちらかを右クリックでリセット",
+  "gui.touhou_little_maid.jchess.promote": "成りますか？"
 }

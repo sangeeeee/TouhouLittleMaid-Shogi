@@ -47,6 +47,7 @@ public final class InitEntitiesRender {
         BlockEntityRenderers.register(TileEntityGomoku.TYPE, TileEntityGomokuRenderer::new);
         BlockEntityRenderers.register(TileEntityCChess.TYPE, TileEntityCChessRenderer::new);
         BlockEntityRenderers.register(TileEntityWChess.TYPE, TileEntityWChessRenderer::new);
+        BlockEntityRenderers.register(TileEntityJChess.TYPE, TileEntityJChessRenderer::new);
         BlockEntityRenderers.register(TileEntityKeyboard.TYPE, TileEntityKeyboardRenderer::new);
         BlockEntityRenderers.register(TileEntityBookshelf.TYPE, TileEntityBookshelfRenderer::new);
         BlockEntityRenderers.register(TileEntityComputer.TYPE, TileEntityComputerRenderer::new);
