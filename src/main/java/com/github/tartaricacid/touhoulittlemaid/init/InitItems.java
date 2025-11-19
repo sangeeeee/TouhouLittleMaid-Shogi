@@ -56,6 +56,7 @@ public final class InitItems {
     public static DeferredItem<Item> GOMOKU = ITEMS.register("gomoku", () -> new BlockItem(InitBlocks.GOMOKU.get(), new Item.Properties()));
     public static DeferredItem<Item> CCHESS = ITEMS.register("cchess", () -> new BlockItem(InitBlocks.CCHESS.get(), new Item.Properties()));
     public static DeferredItem<Item> WCHESS = ITEMS.register("wchess", () -> new BlockItem(InitBlocks.WCHESS.get(), new Item.Properties()));
+    public static DeferredItem<Item> JCHESS = ITEMS.register("jchess", () -> new BlockItem(InitBlocks.JCHESS.get(), new Item.Properties()));
     public static DeferredItem<Item> RED_FOX_SCROLL = ITEMS.register("red_fox_scroll", ItemFoxScroll::new);
     public static DeferredItem<Item> WHITE_FOX_SCROLL = ITEMS.register("white_fox_scroll", ItemFoxScroll::new);
     public static DeferredItem<Item> KEYBOARD = ITEMS.register("keyboard", () -> new BlockItem(InitBlocks.KEYBOARD.get(), new Item.Properties()));
@@ -93,4 +94,7 @@ public final class InitItems {
     public static DeferredItem<Item> KILL_WITHER = ITEMS.register("kill_wither", ItemAdvancementIcon::new);
     public static DeferredItem<Item> KILL_DRAGON = ITEMS.register("kill_dragon", ItemAdvancementIcon::new);
     public static DeferredItem<Item> TACZ_GUN_ICON = ITEMS.register("tacz_gun_icon", ItemAdvancementIcon::new);
+
+
+
 }

@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid;
 
+import com.github.tartaricacid.touhoulittlemaid.api.game.jchess.EngineExtractor;
 import com.github.tartaricacid.touhoulittlemaid.client.entity.GeckoMaidEntity;
 import com.github.tartaricacid.touhoulittlemaid.compat.cloth.MenuIntegration;
 import com.github.tartaricacid.touhoulittlemaid.init.InitDataAttachment;
@@ -18,6 +19,8 @@ public class TouhouLittleMaidClient {
     public TouhouLittleMaidClient(IEventBus modEventBus, ModContainer modContainer) {
         this.registerClientOnly();
         this.registerConfigMenu(modContainer);
+        //提取将棋引擎到config/touhou_little_maid
+        EngineExtractor.extractIfNeeded();
     }
 
     private void registerClientOnly() {

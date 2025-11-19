@@ -45,6 +45,8 @@ public class BedrockModelLoader {
     public static final ResourceLocation CCHESS_PIECES = registerSimpleBlockModel("cchess_pieces");
     public static final ResourceLocation WCHESS = registerSimpleBlockModel("wchess");
     public static final ResourceLocation WCHESS_PIECES = registerSimpleBlockModel("wchess_pieces");
+    public static final ResourceLocation JCHESS = registerSimpleBlockModel("jchess");
+    public static final ResourceLocation JCHESS_PIECES = registerSimpleBlockModel("jchess_pieces");
 
     public static final ResourceLocation CAKE_BOX = registerEntityModel("cake_box", EntityBoxModel::new);
     public static final ResourceLocation MAID_FAIRY = registerEntityModel("maid_fairy", EntityFairyModel::new);

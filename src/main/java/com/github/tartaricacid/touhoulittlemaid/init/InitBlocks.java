@@ -25,6 +25,7 @@ public final class InitBlocks {
     public static DeferredBlock<Block> GOMOKU = BLOCKS.register("gomoku", BlockGomoku::new);
     public static DeferredBlock<Block> CCHESS = BLOCKS.register("cchess", BlockCChess::new);
     public static DeferredBlock<Block> WCHESS = BLOCKS.register("wchess", BlockWChess::new);
+    public static DeferredBlock<Block> JCHESS = BLOCKS.register("jchess", BlockJChess::new);
     public static DeferredBlock<Block> KEYBOARD = BLOCKS.register("keyboard", BlockKeyboard::new);
     public static DeferredBlock<Block> BOOKSHELF = BLOCKS.register("bookshelf", BlockBookshelf::new);
     public static DeferredBlock<Block> COMPUTER = BLOCKS.register("computer", BlockComputer::new);
@@ -39,10 +40,12 @@ public final class InitBlocks {
     public static Supplier<BlockEntityType<TileEntityGomoku>> GOMOKU_TE = TILE_ENTITIES.register("gomoku", () -> TileEntityGomoku.TYPE);
     public static Supplier<BlockEntityType<TileEntityCChess>> CCHESS_TE = TILE_ENTITIES.register("cchess", () -> TileEntityCChess.TYPE);
     public static Supplier<BlockEntityType<TileEntityWChess>> WCHESS_TE = TILE_ENTITIES.register("wchess", () -> TileEntityWChess.TYPE);
+    public static Supplier<BlockEntityType<TileEntityJChess>> JCHESS_TE = TILE_ENTITIES.register("jchess", () -> TileEntityJChess.TYPE);
     public static Supplier<BlockEntityType<TileEntityKeyboard>> KEYBOARD_TE = TILE_ENTITIES.register("keyboard", () -> TileEntityKeyboard.TYPE);
     public static Supplier<BlockEntityType<TileEntityBookshelf>> BOOKSHELF_TE = TILE_ENTITIES.register("bookshelf", () -> TileEntityBookshelf.TYPE);
     public static Supplier<BlockEntityType<TileEntityComputer>> COMPUTER_TE = TILE_ENTITIES.register("computer", () -> TileEntityComputer.TYPE);
     public static Supplier<BlockEntityType<TileEntityShrine>> SHRINE_TE = TILE_ENTITIES.register("shrine", () -> TileEntityShrine.TYPE);
     public static Supplier<BlockEntityType<TileEntityPicnicMat>> PICNIC_MAT_TE = TILE_ENTITIES.register("picnic_mat", () -> TileEntityPicnicMat.TYPE);
     public static Supplier<BlockEntityType<TileEntityMaidBed>> MAID_BED_TE = TILE_ENTITIES.register("maid_bed", () -> TileEntityMaidBed.TYPE);
+
 }

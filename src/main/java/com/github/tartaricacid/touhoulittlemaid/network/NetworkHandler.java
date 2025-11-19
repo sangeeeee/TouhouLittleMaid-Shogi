@@ -53,6 +53,11 @@ public class NetworkHandler {
         registrar.playToServer(CChessToServerPackage.TYPE, CChessToServerPackage.STREAM_CODEC, CChessToServerPackage::handle);
         registrar.playToClient(WChessToClientPackage.TYPE, WChessToClientPackage.STREAM_CODEC, WChessToClientPackage::handle);
         registrar.playToServer(WChessToServerPackage.TYPE, WChessToServerPackage.STREAM_CODEC, WChessToServerPackage::handle);
+        registrar.playToClient(JChessToClientPackage.TYPE, JChessToClientPackage.STREAM_CODEC, JChessToClientPackage::handle);
+        registrar.playToServer(JChessToServerPackage.TYPE, JChessToServerPackage.STREAM_CODEC, JChessToServerPackage::handle);
+        registrar.playToClient(JChessPromoteOpenPackage.TYPE, JChessPromoteOpenPackage.STREAM_CODEC, JChessPromoteOpenPackage::handle);
+        registrar.playToServer(JChessPromoteResultPackage.TYPE, JChessPromoteResultPackage.STREAM_CODEC, JChessPromoteResultPackage::handle);
+
         registrar.playToServer(SendUserChatPackage.TYPE, SendUserChatPackage.STREAM_CODEC, SendUserChatPackage::handle);
         registrar.playToClient(TTSAudioToClientPackage.TYPE, TTSAudioToClientPackage.STREAM_CODEC, TTSAudioToClientPackage::handle);
         // registrar.playToClient(SyncAiSettingPackage.TYPE, SyncAiSettingPackage.STREAM_CODEC, SyncAiSettingPackage::handle);
