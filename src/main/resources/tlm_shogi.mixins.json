@@ -4,8 +4,7 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "tlm_shogi.refmap.json",
   "mixins": [
-    "MaidPoiManagerMixin",
-    "FavorabilityAdvancementMixin"
+    "MaidPoiManagerMixin"
   ],
   "client": [],
   "minVersion": "0.8",

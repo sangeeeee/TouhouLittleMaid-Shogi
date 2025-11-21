@@ -1,6 +1,6 @@
 {
-  "advancements.touhou_little_maid.favorability.win_jchess.title": "Shogi Master",
-  "advancements.touhou_little_maid.favorability.win_jchess.description": "Win a game of Japanese shogi",
+  "advancements.tlm_shogi.favorability.win_jchess.title": "Shogi Master",
+  "advancements.tlm_shogi.favorability.win_jchess.description": "Win a game of Japanese shogi",
   "block.tlm_shogi.jchess": "Japanese Shogi",
   "message.tlm_shogi.jchess.move_limit": "200-move limit!",
   "message.tlm_shogi.jchess.reset": "Right-click either side of the board to reset",

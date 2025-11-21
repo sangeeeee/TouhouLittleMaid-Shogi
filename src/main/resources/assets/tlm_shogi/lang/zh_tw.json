@@ -1,6 +1,6 @@
 {
-  "advancements.touhou_little_maid.favorability.win_jchess.title": "將棋大師",
-  "advancements.touhou_little_maid.favorability.win_jchess.description": "在日本將棋中贏得一局",
+  "advancements.tlm_shogi.favorability.win_jchess.title": "將棋大師",
+  "advancements.tlm_shogi.favorability.win_jchess.description": "在日本將棋中贏得一局",
   "block.tlm_shogi.jchess": "日本將棋",
   "message.tlm_shogi.jchess.move_limit": "二百手限制！",
   "message.tlm_shogi.jchess.reset": "右鍵點擊棋墩左右任意一側進行重置",
