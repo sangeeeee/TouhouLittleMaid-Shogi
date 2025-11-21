@@ -4,8 +4,7 @@ import com.github.sangeeeee.tlm_shogi.api.game.jchess.Position;
 import net.minecraft.world.phys.Vec3;
 
 public final class JChessUtil {
-//    public static final String INIT = "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1";
-    public static final String INIT = "4k4/1+R7/9/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b B2G2S2N2L9P 1";
+    public static final String INIT = "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1";
 
     public static boolean isClickResetArea(Vec3 clickPos) {
         double x = clickPos.x;
