@@ -1,0 +1,8 @@
+{
+  "advancements.touhou_little_maid.favorability.win_jchess.title": "将棋マスター",
+  "advancements.touhou_little_maid.favorability.win_jchess.description": "日本将棋で1勝する",
+  "block.tlm_shogi.jchess": "日本将棋",
+  "message.tlm_shogi.jchess.move_limit": "200手制限！",
+  "message.tlm_shogi.jchess.reset": "盤の左右どちらかを右クリックでリセット",
+  "gui.tlm_shogi.jchess.promote": "成りますか？"
+}

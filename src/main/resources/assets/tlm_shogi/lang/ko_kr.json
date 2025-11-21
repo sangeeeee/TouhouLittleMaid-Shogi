@@ -1,0 +1,8 @@
+{
+  "advancements.touhou_little_maid.favorability.win_jchess.title": "장기 마스터",
+  "advancements.touhou_little_maid.favorability.win_jchess.description": "일본 장기에서 한 판 승리하기",
+  "block.tlm_shogi.jchess": "일본 장기",
+  "message.tlm_shogi.jchess.move_limit": "200수 제한!",
+  "message.tlm_shogi.jchess.reset": "체스판 좌우 어느 쪽이든 우클릭으로 초기화",
+  "gui.tlm_shogi.jchess.promote": "승급하시겠습니까?"
+}
