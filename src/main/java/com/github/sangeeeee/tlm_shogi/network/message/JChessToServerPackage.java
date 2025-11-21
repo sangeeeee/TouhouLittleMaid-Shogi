@@ -3,12 +3,15 @@ package com.github.sangeeeee.tlm_shogi.network.message;
 import com.github.sangeeeee.tlm_shogi.block.BlockJChess;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
+
+import java.util.Objects;
 
 import static com.github.tartaricacid.touhoulittlemaid.util.ResourceLocationUtil.getResourceLocation;
 
@@ -39,7 +42,16 @@ public record JChessToServerPackage(BlockPos pos, String move, boolean maidLost,
                 if (!level.isLoaded(message.pos)) {
                     return;
                 }
-                BlockJChess.maidMove(sender, level, message.pos, message.move, message.maidLost, message.playerLost);
+                switch (message.move) {
+                    case "not windows" ->
+                            sender.sendSystemMessage(Component.translatable("message.tlm_shogi.jchess.notwindows"));
+                    case "no engine" ->
+                            sender.sendSystemMessage(Component.translatable("message.tlm_shogi.jchess.noengine"));
+                    case "engine error" ->
+                            sender.sendSystemMessage(Component.translatable("message.tlm_shogi.jchess.engineerr"));
+                    case null, default ->
+                            BlockJChess.maidMove(sender, level, message.pos, message.move, message.maidLost, message.playerLost);
+                }
             });
         }
     }

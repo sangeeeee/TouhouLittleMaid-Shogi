@@ -1,8 +1,8 @@
 package com.github.sangeeeee.tlm_shogi.network.message;
 
+import com.github.sangeeeee.tlm_shogi.TouhouLittleMaidShogiClient;
 import com.github.sangeeeee.tlm_shogi.api.game.jchess.Position;
 import com.github.sangeeeee.tlm_shogi.api.game.jchess.ShogiEngineInteractor;
-import com.github.sangeeeee.tlm_shogi.network.message.JChessToServerPackage;
 import com.github.sangeeeee.tlm_shogi.util.JChessUtil;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.Util;
@@ -16,6 +16,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
+import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 
 import static com.github.tartaricacid.touhoulittlemaid.util.ResourceLocationUtil.getResourceLocation;
@@ -35,6 +36,7 @@ public record JChessToClientPackage(BlockPos pos, String fenData) implements Cus
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }
+
     public static void handle(JChessToClientPackage message, IPayloadContext context) {
         if (context.flow().isClientbound()) {
             context.enqueueWork(() -> CompletableFuture.runAsync(() -> onHandle(message), Util.backgroundExecutor()));
@@ -59,7 +61,9 @@ public record JChessToClientPackage(BlockPos pos, String fenData) implements Cus
             maidLost = true;
         }
 
-        if (!maidLost) {
+        if (!TouhouLittleMaidShogiClient.IS_WINDOWS) {
+            move = "not windows";
+        } else if (!maidLost) {
             // TODO: 暂时不做女仆的棋技系统
 
             ShogiEngineInteractor interactor = new ShogiEngineInteractor();
@@ -68,24 +72,26 @@ public record JChessToClientPackage(BlockPos pos, String fenData) implements Cus
                 interactor.setup(json);
                 move = interactor.interact(message.fenData, null);
                 interactor.stop();
+
+                position.makeMove(move);
+                if (position.isCheck() && position.isMate() && JChessUtil.isPlayer(position)) {
+                    playerLost = true;
+                }
+
+                // 如果时间还有剩余，那么 sleep 一会儿
+                long timeRemain = Math.max(0, levelTime - (int) (System.currentTimeMillis() - timeStart));
+                try {
+                    if (timeRemain > 0) {
+                        Thread.sleep(timeRemain);
+                    }
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            } catch (IOException e) {
+                move = "no engine";
             } catch (Exception e) {
-                e.printStackTrace();
+                move = "engine error";
             }
-
-            position.makeMove(move);
-            if (position.isCheck() && position.isMate() && JChessUtil.isPlayer(position)) {
-                playerLost = true;
-            }
-        }
-
-        // 如果时间还有剩余，那么 sleep 一会儿
-        long timeRemain = Math.max(0, levelTime - (int) (System.currentTimeMillis() - timeStart));
-        try {
-            if (timeRemain > 0) {
-                Thread.sleep(timeRemain);
-            }
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
         }
 
         final String moveFinal = move;

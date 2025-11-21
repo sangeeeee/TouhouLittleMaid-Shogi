@@ -4,5 +4,8 @@
   "block.tlm_shogi.jchess": "일본 장기",
   "message.tlm_shogi.jchess.move_limit": "200수 제한!",
   "message.tlm_shogi.jchess.reset": "체스판 좌우 어느 쪽이든 우클릭으로 초기화",
-  "gui.tlm_shogi.jchess.promote": "승급하시겠습니까?"
+  "gui.tlm_shogi.jchess.promote": "승급하시겠습니까?",
+  "message.tlm_shogi.jchess.notwindows": "장기는 Windows에서만 플레이 가능합니다",
+  "message.tlm_shogi.jchess.engineerr": "사고 엔진에 오류가 발생했습니다",
+  "message.tlm_shogi.jchess.noengine": "장기 엔진을 찾을 수 없습니다"
 }
