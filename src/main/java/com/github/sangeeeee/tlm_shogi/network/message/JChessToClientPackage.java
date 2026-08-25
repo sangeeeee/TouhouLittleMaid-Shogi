@@ -1,7 +1,7 @@
 package com.github.sangeeeee.tlm_shogi.network.message;
 
-import com.github.sangeeeee.tlm_shogi.TouhouLittleMaidShogiClient;
 import com.github.sangeeeee.tlm_shogi.api.game.jchess.Position;
+import com.github.sangeeeee.tlm_shogi.api.game.jchess.ShogiEnginePlatform;
 import com.github.sangeeeee.tlm_shogi.api.game.jchess.ShogiEngineInteractor;
 import com.github.sangeeeee.tlm_shogi.util.JChessUtil;
 import io.netty.buffer.ByteBuf;
@@ -61,7 +61,7 @@ public record JChessToClientPackage(BlockPos pos, String fenData) implements Cus
             maidLost = true;
         }
 
-        if (!TouhouLittleMaidShogiClient.IS_WINDOWS) {
+        if (!ShogiEnginePlatform.isSupported()) {
             move = "not windows";
         } else if (!maidLost) {
             // TODO: 暂时不做女仆的棋技系统

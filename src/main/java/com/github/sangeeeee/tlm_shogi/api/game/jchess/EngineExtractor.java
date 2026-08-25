@@ -47,6 +47,10 @@ public class EngineExtractor {
     }
 
     public static void extractIfNeeded() {
+        if (!ShogiEnginePlatform.isSupported()) {
+            return;
+        }
+
         boolean allExist = FILES_TO_EXTRACT.stream()
                 .map(file -> TARGET_DIR.resolve(file))
                 .allMatch(Files::exists);

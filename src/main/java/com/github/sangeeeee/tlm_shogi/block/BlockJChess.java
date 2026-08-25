@@ -1,6 +1,7 @@
 package com.github.sangeeeee.tlm_shogi.block;
 
 import com.github.sangeeeee.tlm_shogi.advancements.maid.TriggerType;
+import com.github.sangeeeee.tlm_shogi.api.game.jchess.PlayerPlatformSupport;
 import com.github.tartaricacid.touhoulittlemaid.api.block.IBoardGameBlock;
 import com.github.sangeeeee.tlm_shogi.api.game.jchess.Position;
 import com.github.tartaricacid.touhoulittlemaid.block.BlockJoy;
@@ -269,6 +270,12 @@ public class BlockJChess extends BlockJoy implements IBoardGameBlock {
                 }
 
                 return ItemInteractionResult.SUCCESS;
+            }
+
+            // 引擎运行在玩家客户端，因此必须先于女仆检查验证客户端平台。
+            if (!PlayerPlatformSupport.isSupported(player)) {
+                player.sendSystemMessage(Component.translatable("message.tlm_shogi.jchess.unsupported_platform"));
+                return ItemInteractionResult.FAIL;
             }
 
             // 检查女仆

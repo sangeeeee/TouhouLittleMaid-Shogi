@@ -6,6 +6,7 @@
   "message.tlm_shogi.jchess.reset": "Right-click either side of the board to reset",
   "gui.tlm_shogi.jchess.promote": "Promote this piece?",
   "message.tlm_shogi.jchess.notwindows": "Shogi is only available on Windows",
+  "message.tlm_shogi.jchess.unsupported_platform": "Shogi play is not supported on the current platform",
   "message.tlm_shogi.jchess.engineerr": "Thinking engine error occurred",
   "message.tlm_shogi.jchess.noengine": "Shogi engine not found"
 }
