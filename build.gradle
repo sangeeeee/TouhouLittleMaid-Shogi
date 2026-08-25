@@ -9,7 +9,7 @@ tasks.named('wrapper', Wrapper).configure {
     distributionType = Wrapper.DistributionType.ALL
 }
 
-version = mod_version
+version = "${mod_version}-neoforge+mc${minecraft_version}"
 group = mod_group_id
 
 repositories {

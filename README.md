@@ -1,28 +1,25 @@
 # 车万女仆：将棋（Touhou Little Maid Shogi）
 
-这是一个为 **[车万女仆（Touhou Little Maid）](https://github.com/TartaricAcid/TouhouLittleMaid)** 制作的附属模组，  
-新增了**日本将棋（Shogi）**！
+[简体中文](README.md) | [English](README_en.md) | [日本語](README_ja.md)
 
-### 重要限制
-由于使用的 YaneuraOu 引擎为原生编译的 Windows 可执行程序，  
-**本模组目前仅支持以下平台**：
+这是一个为 **[车万女仆（Touhou Little Maid）](https://github.com/TartaricAcid/TouhouLittleMaid)** 制作的附属模组，加入了可以和女仆对弈的日本将棋棋盘。
 
-**仅支持 Windows 10/11 64位系统 + 支持 AVX2 的 CPU**  
-（几乎所有 2015 年之后的 Intel/AMD CPU 都支持 AVX2，2013 年之前的旧机器大概率不支持）
+## 平台支持
 
-不支持的情况：
-- macOS
-- Linux
-- ARM 架构（如苹果 M1/M2、Android等）
-- 过老的 Intel CPU（如 2012 年以前的 i3/i5/i7）
+由于内置的 YaneuraOu 引擎是 Windows `.exe` 程序，目前只有 **Windows 客户端**可以进行将棋对局。
 
-在不支持的平台上加载本模组不会导致崩溃，但无法与女仆对局，将棋盘会仅成为装饰性方块。
+Linux、macOS 等其他平台仍可正常加载模组、放置棋盘并让女仆入座，但玩家无法下棋，棋盘仅作为装饰方块使用。这些平台不会解压引擎资源，玩家尝试下棋时会收到平台不支持提示。平台支持情况按照玩家客户端判断，因此专用服务器本身可以运行在任意平台。
 
-因为模组运行时会自动解压并运行一个 `.exe` 可执行文件（YaneuraOu 引擎本体），**部分杀毒软件可能会误报**。  
-目前测试未发现报警，但不排除个别杀软报“未知发布者”或“行为监控”警告。  
-该文件来自公开的 YaneuraOu 官方发布版，可放心加入白名单。
+Windows 客户端首次运行时会将引擎及评估资源释放到 `config/touhou_little_maid/shogi_engine`。由于模组会解压并运行 `.exe` 文件，部分杀毒软件可能误报，请根据自己的安全策略检查后再决定是否加入白名单。
 
-### 致谢
-- TartaricAcid & 车万女仆团队 —— 提供了优秀的女仆框架
-- YaneuraOu 作者 —— 世界最强的开源将棋引擎之一
-- 所有测试与女仆下将棋的玩家（
+## 构建
+
+```powershell
+.\gradlew.bat build
+```
+
+## 致谢
+
+- TartaricAcid 与车万女仆团队——提供了优秀的女仆框架
+- YaneuraOu 作者及贡献者——提供了优秀的开源将棋引擎
+- 所有参与测试以及和女仆下将棋的玩家
