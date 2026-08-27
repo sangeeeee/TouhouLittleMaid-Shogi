@@ -16,7 +16,8 @@ gradlew.bat :engine:probeSunfishResources
 ```
 
 The self-test is implemented with only the Java standard library, so it can run
-offline without downloading a test framework. The current phase establishes
-API, lifecycle, cancellation, and resource contracts. Rule generation and
-search are intentionally reported as not yet implemented until their Java
-ports are added and verified against Sunfish.
+offline without downloading a test framework. It covers the engine lifecycle,
+resource contracts, and the Sunfish-compatible base types (`Turn`, pieces,
+squares, moves, hands, and 81-bit/rotated bitboards). Rule generation and search
+are intentionally reported as not yet implemented until their Java ports are
+added and verified against Sunfish.
