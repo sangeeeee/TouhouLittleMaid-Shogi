@@ -1,0 +1,48 @@
+plugins {
+    id 'java-library'
+}
+
+group = 'com.github.sangeeeee.tlm_shogi'
+version = rootProject.version
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
+}
+
+sourceSets {
+    selfTest {
+        java.srcDir 'src/selfTest/java'
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += output + compileClasspath
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+configurations {
+    selfTestImplementation.extendsFrom implementation
+    selfTestRuntimeOnly.extendsFrom runtimeOnly
+}
+
+tasks.register('engineTest', JavaExec) {
+    group = 'verification'
+    description = 'Runs the dependency-free engine tests without launching Minecraft.'
+    dependsOn selfTestClasses
+    classpath = sourceSets.selfTest.runtimeClasspath
+    mainClass = 'com.github.sangeeeee.tlm_shogi.engine.EngineSelfTest'
+}
+
+tasks.register('probeSunfishResources', JavaExec) {
+    group = 'verification'
+    description = 'Validates tem/eval.bin and tem/book.bin without launching Minecraft.'
+    dependsOn classes
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'com.github.sangeeeee.tlm_shogi.engine.tool.SunfishResourceProbe'
+    args rootProject.layout.projectDirectory.dir('tem').asFile.absolutePath
+}
+
+tasks.named('check') {
+    dependsOn engineTest
+}
