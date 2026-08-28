@@ -33,6 +33,7 @@ public class TouhouLittleMaidShogi {
     private static void initRegister(IEventBus eventBus) {
         InitBlocks.BLOCKS.register(eventBus);
         InitBlocks.TILE_ENTITIES.register(eventBus);
+        InitDataComponents.DATA_COMPONENTS.register(eventBus);
         InitItems.ITEMS.register(eventBus);
         InitLootModifiers.LOOT_FUNCTION_TYPES.register(eventBus);
 

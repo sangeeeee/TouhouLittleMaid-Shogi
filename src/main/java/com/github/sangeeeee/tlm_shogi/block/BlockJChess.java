@@ -10,6 +10,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.favorability.Type;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySit;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.sangeeeee.tlm_shogi.init.InitItems;
+import com.github.sangeeeee.tlm_shogi.item.ItemTsumeBoardState;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import com.github.tartaricacid.touhoulittlemaid.init.InitTrigger;
 import com.github.sangeeeee.tlm_shogi.network.message.JChessPromoteOpenPackage;
@@ -61,7 +62,6 @@ import java.util.List;
 import java.util.UUID;
 
 public class BlockJChess extends BlockJoy implements IBoardGameBlock {
-    private static final int TSUME_MATE_PLY = 3;
     public static final EnumProperty<ShogiPart> PART = EnumProperty.create("part", ShogiPart.class);
     public static final int plate = 6;
     public static final int height = 10;
@@ -297,7 +297,8 @@ public class BlockJChess extends BlockJoy implements IBoardGameBlock {
                 }
                 try {
                     String puzzleId = TsumePuzzleId.fromSfen(boardState[0]);
-                    chess.resetToTsume(boardState[0], puzzleId, TSUME_MATE_PLY);
+                    chess.resetToTsume(boardState[0], puzzleId,
+                            ItemTsumeBoardState.getMaximumPly(heldItem));
                 } catch (IllegalArgumentException exception) {
                     player.sendSystemMessage(Component.translatable("message.tlm_shogi.jchess.tsume.invalid"));
                     return ItemInteractionResult.FAIL;
@@ -409,7 +410,8 @@ public class BlockJChess extends BlockJoy implements IBoardGameBlock {
                     // 强制升变
                     Position copy = chessData.deepCopy();
                     if (copy.move(preClick, nowClick, true) != -1) {
-                        if (isPlayerKingInvalidAfterMove(chess, copy)) {
+                        if (isPlayerKingInvalidAfterMove(chess, copy)
+                                || !isCheckingTsumeMove(chess, copy)) {
                             return ItemInteractionResult.FAIL;
                         }
                         chessData.move(preClick, nowClick, true);
@@ -425,7 +427,8 @@ public class BlockJChess extends BlockJoy implements IBoardGameBlock {
                     // 普通移动
                     Position copy = chessData.deepCopy();
                     if (copy.move(preClick, nowClick, false) != -1) {
-                        if (isPlayerKingInvalidAfterMove(chess, copy)) {
+                        if (isPlayerKingInvalidAfterMove(chess, copy)
+                                || !isCheckingTsumeMove(chess, copy)) {
                             return ItemInteractionResult.FAIL;
                         }
                         chessData.move(preClick, nowClick, false);
@@ -457,9 +460,9 @@ public class BlockJChess extends BlockJoy implements IBoardGameBlock {
                 completeTsume(serverPlayer, level, centerPos, chess);
                 return;
             }
-            // Tsume requires an uninterrupted sequence of checks. The player's final
-            // allowed ply must be mate, otherwise the attempted solution is incorrect.
-            if (!status.inCheck() || chess.getTsumePly() >= chess.getTsumeMaxPly()) {
+            // Non-checking moves are rejected before being applied. Reaching the final
+            // allowed ply without mate is therefore the only ordinary incorrect result.
+            if (chess.getTsumePly() >= chess.getTsumeMaxPly()) {
                 markTsumeIncorrect(serverPlayer, level, centerPos, chess);
                 return;
             }
@@ -482,6 +485,13 @@ public class BlockJChess extends BlockJoy implements IBoardGameBlock {
             return false;
         }
         return position.isKingUnderAttack(true);
+    }
+
+    private static boolean isCheckingTsumeMove(TileEntityJChess chess, Position position) {
+        if (!chess.isTsumeMode()) {
+            return true;
+        }
+        return com.github.sangeeeee.tlm_shogi.engine.core.Position.parse(position.toUSI()).inCheck();
     }
 
     private static boolean hasPiece(Position position, int pieceId) {
@@ -570,7 +580,8 @@ public class BlockJChess extends BlockJoy implements IBoardGameBlock {
             // 执行带升变结果的移动
             Position copy = data.deepCopy();
             if (copy.move(fromPos, toPos, promote) != -1) {
-                if (isPlayerKingInvalidAfterMove(chess, copy)) {
+                if (isPlayerKingInvalidAfterMove(chess, copy)
+                        || !isCheckingTsumeMove(chess, copy)) {
                     return;
                 }
                 data.move(fromPos, toPos, promote);

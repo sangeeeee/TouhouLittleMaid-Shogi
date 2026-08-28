@@ -1,7 +1,6 @@
 package com.github.sangeeeee.tlm_shogi.datapack;
 
 import com.github.sangeeeee.tlm_shogi.TouhouLittleMaidShogi;
-import com.github.tartaricacid.touhoulittlemaid.datapack.pojo.BoardStateRecord;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import net.minecraft.resources.ResourceLocation;
@@ -35,7 +34,7 @@ public final class TsumeBoardStateReloadListener implements ResourceManagerReloa
         }
         try (InputStream stream = resource.get();
              InputStreamReader reader = new InputStreamReader(stream, StandardCharsets.UTF_8)) {
-            List<BoardStateRecord> records = GSON.fromJson(reader, new TypeToken<List<BoardStateRecord>>() {
+            List<TsumeBoardStateRecord> records = GSON.fromJson(reader, new TypeToken<List<TsumeBoardStateRecord>>() {
             }.getType());
             if (records != null) {
                 TsumeBoardStateData.addAll(records);

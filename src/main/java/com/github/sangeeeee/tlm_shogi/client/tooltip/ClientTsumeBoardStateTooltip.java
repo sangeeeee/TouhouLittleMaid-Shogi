@@ -9,6 +9,7 @@ import net.minecraft.Util;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
@@ -32,16 +33,18 @@ public final class ClientTsumeBoardStateTooltip implements ClientTooltipComponen
     private static final int GRID_OFFSET = 6;
     private static final int PIECE_WIDTH = 22;
     private static final int PIECE_HEIGHT = 24;
+    private static final int GLYPH_RENDER_WIDTH = 14;
+    private static final int GLYPH_RENDER_HEIGHT = 15;
     private static final int TEXT_COLOR = 0xFFE8E8E8;
 
     private final PreviewData data;
     private final String playerHand;
-    private final String engineHand;
+    private final Component engineHand;
 
     public ClientTsumeBoardStateTooltip(TsumeBoardStateTooltip tooltip) {
         this.data = CACHE.apply(tooltip.sfen());
         this.playerHand = formatHand("☗", data.blackHand());
-        this.engineHand = formatHand("☖", data.whiteHand());
+        this.engineHand = Component.translatable("tooltip.tlm_shogi.tsume.engine_hand_all");
     }
 
     private static PreviewData decode(String sfen) {
@@ -54,7 +57,7 @@ public final class ClientTsumeBoardStateTooltip implements ClientTooltipComponen
                     board[y][x] = position.getPieceAt(x, y);
                 }
             }
-            return new PreviewData(true, board, copyHand(position.getBlackHand()), copyHand(position.getWhiteHand()));
+            return new PreviewData(true, board, copyHand(position.getBlackHand()));
         } catch (RuntimeException exception) {
             TouhouLittleMaidShogi.LOGGER.warn("Unable to render invalid tsume SFEN tooltip", exception);
             return PreviewData.invalid();
@@ -129,8 +132,18 @@ public final class ClientTsumeBoardStateTooltip implements ClientTooltipComponen
         Glyph glyph = Glyph.forPiece(pieceId);
         if (glyph != null) {
             pose.pushPose();
-            pose.translate(4, 4, 0.1f);
-            pose.scale(14.0f / glyph.width(), 15.0f / glyph.height(), 1.0f);
+            // The white piece is rotated as a whole, so increasing this common Y
+            // moves black down and white up by the same half preview pixel.
+            pose.translate(4, 5, 0.1f);
+            if (pieceId == 10) {
+                // This atlas crop faces the opposite direction when used by the
+                // unrotated player piece, so turn only the player's king glyph.
+                pose.translate(GLYPH_RENDER_WIDTH / 2.0f, GLYPH_RENDER_HEIGHT / 2.0f, 0);
+                pose.mulPose(Axis.ZP.rotationDegrees(180));
+                pose.translate(-GLYPH_RENDER_WIDTH / 2.0f, -GLYPH_RENDER_HEIGHT / 2.0f, 0);
+            }
+            pose.scale(GLYPH_RENDER_WIDTH / (float) glyph.width(),
+                    GLYPH_RENDER_HEIGHT / (float) glyph.height(), 1.0f);
             graphics.blit(GLYPHS, 0, 0, glyph.u(), glyph.v(),
                     glyph.width(), glyph.height(), 512, 512);
             pose.popPose();
@@ -205,9 +218,9 @@ public final class ClientTsumeBoardStateTooltip implements ClientTooltipComponen
         return Integer.toString(value);
     }
 
-    private record PreviewData(boolean valid, int[][] board, List<int[]> blackHand, List<int[]> whiteHand) {
+    private record PreviewData(boolean valid, int[][] board, List<int[]> blackHand) {
         static PreviewData invalid() {
-            return new PreviewData(false, new int[9][9], List.of(), List.of());
+            return new PreviewData(false, new int[9][9], List.of());
         }
     }
 

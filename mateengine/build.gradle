@@ -43,6 +43,15 @@ tasks.register('mateEngineTest', JavaExec) {
     mainClass = 'com.github.sangeeeee.tlm_shogi.mateengine.MateEngineSelfTest'
 }
 
+tasks.register('tsumePuzzleCatalogTest', JavaExec) {
+    group = 'verification'
+    description = 'Validates every bundled tsume-shogi puzzle without launching Minecraft.'
+    dependsOn selfTestClasses
+    classpath = sourceSets.selfTest.runtimeClasspath
+    mainClass = 'com.github.sangeeeee.tlm_shogi.mateengine.TsumePuzzleCatalogSelfTest'
+    args rootProject.file('src/main/resources/data/tlm_shogi/board_states/tsume.json').absolutePath
+}
+
 tasks.register('mateSearch', JavaExec) {
     group = 'verification'
     description = 'Finds a longest-surviving defense for a checked SFEN position.'
@@ -59,4 +68,5 @@ tasks.register('mateSearch', JavaExec) {
 
 tasks.named('check') {
     dependsOn mateEngineTest
+    dependsOn tsumePuzzleCatalogTest
 }

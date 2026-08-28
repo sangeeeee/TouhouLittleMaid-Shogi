@@ -1,8 +1,9 @@
 package com.github.sangeeeee.tlm_shogi.loot;
 
 import com.github.sangeeeee.tlm_shogi.datapack.TsumeBoardStateData;
+import com.github.sangeeeee.tlm_shogi.datapack.TsumeBoardStateRecord;
+import com.github.sangeeeee.tlm_shogi.init.InitDataComponents;
 import com.github.sangeeeee.tlm_shogi.init.InitLootModifiers;
-import com.github.tartaricacid.touhoulittlemaid.datapack.pojo.BoardStateRecord;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemBoardState;
 import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;
@@ -31,7 +32,7 @@ public final class RandomTsumeBoardStateFunction extends LootItemConditionalFunc
         this.tags = List.copyOf(tags);
     }
 
-    private boolean matches(BoardStateRecord record) {
+    private boolean matches(TsumeBoardStateRecord record) {
         return tags.stream().anyMatch(record.tags()::contains);
     }
 
@@ -40,17 +41,18 @@ public final class RandomTsumeBoardStateFunction extends LootItemConditionalFunc
         if (tags.isEmpty()) {
             return stack;
         }
-        List<BoardStateRecord> records = TsumeBoardStateData.records().stream().filter(this::matches).toList();
-        BoardStateRecord selected = pick(records, context.getRandom());
+        List<TsumeBoardStateRecord> records = TsumeBoardStateData.records().stream().filter(this::matches).toList();
+        TsumeBoardStateRecord selected = pick(records, context.getRandom());
         if (selected == null) {
             return stack;
         }
-        BoardStateRecord.Display display = selected.display();
+        TsumeBoardStateRecord.Display display = selected.display();
         ItemBoardState.setState(stack, selected.data(), display.description(), display.author());
+        stack.set(InitDataComponents.TSUME_MAXIMUM_PLY, selected.maximumPly());
         return stack;
     }
 
-    private static BoardStateRecord pick(List<BoardStateRecord> records, RandomSource random) {
+    private static TsumeBoardStateRecord pick(List<TsumeBoardStateRecord> records, RandomSource random) {
         int totalWeight = records.stream().mapToInt(record -> Math.max(0, record.weight())).sum();
         if (records.isEmpty()) {
             return null;
@@ -59,7 +61,7 @@ public final class RandomTsumeBoardStateFunction extends LootItemConditionalFunc
             return records.get(random.nextInt(records.size()));
         }
         int value = random.nextInt(totalWeight);
-        for (BoardStateRecord record : records) {
+        for (TsumeBoardStateRecord record : records) {
             value -= Math.max(0, record.weight());
             if (value < 0) {
                 return record;
