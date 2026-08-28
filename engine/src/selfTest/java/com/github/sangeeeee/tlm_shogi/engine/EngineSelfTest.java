@@ -13,6 +13,7 @@ import com.github.sangeeeee.tlm_shogi.engine.core.RelativeSquare;
 import com.github.sangeeeee.tlm_shogi.engine.core.RotatedBitboard;
 import com.github.sangeeeee.tlm_shogi.engine.core.Square;
 import com.github.sangeeeee.tlm_shogi.engine.core.Turn;
+import com.github.sangeeeee.tlm_shogi.engine.core.Zobrist;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -43,6 +44,7 @@ public final class EngineSelfTest {
         moveTablesMatchSunfishAttacks();
         positionRoundTripsAndUndoesMoves();
         legalMoveGenerationEnforcesShogiRules();
+        incrementalCachesAndZobristStayConsistent();
         cancellationIsVisibleThroughToken();
         casualLimitsMatchTheCurrentModConfiguration();
         requestDefensivelyCopiesMoveHistory();
@@ -380,6 +382,74 @@ public final class EngineSelfTest {
         check(!MoveGenerator.isLegal(whitePawnDropMate, illegalWhiteMate), "white pawn-drop mate rejected");
         equal(17, MoveGenerator.generateQuiets(whitePawnDropMate).size(),
                 "Sunfish white pawn-drop-mate test move count");
+    }
+
+    private void incrementalCachesAndZobristStayConsistent() {
+        equal(0x17b17c12beec384cL, Zobrist.board(new Square(0), Piece.BLACK_PAWN),
+                "Sunfish first board Zobrist constant");
+        equal(0x4d04df8fbe3b38bcL, Zobrist.blackHand(PieceType.PAWN),
+                "Sunfish black hand Zobrist constant");
+        equal(0x63bec768e26d7958L, Zobrist.whiteHand(PieceType.ROOK),
+                "Sunfish white hand Zobrist constant");
+        equal(1L, Zobrist.turn(Turn.BLACK), "Sunfish black turn hash");
+        equal(0L, Zobrist.turn(Turn.WHITE), "Sunfish white turn hash");
+
+        Position position = Position.startPosition();
+        String initialSfen = position.toSfen();
+        long initialHash = position.getHash();
+        check(position.verifyIncrementalState(), "initial incremental state");
+        equal(9, position.pieceBitboard(Piece.BLACK_PAWN).count(), "incremental black pawn bitboard");
+        equal(20, position.getBOccupiedBitboard().count(), "incremental black occupancy");
+        equal(recomputeBoardHash(position), position.getBoardHash(), "initial board hash recomputation");
+        equal(recomputeHandHash(position), position.getHandHash(), "initial hand hash recomputation");
+
+        MoveGenerator.generateLegal(position);
+        equal(initialSfen, position.toSfen(), "generation leaves position unchanged");
+        equal(initialHash, position.getHash(), "generation restores hash");
+        check(position.verifyIncrementalState(), "state after legal generation");
+
+        List<Position.Undo> undos = new ArrayList<>();
+        for (int ply = 0; ply < 16; ply++) {
+            List<Move> legal = MoveGenerator.generateLegal(position);
+            check(!legal.isEmpty(), "deterministic cache test has legal move");
+            Move move = legal.get((ply * 7) % legal.size());
+            undos.add(position.makeMove(move));
+            check(position.verifyIncrementalState(), "incremental state after ply " + (ply + 1));
+            equal(recomputeBoardHash(position), position.getBoardHash(), "board hash after ply " + (ply + 1));
+            equal(recomputeHandHash(position), position.getHandHash(), "hand hash after ply " + (ply + 1));
+        }
+        for (int index = undos.size() - 1; index >= 0; index--) {
+            position.undoMove(undos.get(index));
+            check(position.verifyIncrementalState(), "incremental state after undo " + index);
+        }
+        equal(initialSfen, position.toSfen(), "multi-move undo restores SFEN");
+        equal(initialHash, position.getHash(), "multi-move undo restores Zobrist");
+
+        position.doNullMove();
+        equal(initialHash ^ 1L, position.getHash(), "null move toggles only turn hash");
+        equal(1, position.moveNumber(), "null move preserves SFEN move number");
+        position.undoNullMove();
+        equal(initialHash, position.getHash(), "null move undo restores hash");
+        check(position.verifyIncrementalState(), "state after null move round trip");
+    }
+
+    private static long recomputeBoardHash(Position position) {
+        long hash = 0;
+        Piece[] board = position.boardCopy();
+        for (int raw = 0; raw < board.length; raw++) {
+            if (!board[raw].isEmpty()) hash ^= Zobrist.board(new Square(raw), board[raw]);
+        }
+        return hash;
+    }
+
+    private static long recomputeHandHash(Position position) {
+        long hash = 0;
+        for (PieceType type : List.of(PieceType.PAWN, PieceType.LANCE, PieceType.KNIGHT,
+                PieceType.SILVER, PieceType.GOLD, PieceType.BISHOP, PieceType.ROOK)) {
+            hash += Zobrist.blackHand(type) * position.handCount(Turn.BLACK, type);
+            hash += Zobrist.whiteHand(type) * position.handCount(Turn.WHITE, type);
+        }
+        return hash;
     }
 
     private void cancellationIsVisibleThroughToken() {

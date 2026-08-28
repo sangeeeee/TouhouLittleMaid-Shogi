@@ -45,10 +45,13 @@ public final class MoveGenerator {
         Objects.requireNonNull(move, "move");
         if (!isPseudoLegal(position, move)) return false;
         Turn movingSide = position.turn();
-        Position next = position.copy();
-        next.makeMoveUnchecked(move);
-        if (next.inCheck(movingSide)) return false;
-        return !isIllegalPawnDropMate(move, next);
+        Position.Undo undo = position.makeMoveUnchecked(move);
+        try {
+            if (position.inCheck(movingSide)) return false;
+            return !isIllegalPawnDropMate(move, position);
+        } finally {
+            position.undoMove(undo);
+        }
     }
 
     public static boolean isPseudoLegal(Position position, Move move) {
@@ -102,12 +105,18 @@ public final class MoveGenerator {
         Turn movingSide = position.turn();
         List<Move> legal = new ArrayList<>();
         for (Move move : generatePseudoLegal(position)) {
-            Position next = position.copy();
-            next.makeMoveUnchecked(move);
-            if (next.inCheck(movingSide)) continue;
-            if (enforcePawnDropMate && isIllegalPawnDropMate(move, next)) continue;
-            legal.add(move);
-            if (stopAfterFirst) return legal;
+            Position.Undo undo = position.makeMoveUnchecked(move);
+            boolean accepted;
+            try {
+                accepted = !position.inCheck(movingSide)
+                        && (!enforcePawnDropMate || !isIllegalPawnDropMate(move, position));
+            } finally {
+                position.undoMove(undo);
+            }
+            if (accepted) {
+                legal.add(move);
+                if (stopAfterFirst) return legal;
+            }
         }
         return legal;
     }

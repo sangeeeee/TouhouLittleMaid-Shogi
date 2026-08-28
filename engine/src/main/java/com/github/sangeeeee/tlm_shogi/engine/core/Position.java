@@ -17,8 +17,17 @@ public final class Position {
     private final Piece[] board;
     private final Hand blackHand;
     private final Hand whiteHand;
+    private final Bitboard[] pieceBitboards;
+    private final Bitboard[] occupiedBySide;
+    private RotatedBitboard rotated90;
+    private RotatedBitboard rotatedRight45;
+    private RotatedBitboard rotatedLeft45;
+    private Square blackKingSquare;
+    private Square whiteKingSquare;
     private Turn turn;
     private int moveNumber;
+    private long boardHash;
+    private long handHash;
 
     /** Creates an empty board with black to move, matching Sunfish's default constructor. */
     public Position() {
@@ -26,6 +35,9 @@ public final class Position {
         Arrays.fill(board, Piece.EMPTY);
         blackHand = new Hand();
         whiteHand = new Hand();
+        pieceBitboards = new Bitboard[Piece.END];
+        occupiedBySide = new Bitboard[] {Bitboard.zero(), Bitboard.zero()};
+        initializeEmptyCaches();
         turn = Turn.BLACK;
         moveNumber = 1;
     }
@@ -35,8 +47,17 @@ public final class Position {
         board = Arrays.copyOf(source.board, source.board.length);
         blackHand = source.blackHand.copy();
         whiteHand = source.whiteHand.copy();
+        pieceBitboards = copyBitboards(source.pieceBitboards);
+        occupiedBySide = copyBitboards(source.occupiedBySide);
+        rotated90 = new RotatedBitboard(source.rotated90);
+        rotatedRight45 = new RotatedBitboard(source.rotatedRight45);
+        rotatedLeft45 = new RotatedBitboard(source.rotatedLeft45);
+        blackKingSquare = source.blackKingSquare;
+        whiteKingSquare = source.whiteKingSquare;
         turn = source.turn;
         moveNumber = source.moveNumber;
+        boardHash = source.boardHash;
+        handHash = source.handHash;
     }
 
     public static Position startPosition() {
@@ -71,6 +92,7 @@ public final class Position {
             throw new IllegalArgumentException("invalid SFEN move number: " + fields[3], exception);
         }
         if (position.moveNumber < 1) throw new IllegalArgumentException("SFEN move number must be positive");
+        position.rebuildCaches();
         return position;
     }
 
@@ -101,47 +123,39 @@ public final class Position {
     public Hand getWhiteHand() { return whiteHand.copy(); }
 
     public Square kingSquare(Turn side) {
-        Piece king = side == Turn.BLACK ? Piece.BLACK_KING : Piece.WHITE_KING;
-        for (int raw = 0; raw < board.length; raw++) {
-            if (board[raw].equals(king)) return new Square(raw);
-        }
-        return Square.invalid();
+        return side == Turn.BLACK ? blackKingSquare : whiteKingSquare;
     }
 
     public Square getBlackKingSquare() { return kingSquare(Turn.BLACK); }
     public Square getWhiteKingSquare() { return kingSquare(Turn.WHITE); }
 
     public Bitboard occupied() {
-        Bitboard result = Bitboard.zero();
-        for (int raw = 0; raw < board.length; raw++) {
-            if (!board[raw].isEmpty()) result.set(new Square(raw));
-        }
-        return result;
+        return occupiedBySide[0].or(occupiedBySide[1]);
     }
 
     public Bitboard occupied(Turn side) {
-        Bitboard result = Bitboard.zero();
-        for (int raw = 0; raw < board.length; raw++) {
-            Piece piece = board[raw];
-            if (!piece.isEmpty() && piece.turn() == side) result.set(new Square(raw));
-        }
-        return result;
+        return occupiedBySide[sideIndex(side)].copy();
     }
 
     public Bitboard getBOccupiedBitboard() { return occupied(Turn.BLACK); }
     public Bitboard getWOccupiedBitboard() { return occupied(Turn.WHITE); }
 
-    public RotatedBitboard get90RotatedBitboard() { return rotated(Rotation.NINETY); }
-    public RotatedBitboard getRight45RotatedBitboard() { return rotated(Rotation.RIGHT_45); }
-    public RotatedBitboard getLeft45RotatedBitboard() { return rotated(Rotation.LEFT_45); }
+    public RotatedBitboard get90RotatedBitboard() { return new RotatedBitboard(rotated90); }
+    public RotatedBitboard getRight45RotatedBitboard() { return new RotatedBitboard(rotatedRight45); }
+    public RotatedBitboard getLeft45RotatedBitboard() { return new RotatedBitboard(rotatedLeft45); }
+
+    public Bitboard pieceBitboard(Piece piece) {
+        Objects.requireNonNull(piece, "piece");
+        if (piece.isEmpty() || piece.raw() >= Piece.END) {
+            throw new IllegalArgumentException("invalid piece bitboard: " + piece.raw());
+        }
+        return pieceBitboards[piece.raw()].copy();
+    }
 
     public boolean hasPawnInFile(Turn side, int file) {
         if (!Square.isValidFile(file)) throw new IllegalArgumentException("invalid file: " + file);
         Piece pawn = side == Turn.BLACK ? Piece.BLACK_PAWN : Piece.WHITE_PAWN;
-        for (int rank = 1; rank <= 9; rank++) {
-            if (pieceAt(Square.of(file, rank)).equals(pawn)) return true;
-        }
-        return false;
+        return pieceBitboards[pawn.raw()].containsAnyOnFile(file);
     }
 
     public boolean hasBlackPawnInFile(int file) { return hasPawnInFile(Turn.BLACK, file); }
@@ -150,10 +164,10 @@ public final class Position {
     public boolean isSquareAttacked(Square target, Turn attacker) {
         requireSquare(target);
         Bitboard occupied = occupied();
-        for (int raw = 0; raw < board.length; raw++) {
-            Piece piece = board[raw];
-            if (!piece.isEmpty() && piece.turn() == attacker
-                    && MoveTables.attacks(piece, new Square(raw), occupied).contains(target)) {
+        Bitboard sources = occupiedBySide[sideIndex(attacker)].copy();
+        for (Square from = sources.pickForward(); from.isStrictValid(); from = sources.pickForward()) {
+            Piece piece = board[from.raw()];
+            if (MoveTables.attacks(piece, from, occupied).contains(target)) {
                 return true;
             }
         }
@@ -173,9 +187,12 @@ public final class Position {
     }
 
     public boolean isCheck(Move move) {
-        Position next = copy();
-        next.makeMoveUnchecked(move);
-        return next.inCheck(next.turn);
+        Undo undo = makeMoveUnchecked(move);
+        try {
+            return inCheck(turn);
+        } finally {
+            undoMove(undo);
+        }
     }
 
     public boolean validateMove(Move move) {
@@ -191,27 +208,35 @@ public final class Position {
         Objects.requireNonNull(move, "move");
         Turn movingTurn = turn;
         int previousMoveNumber = moveNumber;
+        long previousBoardHash = boardHash;
+        long previousHandHash = handHash;
         if (move.isDrop()) {
             PieceType type = move.droppingPieceType().hand();
             Square to = move.to();
             if (!pieceAt(to).isEmpty()) throw new IllegalStateException("drop destination is occupied: " + to);
             handInternal(movingTurn).decrementUnpromoted(type);
-            board[to.raw()] = movingTurn == Turn.BLACK ? type.black() : type.white();
+            handHash -= Zobrist.hand(movingTurn, type);
+            putPiece(to, movingTurn == Turn.BLACK ? type.black() : type.white());
             turn = turn.opposite();
             moveNumber++;
-            return new Undo(move, Piece.EMPTY, Piece.EMPTY, movingTurn, previousMoveNumber);
+            return new Undo(move, Piece.EMPTY, Piece.EMPTY, movingTurn, previousMoveNumber,
+                    previousBoardHash, previousHandHash);
         }
 
         Square from = move.from();
         Square to = move.to();
-        Piece movingPiece = pieceAt(from);
+        Piece movingPiece = takePiece(from);
         Piece captured = pieceAt(to);
-        board[from.raw()] = Piece.EMPTY;
-        board[to.raw()] = move.isPromotion() ? movingPiece.promote() : movingPiece;
-        if (!captured.isEmpty()) handInternal(movingTurn).increment(captured.hand());
+        if (!captured.isEmpty()) {
+            takePiece(to);
+            handInternal(movingTurn).increment(captured.hand());
+            handHash += Zobrist.hand(movingTurn, captured.hand());
+        }
+        putPiece(to, move.isPromotion() ? movingPiece.promote() : movingPiece);
         turn = turn.opposite();
         moveNumber++;
-        return new Undo(move, movingPiece, captured, movingTurn, previousMoveNumber);
+        return new Undo(move, movingPiece, captured, movingTurn, previousMoveNumber,
+                previousBoardHash, previousHandHash);
     }
 
     public void undoMove(Undo undo) {
@@ -220,40 +245,38 @@ public final class Position {
         turn = undo.previousTurn();
         moveNumber = undo.previousMoveNumber();
         if (move.isDrop()) {
-            board[move.to().raw()] = Piece.EMPTY;
+            takePiece(move.to());
             handInternal(turn).incrementUnpromoted(move.droppingPieceType());
+            boardHash = undo.previousBoardHash();
+            handHash = undo.previousHandHash();
             return;
         }
-        board[move.from().raw()] = undo.movedPiece();
-        board[move.to().raw()] = undo.capturedPiece();
-        if (!undo.capturedPiece().isEmpty()) handInternal(turn).decrement(undo.capturedPiece().hand());
+        takePiece(move.to());
+        putPiece(move.from(), undo.movedPiece());
+        if (!undo.capturedPiece().isEmpty()) {
+            putPiece(move.to(), undo.capturedPiece());
+            handInternal(turn).decrement(undo.capturedPiece().hand());
+        }
+        boardHash = undo.previousBoardHash();
+        handHash = undo.previousHandHash();
     }
 
     public void doNullMove() {
         turn = turn.opposite();
-        moveNumber++;
     }
 
     public void undoNullMove() {
         turn = turn.opposite();
-        moveNumber = Math.max(1, moveNumber - 1);
     }
 
     public List<Move> legalMoves() { return MoveGenerator.generateLegal(this); }
     public boolean isMate() { return inCheck() && legalMoves().isEmpty(); }
 
-    public long hash() {
-        long hash = 0xcbf29ce484222325L;
-        for (int raw = 0; raw < board.length; raw++) {
-            hash ^= (long) (board[raw].raw() + 1) * 83 + raw;
-            hash *= 0x100000001b3L;
-        }
-        for (PieceType type : HAND_ORDER) {
-            hash ^= ((long) blackHand.get(type) << 32) ^ whiteHand.get(type) ^ type.raw();
-            hash *= 0x100000001b3L;
-        }
-        return turn == Turn.BLACK ? hash ^ 0x9e3779b97f4a7c15L : hash;
-    }
+    public long hash() { return getHash(); }
+    public long getHash() { return boardHash ^ handHash ^ getTurnHash(); }
+    public long getBoardHash() { return boardHash; }
+    public long getHandHash() { return handHash; }
+    public long getTurnHash() { return Zobrist.turn(turn); }
 
     public String toSfen() {
         StringBuilder result = new StringBuilder(100);
@@ -321,21 +344,109 @@ public final class Position {
         }
     }
 
-    private RotatedBitboard rotated(Rotation rotation) {
-        RotatedBitboard result = RotatedBitboard.zero();
-        for (int raw = 0; raw < board.length; raw++) {
-            if (board[raw].isEmpty()) continue;
-            Square square = new Square(raw);
-            result.set(switch (rotation) {
-                case NINETY -> square.rotate90();
-                case RIGHT_45 -> square.rotateRight45();
-                case LEFT_45 -> square.rotateLeft45();
-            });
-        }
-        return result;
+    /** Rebuilds every cache independently and compares it with the incremental state. */
+    public boolean verifyIncrementalState() {
+        Position rebuilt = new Position(this);
+        rebuilt.rebuildCaches();
+        return Arrays.equals(pieceBitboards, rebuilt.pieceBitboards)
+                && Arrays.equals(occupiedBySide, rebuilt.occupiedBySide)
+                && rotated90.equals(rebuilt.rotated90)
+                && rotatedRight45.equals(rebuilt.rotatedRight45)
+                && rotatedLeft45.equals(rebuilt.rotatedLeft45)
+                && blackKingSquare.equals(rebuilt.blackKingSquare)
+                && whiteKingSquare.equals(rebuilt.whiteKingSquare)
+                && boardHash == rebuilt.boardHash
+                && handHash == rebuilt.handHash;
     }
 
     private Hand handInternal(Turn side) { return side == Turn.BLACK ? blackHand : whiteHand; }
+
+    private void initializeEmptyCaches() {
+        for (int raw = 0; raw < pieceBitboards.length; raw++) pieceBitboards[raw] = Bitboard.zero();
+        occupiedBySide[0] = Bitboard.zero();
+        occupiedBySide[1] = Bitboard.zero();
+        rotated90 = RotatedBitboard.zero();
+        rotatedRight45 = RotatedBitboard.zero();
+        rotatedLeft45 = RotatedBitboard.zero();
+        blackKingSquare = Square.invalid();
+        whiteKingSquare = Square.invalid();
+        boardHash = 0;
+        handHash = 0;
+    }
+
+    private void rebuildCaches() {
+        initializeEmptyCaches();
+        for (int raw = 0; raw < board.length; raw++) {
+            Piece piece = board[raw];
+            if (!piece.isEmpty()) addToCaches(new Square(raw), piece);
+        }
+        for (PieceType type : HAND_ORDER) {
+            handHash += Zobrist.blackHand(type) * blackHand.get(type);
+            handHash += Zobrist.whiteHand(type) * whiteHand.get(type);
+        }
+    }
+
+    private void putPiece(Square square, Piece piece) {
+        int raw = requireSquare(square);
+        Objects.requireNonNull(piece, "piece");
+        if (piece.isEmpty() || piece.raw() >= Piece.END) throw new IllegalArgumentException("invalid piece");
+        if (!board[raw].isEmpty()) throw new IllegalStateException("square is already occupied: " + square);
+        board[raw] = piece;
+        addToCaches(square, piece);
+    }
+
+    private Piece takePiece(Square square) {
+        int raw = requireSquare(square);
+        Piece piece = board[raw];
+        if (piece.isEmpty()) throw new IllegalStateException("square is empty: " + square);
+        removeFromCaches(square, piece);
+        board[raw] = Piece.EMPTY;
+        return piece;
+    }
+
+    private void addToCaches(Square square, Piece piece) {
+        pieceBitboards[piece.raw()].set(square);
+        occupiedBySide[sideIndex(piece.turn())].set(square);
+        setRotated(square);
+        if (piece.equals(Piece.BLACK_KING)) blackKingSquare = square;
+        if (piece.equals(Piece.WHITE_KING)) whiteKingSquare = square;
+        boardHash ^= Zobrist.board(square, piece);
+    }
+
+    private void removeFromCaches(Square square, Piece piece) {
+        pieceBitboards[piece.raw()].unset(square);
+        occupiedBySide[sideIndex(piece.turn())].unset(square);
+        unsetRotated(square);
+        if (piece.equals(Piece.BLACK_KING)) blackKingSquare = Square.invalid();
+        if (piece.equals(Piece.WHITE_KING)) whiteKingSquare = Square.invalid();
+        boardHash ^= Zobrist.board(square, piece);
+    }
+
+    private void setRotated(Square square) {
+        RotatedSquare r90 = square.rotate90();
+        RotatedSquare right45 = square.rotateRight45();
+        RotatedSquare left45 = square.rotateLeft45();
+        if (r90.raw() != 0) rotated90.set(r90);
+        if (right45.raw() != 0) rotatedRight45.set(right45);
+        if (left45.raw() != 0) rotatedLeft45.set(left45);
+    }
+
+    private void unsetRotated(Square square) {
+        RotatedSquare r90 = square.rotate90();
+        RotatedSquare right45 = square.rotateRight45();
+        RotatedSquare left45 = square.rotateLeft45();
+        if (r90.raw() != 0) rotated90.unset(r90);
+        if (right45.raw() != 0) rotatedRight45.unset(right45);
+        if (left45.raw() != 0) rotatedLeft45.unset(left45);
+    }
+
+    private static Bitboard[] copyBitboards(Bitboard[] source) {
+        Bitboard[] result = new Bitboard[source.length];
+        for (int index = 0; index < source.length; index++) result[index] = source[index].copy();
+        return result;
+    }
+
+    private static int sideIndex(Turn side) { return side == Turn.BLACK ? 0 : 1; }
 
     private static int requireSquare(Square square) {
         Objects.requireNonNull(square, "square");
@@ -394,7 +505,8 @@ public final class Position {
     }
 
     public record Undo(Move move, Piece movedPiece, Piece capturedPiece,
-                       Turn previousTurn, int previousMoveNumber) {
+                       Turn previousTurn, int previousMoveNumber,
+                       long previousBoardHash, long previousHandHash) {
         public Undo {
             Objects.requireNonNull(move, "move");
             Objects.requireNonNull(movedPiece, "movedPiece");
@@ -402,6 +514,4 @@ public final class Position {
             Objects.requireNonNull(previousTurn, "previousTurn");
         }
     }
-
-    private enum Rotation { NINETY, RIGHT_45, LEFT_45 }
 }

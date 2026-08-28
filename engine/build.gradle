@@ -34,6 +34,15 @@ tasks.register('engineTest', JavaExec) {
     mainClass = 'com.github.sangeeeee.tlm_shogi.engine.EngineSelfTest'
 }
 
+tasks.register('enginePerft', JavaExec) {
+    group = 'verification'
+    description = 'Runs a start-position perft benchmark without launching Minecraft.'
+    dependsOn selfTestClasses
+    classpath = sourceSets.selfTest.runtimeClasspath
+    mainClass = 'com.github.sangeeeee.tlm_shogi.engine.EnginePerft'
+    args((findProperty('perftDepth') ?: '4').toString())
+}
+
 tasks.register('probeSunfishResources', JavaExec) {
     group = 'verification'
     description = 'Validates tem/eval.bin and tem/book.bin without launching Minecraft.'
