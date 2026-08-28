@@ -173,8 +173,17 @@ tasks.register('microcosmosGameplayTest', JavaExec) {
     args(layout.projectDirectory.file('src/main/resources/data/tlm_shogi/tsume/microcosmos.usi'))
 }
 
+tasks.register('handSelectionGeometryTest', JavaExec) {
+    group = 'verification'
+    description = 'Verifies the hand-piece picking footprint and gaps.'
+    dependsOn selfTestClasses
+    classpath = sourceSets.selfTest.runtimeClasspath
+    mainClass = 'com.github.sangeeeee.tlm_shogi.util.HandSelectionGeometrySelfTest'
+}
+
 tasks.named('check') {
     dependsOn microcosmosGameplayTest
+    dependsOn handSelectionGeometryTest
 }
 
 // Example configuration to allow publishing using the maven-publish plugin

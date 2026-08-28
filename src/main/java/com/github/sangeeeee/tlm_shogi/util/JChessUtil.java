@@ -13,11 +13,18 @@ public final class JChessUtil {
     public static final String INIT = "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1";
 //    public static final String INIT = "4k4/1R7/9/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b B2G2S2N2L9P 1";
 
-    /** Player-hand slot geometry in the board's player-oriented coordinate system. */
-    public static final double HAND_MIN_X = 0.5120;
-    public static final double HAND_MIN_Z = 0.1570;
+    /**
+     * Player-hand layout in the board's player-oriented coordinate system.
+     * The slot pitch preserves the rendered 3x3 layout, while the smaller
+     * piece bounds match the SELECTED model at its 0.85 render scale, excluding
+     * the former number area and the gaps between stacks.
+     */
     public static final double HAND_SLOT_WIDTH = 0.1167;
     public static final double HAND_SLOT_DEPTH = 0.1096;
+    public static final double HAND_PIECE_MIN_X = 0.539153125;
+    public static final double HAND_PIECE_MIN_Z = 0.156425;
+    public static final double HAND_PIECE_WIDTH = 0.09509375;
+    public static final double HAND_PIECE_DEPTH = 0.099078125;
     public static final int HAND_COLUMNS = 3;
     public static final int HAND_ROWS = 3;
 
@@ -75,17 +82,23 @@ public final class JChessUtil {
 
     /** Returns a row-major player-hand slot, or {@code -1} outside the 3x3 stand grid. */
     public static int getPlayerHandSlot(double x, double z) {
-        double slotX = (x - HAND_MIN_X) / HAND_SLOT_WIDTH;
-        double slotZ = (z - HAND_MIN_Z) / HAND_SLOT_DEPTH;
-        if (slotX < 0 || slotZ < 0) {
-            return -1;
+        // There are only nine stacks. Testing their exact rectangles directly
+        // avoids floating-point boundary errors from pitch-based division.
+        for (int row = 0; row < HAND_ROWS; row++) {
+            double pieceMinZ = HAND_PIECE_MIN_Z + row * HAND_SLOT_DEPTH;
+            double pieceMaxZ = pieceMinZ + HAND_PIECE_DEPTH;
+            if (z < pieceMinZ || z > pieceMaxZ) {
+                continue;
+            }
+            for (int column = 0; column < HAND_COLUMNS; column++) {
+                double pieceMinX = HAND_PIECE_MIN_X + column * HAND_SLOT_WIDTH;
+                double pieceMaxX = pieceMinX + HAND_PIECE_WIDTH;
+                if (x >= pieceMinX && x <= pieceMaxX) {
+                    return column + row * HAND_COLUMNS;
+                }
+            }
         }
-        int column = (int) Math.floor(slotX);
-        int row = (int) Math.floor(slotZ);
-        if (column >= HAND_COLUMNS || row >= HAND_ROWS) {
-            return -1;
-        }
-        return column + row * HAND_COLUMNS;
+        return -1;
     }
 
     public static double handStackTopY(int count) {

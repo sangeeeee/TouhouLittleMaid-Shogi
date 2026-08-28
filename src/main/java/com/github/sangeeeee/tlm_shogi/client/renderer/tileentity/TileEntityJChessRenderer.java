@@ -247,7 +247,8 @@ public class TileEntityJChessRenderer implements BlockEntityRenderer<TileEntityJ
             int count = pair[0];
             int pieceId = pair[1];
 
-            // Keep the old slot layout, but use its former number area as padding.
+            // Preserve the established visual spacing; picking uses a separate
+            // tight footprint fitted to the rendered piece rather than this pitch.
             poseStack.translate(s1, 0, 0);
             rowOffset += s1;
 

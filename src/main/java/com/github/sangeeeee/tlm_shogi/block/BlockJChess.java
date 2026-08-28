@@ -771,10 +771,10 @@ public class BlockJChess extends BlockJoy implements IBoardGameBlock {
         }
         int column = handIndex % JChessUtil.HAND_COLUMNS;
         int row = handIndex / JChessUtil.HAND_COLUMNS;
-        double minX = JChessUtil.HAND_MIN_X + column * JChessUtil.HAND_SLOT_WIDTH;
-        double maxX = minX + JChessUtil.HAND_SLOT_WIDTH;
-        double minZ = JChessUtil.HAND_MIN_Z + row * JChessUtil.HAND_SLOT_DEPTH;
-        double maxZ = minZ + JChessUtil.HAND_SLOT_DEPTH;
+        double minX = JChessUtil.HAND_PIECE_MIN_X + column * JChessUtil.HAND_SLOT_WIDTH;
+        double maxX = minX + JChessUtil.HAND_PIECE_WIDTH;
+        double minZ = JChessUtil.HAND_PIECE_MIN_Z + row * JChessUtil.HAND_SLOT_DEPTH;
+        double maxZ = minZ + JChessUtil.HAND_PIECE_DEPTH;
         return getHandStackShape(state.getValue(PART), state.getValue(FACING),
                 minX, maxX, minZ, maxZ, count);
     }
