@@ -8,7 +8,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "lns+R4l/1p1p5/p1pkppB1p/6p2/1R7/6P1P/P1PPnPS2/2+b1G1g2/L3K1sNL b 2GS3Pnp 51",
-    "maximum_ply": 3,
+    "maximum_ply": 5,
     "weight": 1
   },
   {
@@ -80,7 +80,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l3k2G1/1+B4gPl/n2+Nppsp1/pP2R2bp/9/Pps1P1N1P/2GG1P3/3S5/LNK5L b R6Ps 97",
-    "maximum_ply": 3,
+    "maximum_ply": 7,
     "weight": 1
   },
   {
@@ -104,7 +104,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "3g2S1l/3s2k2/3ppplpp/2p3R2/rP7/1LP1P2P1/N2P1P2P/2GSG4/3KN2NL b BG4Pbsnp 89",
-    "maximum_ply": 3,
+    "maximum_ply": 11,
     "weight": 1
   },
   {
@@ -152,7 +152,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln1+P1GBnl/s8/p1p1p1kpp/3P2p2/5p3/Pp3PPP1/1P1SP3P/2R6/1N1GKG1NL b BGLr2sp 67",
-    "maximum_ply": 5,
+    "maximum_ply": 9,
     "weight": 1
   },
   {
@@ -176,7 +176,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln1k1g3/5s3/p1p1pp1pp/3p5/5+Bp2/2P2PPP1/P3S+n2P/2G3+l2/+p3K3L b RBG2SNL2Prgnp 73",
-    "maximum_ply": 5,
+    "maximum_ply": 7,
     "weight": 1
   },
   {
@@ -188,7 +188,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln1G3nl/1ks1n+PR2/p1pp4p/5ppp1/8b/1P2p4/PGPPP+s2P/1B7/LNSK1G2L b RGSP2p 71",
-    "maximum_ply": 5,
+    "maximum_ply": 9,
     "weight": 1
   },
   {
@@ -212,7 +212,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "1n4R1l/2k3GR1/p1sp1pg2/1p2+B1p1p/2P6/P1pL5/1PNsPPP1P/4g1S2/Lb3GKNL b SN4P 99",
-    "maximum_ply": 5,
+    "maximum_ply": 7,
     "weight": 1
   },
   {
@@ -284,7 +284,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l2g2gnl/9/2s1B+N2p/p1p3pk1/9/P3P2rS/2PP1P1R1/1S1G1G3/LN1K1+B3 b L7Psn2p 101",
-    "maximum_ply": 5,
+    "maximum_ply": 7,
     "weight": 1
   },
   {
@@ -296,7 +296,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "lnS5l/6k2/p2G2ppp/2pnp1G2/2PK1P3/1p2Sp1P1/P2GP3P/4+b2+b1/LNS6 b 2RGSN3Plp 115",
-    "maximum_ply": 5,
+    "maximum_ply": 7,
     "weight": 1
   },
   {
@@ -320,7 +320,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "+R2g5/3gk4/1+L2Np1+S1/2p1L1pb1/3G3p1/P1PPpP3/6P1p/1LKR5/LN4SN1 b BG2SN3P4p 123",
-    "maximum_ply": 5,
+    "maximum_ply": 9,
     "weight": 1
   },
   {
@@ -356,7 +356,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l+R6l/7g1/p1k3np1/2r3p2/3+B1p2p/P4PN1P/1P1+b+p1K2/1S4G2/6sNL b 2GSNLPs7p 111",
-    "maximum_ply": 5,
+    "maximum_ply": 7,
     "weight": 1
   },
   {
@@ -380,7 +380,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l6nl/3k2+B2/p1n1g2pp/2G1ppp2/2P2N1P1/3P2P1P/Ps1GP4/1+rSK2R2/LN6L b G3Pb2s2p 77",
-    "maximum_ply": 7,
+    "maximum_ply": 9,
     "weight": 1
   },
   {
@@ -416,7 +416,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln2+Rg1nl/5g1k1/p2+B1p1gp/4p2R1/2pK2p2/P3P1P1P/3+b1PN2/5S3/L7L b 2SN7Pgs 81",
-    "maximum_ply": 7,
+    "maximum_ply": 13,
     "weight": 1
   },
   {
@@ -524,7 +524,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "lR2g1S2/3gks+R2/5p3/p1pppbp2/9/PP3SP2/L1+nPPPNP+p/3S5/4G1K1L b BG2NL4P 109",
-    "maximum_ply": 7,
+    "maximum_ply": 11,
     "weight": 1
   },
   {
@@ -560,7 +560,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "+B7l/3G1+R1s1/p2p1+N2p/1pp1p1pk1/7p1/2P2G1l1/PP1P1PPLP/4G2S1/2+n2K1NL b RG2S2Pbnp 91",
-    "maximum_ply": 7,
+    "maximum_ply": 9,
     "weight": 1
   },
   {
@@ -572,7 +572,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "1p+L2G1kl/4b1g2/1L2+S1+Pp1/4p3P/2ppn4/2PP1P3/1P2P4/1G1K2G1L/+r1S5R b 2S3N6Pb 111",
-    "maximum_ply": 7,
+    "maximum_ply": 11,
     "weight": 1
   },
   {
@@ -584,7 +584,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln1g2Gnl/4pp3/pk1+P2pP1/8p/9/1P1nP+RP2/P1P5P/3S5/L+p1BK1GNL b RB3SPg3p 83",
-    "maximum_ply": 7,
+    "maximum_ply": 9,
     "weight": 1
   },
   {
@@ -608,7 +608,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "+Rg6l/2kg1+P3/1p1sppp2/p1p5p/1N2S1S2/2P3P1P/P1+r1gP3/2b6/L4GKNL b BSNL5Pn 67",
-    "maximum_ply": 7,
+    "maximum_ply": 15,
     "weight": 1
   },
   {
@@ -644,7 +644,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "r7l/3g1B3/4ns1k1/p7p/4P4/1PP1G1P1P/P2PS1N2/7S1/LN2KG2L b GSL8Prbnp 129",
-    "maximum_ply": 7,
+    "maximum_ply": 11,
     "weight": 1
   },
   {
@@ -656,7 +656,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln2n1+R2/2kg2+P1s/3l4p/p1pp2s2/1L2B1P2/P1PP2pr1/3KP3P/1G3G3/L3b3+p b G2S2N5P 129",
-    "maximum_ply": 7,
+    "maximum_ply": 15,
     "weight": 1
   },
   {
@@ -680,7 +680,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln7/4+RG3/1S1p1p+N2/p1pspkp1p/1N5g1/P1+B1PP3/+b2P1SPp1/2G1G4/2P1K2NL b RS2L3Pp 101",
-    "maximum_ply": 7,
+    "maximum_ply": 11,
     "weight": 1
   },
   {
@@ -692,7 +692,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln6l/4+B4/3p3kp/p3ppPp1/2ps4P/Pr7/2PPP4/1G1K1G1+B1/LN3s2L b GN2Prg2sn3p 101",
-    "maximum_ply": 7,
+    "maximum_ply": 13,
     "weight": 1
   },
   {
@@ -716,7 +716,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l1R1n1knl/5g1b1/2+PBp1gp1/p2p1S1Pp/3n1P3/1P2S3P/P3P1S2/2G6/LN2KG2L b S4Pr2p 89",
-    "maximum_ply": 7,
+    "maximum_ply": 19,
     "weight": 1
   },
   {
@@ -812,7 +812,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l+B6l/5kg2/2n1ps1p1/p1p2pP1P/n6S1/P1P1P1+R2/2+p2PN2/K7L/L1S6 b RB2GSN4Pg2p 113",
-    "maximum_ply": 7,
+    "maximum_ply": 21,
     "weight": 1
   },
   {
@@ -836,7 +836,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l4s3/3k5/3p2+B+R1/p1rB1pp1p/1p4L2/2p3P2/PP1PKP2P/1SG3S2/LN3G1NL b GSN2Pgn3p 75",
-    "maximum_ply": 7,
+    "maximum_ply": 11,
     "weight": 1
   },
   {
@@ -872,7 +872,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "1+B7/2skn4/p5s2/G1pppN1S1/K2n1p1p1/PPP1G1p2/1+r1P1P3/4P4/3L1G1+l1 b BGSNL5Prl 151",
-    "maximum_ply": 7,
+    "maximum_ply": 9,
     "weight": 1
   },
   {
@@ -884,7 +884,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln2n1s1l/3k2S2/3p1+R3/p1r1S3P/1p4p2/P1G6/1P1P+p4/K5S2/LNb2G2L b B2GN6P3p 117",
-    "maximum_ply": 7,
+    "maximum_ply": 9,
     "weight": 1
   },
   {
@@ -896,7 +896,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "2+R+L3nl/G2S1spk1/4p2sp/1Kp2pP2/2g3S2/P4P3/3PP3P/3+n3R1/2+p2G1NL b BGNL5Pbp 115",
-    "maximum_ply": 7,
+    "maximum_ply": 9,
     "weight": 1
   },
   {
@@ -968,7 +968,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l4kb1+R/4gs1+P1/2+Pp2p1n/p3pS2p/9/P1pP2PbP/4PPN2/2+pS1K1s1/L+r3G1NL b GL2Pgnp 59",
-    "maximum_ply": 9,
+    "maximum_ply": 11,
     "weight": 1
   },
   {
@@ -992,7 +992,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l+S4+N1l/6+R2/p2p1p2p/1pp1pkp2/3n5/2P1G3P/PP2PPP+b1/2GS5/1N2KGS+pL b GSLPrbnp 55",
-    "maximum_ply": 9,
+    "maximum_ply": 15,
     "weight": 1
   },
   {
@@ -1004,7 +1004,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "3+Rbk1Sl/4gg3/p2p1pp+P1/4s2PP/1p5N1/8p/PPSKPPP2/3B1G3/LN1G3+r1 b N2LPsn3p 107",
-    "maximum_ply": 9,
+    "maximum_ply": 13,
     "weight": 1
   },
   {
@@ -1016,7 +1016,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "+B5knl/4+Pg3/3+Rppspp/1p7/3N2pP1/7sP/PP3+pPS1/5g1K1/L7L b RB2GS2NLP4p 93",
-    "maximum_ply": 9,
+    "maximum_ply": 19,
     "weight": 1
   },
   {
@@ -1040,7 +1040,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l7l/3+B5/p4g1k1/4pppp1/P1+B4np/1PpPP1P1P/1S3P3/1pG1K4/L5SNg b R2SL2Prg2np 93",
-    "maximum_ply": 9,
+    "maximum_ply": 13,
     "weight": 1
   },
   {
@@ -1052,7 +1052,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l1+R1sks2/2Gg5/p3pp1+P1/2psnlp2/7Np/P1P1G1S1P/3+BPPP+p1/1+r1L5/3PKG1NL b BN3P 93",
-    "maximum_ply": 9,
+    "maximum_ply": 11,
     "weight": 1
   },
   {
@@ -1064,7 +1064,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln1g3+R1/3k2G2/2spspp2/p1p1p4/3nl4/1PPP2P2/Pp2PP3/1BS1KG3/LN1G1+n1+l1 b RBS4P 71",
-    "maximum_ply": 9,
+    "maximum_ply": 11,
     "weight": 1
   },
   {
@@ -1100,7 +1100,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l3g1s2/1k1L2+P2/ps1pp+R3/1p1s1B2L/N8/2P1P4/PPNP1PP2/2G3G+n1/L4K3 b RBGSN6P 83",
-    "maximum_ply": 9,
+    "maximum_ply": 15,
     "weight": 1
   },
   {
@@ -1112,7 +1112,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l1Rpn3l/5g1k1/p4p1pp/9/2sP4P/P3PPS2/1P+p1K1N2/1pS6/L1R5L b 2B2GSN4Pgnp 133",
-    "maximum_ply": 9,
+    "maximum_ply": 13,
     "weight": 1
   },
   {
@@ -1124,7 +1124,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l1+Rl2+Bnl/3g2+P2/pspppkp1p/1P5s1/9/2P6/P1NPPPP1P/5S1p1/2rSKG1NL b BGNg2p 53",
-    "maximum_ply": 9,
+    "maximum_ply": 19,
     "weight": 1
   },
   {
@@ -1160,7 +1160,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "lnB6/2r1k2+L1/p1p2g3/1p1Bpp1p1/1n6N/2P2sp2/PP1S5/3K5/LN5R1 b 2GSLPgs7p 111",
-    "maximum_ply": 9,
+    "maximum_ply": 13,
     "weight": 1
   },
   {
@@ -1184,7 +1184,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "4G3l/1+Rp6/3sNpN1p/3np4/L1P1PLpk1/2S3P1P/1K2SP1p1/3R5/5b2L b B3GSN5P2p 129",
-    "maximum_ply": 9,
+    "maximum_ply": 15,
     "weight": 1
   },
   {
@@ -1196,7 +1196,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l6nl/3+N2+S2/p1k2+P1p1/2s1p3p/3n2pP1/P2bP1P1P/1PppsK3/6G2/L2G3RL b RGN3Pbgsp 95",
-    "maximum_ply": 9,
+    "maximum_ply": 17,
     "weight": 1
   },
   {
@@ -1208,7 +1208,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l3k2n1/1r7/ppnppS1p1/2Bsl+B3/3n5/2PS1SRP1/PPpPPP3/2GK2+p2/LN6+l b G3P2gp 73",
-    "maximum_ply": 9,
+    "maximum_ply": 13,
     "weight": 1
   },
   {
@@ -1232,7 +1232,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln1+R3+P1/1k1rp4/1N1Gs1p1l/ppp5g/3sN1Pl1/2P1P4/PP3PS2/2GS5/LN1K1G1+p1 b 2BP4p 83",
-    "maximum_ply": 9,
+    "maximum_ply": 13,
     "weight": 1
   },
   {
@@ -1244,7 +1244,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l2g3s+B/r4sk2/p2+P3P1/5p1pp/3P2N2/1P3P2P/PSB2S+p2/2G1P4/LN2KG2L b GNLPrn4p 85",
-    "maximum_ply": 9,
+    "maximum_ply": 11,
     "weight": 1
   },
   {
@@ -1268,7 +1268,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "5B1ll/5s1r1/p5p2/1pP2p3/6Ppk/2S3S2/PPNKPP3/4+nS3/L3G4 b RBGN3P2gnl4p 135",
-    "maximum_ply": 9,
+    "maximum_ply": 21,
     "weight": 1
   },
   {
@@ -1316,7 +1316,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l6nl/2R3S1n/3p2p1p/pp2pp1k1/8+b/2pP5/PP1GPP2N/1S2K4/LN1G2S1L b B2GSPr4p 95",
-    "maximum_ply": 9,
+    "maximum_ply": 15,
     "weight": 1
   },
   {
@@ -1328,7 +1328,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l4R2l/4+N2k1/2+P1pb1p1/p2pP3p/1P2S1P2/P1pPg3P/4n1+s2/2GB5/LN2KG2L b RGSNPs4p 121",
-    "maximum_ply": 9,
+    "maximum_ply": 13,
     "weight": 1
   },
   {
@@ -1352,7 +1352,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln4S1l/r2g3n1/2n1B3k/p1K1Lpgp1/1p2GP2P/2P1P+r3/PPN1b4/9/L4+p2+p b G2S4Ps2p 143",
-    "maximum_ply": 9,
+    "maximum_ply": 13,
     "weight": 1
   },
   {
@@ -1412,151 +1412,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l2+R1nskl/3b1Gs2/pp1p1pp2/4R2p1/3N4p/3P4P/PBK1PPP2/7S1/L4G1NL b 2GSN5P 95",
-    "maximum_ply": 9,
-    "weight": 1
-  },
-  {
-    "tags": [
-      "library"
-    ],
-    "display": {
-      "description": "board_state.tlm_shogi.tsume",
-      "author": "board_state.tlm_shogi.tsume.author.unknown"
-    },
-    "data": "l+Rp3k1l/2gs2g2/p2p1p3/1pGnp1NPp/6S2/1B2P1B1P/PPN1+RPK2/9/L7L b G2SN5P 167",
-    "maximum_ply": 9,
-    "weight": 1
-  },
-  {
-    "tags": [
-      "library"
-    ],
-    "display": {
-      "description": "board_state.tlm_shogi.tsume",
-      "author": "board_state.tlm_shogi.tsume.author.unknown"
-    },
-    "data": "8l/2n2kb2/p1+Rs3p+b/1p3Gp1p/2P1PP1P1/6P1P/PPN+sgS1R1/4G4/L5K1L b GSN4Pnlp 107",
-    "maximum_ply": 9,
-    "weight": 1
-  },
-  {
-    "tags": [
-      "library"
-    ],
-    "display": {
-      "description": "board_state.tlm_shogi.tsume",
-      "author": "board_state.tlm_shogi.tsume.author.unknown"
-    },
-    "data": "l5s1l/3k5/1rnppG2p/pSR4p1/2nb5/PGP2Sp2/3PP3P/2KS5/LN2G4 b BG5Pnl2p 103",
-    "maximum_ply": 9,
-    "weight": 1
-  },
-  {
-    "tags": [
-      "library"
-    ],
-    "display": {
-      "description": "board_state.tlm_shogi.tsume",
-      "author": "board_state.tlm_shogi.tsume.author.unknown"
-    },
-    "data": "l2g4l/2s3+R2/2n1p1p2/p2P2kgp/1P2Gpg2/P1P1B3P/2N1P1PK1/3+p2S2/L2r2+bNL b 2S2Pn3p 101",
-    "maximum_ply": 9,
-    "weight": 1
-  },
-  {
-    "tags": [
-      "library"
-    ],
-    "display": {
-      "description": "board_state.tlm_shogi.tsume",
-      "author": "board_state.tlm_shogi.tsume.author.unknown"
-    },
-    "data": "l3ks1+R1/4gg3/n1p+N1pp2/p2pp4/6S2/P1P3Ppp/3PPPNb1/1+r2SK3/L1+p2G2L b BGSnl3p 63",
-    "maximum_ply": 9,
-    "weight": 1
-  },
-  {
-    "tags": [
-      "library"
-    ],
-    "display": {
-      "description": "board_state.tlm_shogi.tsume",
-      "author": "board_state.tlm_shogi.tsume.author.unknown"
-    },
-    "data": "lnsk1g2l/5+P1+R1/p+Npp1p2p/4p1p2/5g3/1p2P4/P1PP1P1pP/1Bg+b4R/LN3GKNL b 3S2p 95",
-    "maximum_ply": 9,
-    "weight": 1
-  },
-  {
-    "tags": [
-      "library"
-    ],
-    "display": {
-      "description": "board_state.tlm_shogi.tsume",
-      "author": "board_state.tlm_shogi.tsume.author.unknown"
-    },
-    "data": "l4+B+S1l/1r1s1b3/p1N2k3/2p1pp1pp/1p1p2p2/2P5P/PP1PPPN2/2G6/L1S1KG2L b GSNrgn2p 77",
-    "maximum_ply": 9,
-    "weight": 1
-  },
-  {
-    "tags": [
-      "library"
-    ],
-    "display": {
-      "description": "board_state.tlm_shogi.tsume",
-      "author": "board_state.tlm_shogi.tsume.author.unknown"
-    },
-    "data": "3S3+P+B/1s2g2+R1/pr1skp1p1/1pppp3p/1n3gL2/1B2gP3/P7P/2K1P4/LN5NL b GSNL5p 125",
-    "maximum_ply": 9,
-    "weight": 1
-  },
-  {
-    "tags": [
-      "library"
-    ],
-    "display": {
-      "description": "board_state.tlm_shogi.tsume",
-      "author": "board_state.tlm_shogi.tsume.author.unknown"
-    },
-    "data": "ln1R2g2/2gs+Bl3/pk1p1pp2/1pP1ps2p/1N1P5/+rP1S4P/2N+BPPP1N/6S2/1L2KG2L b G4P 99",
-    "maximum_ply": 9,
-    "weight": 1
-  },
-  {
-    "tags": [
-      "library"
-    ],
-    "display": {
-      "description": "board_state.tlm_shogi.tsume",
-      "author": "board_state.tlm_shogi.tsume.author.unknown"
-    },
-    "data": "lg6l/2s+BR+R+S2/k1np1p3/2p2s3/p2n1N3/1GG1PP2P/2PP5/1P1S+p4/LNKb4L b G6Pp 111",
-    "maximum_ply": 9,
-    "weight": 1
-  },
-  {
-    "tags": [
-      "library"
-    ],
-    "display": {
-      "description": "board_state.tlm_shogi.tsume",
-      "author": "board_state.tlm_shogi.tsume.author.unknown"
-    },
-    "data": "l1k2p2+P/3g2+R2/p1n2+S2p/1ppp4b/4pP3/1PP5P/PSSG1S3/4P4/LN1K1G2L b BGNL4Prn 115",
-    "maximum_ply": 9,
-    "weight": 1
-  },
-  {
-    "tags": [
-      "library"
-    ],
-    "display": {
-      "description": "board_state.tlm_shogi.tsume",
-      "author": "board_state.tlm_shogi.tsume.author.unknown"
-    },
-    "data": "l8/4+P4/p4p3/4p2k1/6pp1/1PpP2P2/P2pPPNL1/5S2+l/LSBGKG3 b R2G2SN2Prb2n2p 95",
-    "maximum_ply": 9,
+    "maximum_ply": 11,
     "weight": 1
   },
   {
@@ -1568,7 +1424,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "+P2+Rb1gnl/7k1/n1p1+Bp1pp/p5p2/1p1pP2P1/2+s6/PsNGSPP1P/3KG4/L5RNL b SL3Pg 83",
-    "maximum_ply": 11,
+    "maximum_ply": 15,
     "weight": 1
   },
   {
@@ -1592,7 +1448,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l4rg2/2+B1g1sl1/p2n1kn2/2p1Ppp2/3+R5/1PPP2P2/P1S2PN1P/3GGS3/+p3K3L b SN3Pbl2p 89",
-    "maximum_ply": 11,
+    "maximum_ply": 15,
     "weight": 1
   },
   {
@@ -1604,7 +1460,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln6+B/1+B2gkp2/p1ppspn2/4ps2p/3N3N1/2PP1PPRP/P2SG4/1PG2KS2/L7L b RGL3Pp 89",
-    "maximum_ply": 11,
+    "maximum_ply": 21,
     "weight": 1
   },
   {
@@ -1616,7 +1472,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "1nslksG+R1/l2g1r3/p+B1pppp2/9/2P6/3B1PP2/PP1PP4/3S5/LN1GKG1N1 b SN6Pl 77",
-    "maximum_ply": 11,
+    "maximum_ply": 23,
     "weight": 1
   },
   {
@@ -1628,7 +1484,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l7l/1+Rskg4/p3pp1+B1/1pp1s1N1p/2g2P3/4S3P/PPPPP1P2/3K2GP1/1+b1G1+r2L b S3N3Pl 117",
-    "maximum_ply": 11,
+    "maximum_ply": 19,
     "weight": 1
   },
   {
@@ -1640,7 +1496,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "1+Rn1g3+P/2+Nsk2p+R/3psp+L2/2p1p1P2/1S5g1/1+l2PSp2/2NG1P1+p1/2gB5/L3K1+b2 b NL4P3p 121",
-    "maximum_ply": 11,
+    "maximum_ply": 17,
     "weight": 1
   },
   {
@@ -1652,7 +1508,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l2+R2snl/4+Sgk2/pgnpp1pp1/2R2p1Pp/bpP6/9/PP1PPPP1P/5K3/LNSG1GSNL b Bp 51",
-    "maximum_ply": 11,
+    "maximum_ply": 15,
     "weight": 1
   },
   {
@@ -1664,7 +1520,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln1g2+B2/1rk6/1n1pBp1P1/p1P2g2p/2N1p4/2pS2P1P/P2PPPp2/2K2G2+r/LN4S2 b SPgs2l2p 103",
-    "maximum_ply": 11,
+    "maximum_ply": 15,
     "weight": 1
   },
   {
@@ -1688,7 +1544,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "1n6+R/l1s1gk1+L1/p4snp1/1rPppp3/9/1P1PP2P1/PG1S1P3/1K2+p4/LN7 b 2BGL3Pgsn2p 71",
-    "maximum_ply": 11,
+    "maximum_ply": 17,
     "weight": 1
   },
   {
@@ -1712,7 +1568,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l1+N2n1+Rl/2G2g3/p2kpp2p/3pr1P2/2p2s3/2PB5/PP1PPK2P/2G6/LNS3G1L b B2S4Pnp 83",
-    "maximum_ply": 11,
+    "maximum_ply": 13,
     "weight": 1
   },
   {
@@ -1724,7 +1580,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l+R1n2s+R1/1s1g1kS2/2pp3p1/p+B3p3/4g4/PPP1l+B3/1p+nPSPPP1/6G2/L2K3N+l b N4Pgp 97",
-    "maximum_ply": 11,
+    "maximum_ply": 13,
     "weight": 1
   },
   {
@@ -1736,7 +1592,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "lG3r1n1/1+S2g3l/1Sp1p4/pp1ps1P1p/1kN1+B4/2P4P1/PP1P1P1+RP/2GS1+b3/LNK3gNL b 2P2p 93",
-    "maximum_ply": 11,
+    "maximum_ply": 13,
     "weight": 1
   },
   {
@@ -1748,7 +1604,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "2p1g1S2/l+P4G1l/p2k2ppp/4pR3/3s5/P1gN5/1+p2PP2P/1B1G5/LNSKL3+r b BSN2Pn4p 141",
-    "maximum_ply": 11,
+    "maximum_ply": 13,
     "weight": 1
   },
   {
@@ -1760,7 +1616,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln1g2Rnl/3k5/3sps1gp/p1pP1p1p1/6p1B/PP1SP3P/5P3/2GK2+s2/LN5rL b B4Pgnp 69",
-    "maximum_ply": 11,
+    "maximum_ply": 15,
     "weight": 1
   },
   {
@@ -1772,7 +1628,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l2gk2bl/2s3s2/2np4p/p1p3K2/1+r4+B1P/P4P1p1/2PPP1P2/9/L2+p1G1gL b GS2N4Prsnp 75",
-    "maximum_ply": 11,
+    "maximum_ply": 15,
     "weight": 1
   },
   {
@@ -1784,7 +1640,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l6n+B/2n6/p1p+R2s1p/+b3pk1p1/2GN1pp2/3P3s1/PP1l1P2P/3S1G3/+r1PK4L b 2GSNPl4p 95",
-    "maximum_ply": 11,
+    "maximum_ply": 21,
     "weight": 1
   },
   {
@@ -1796,7 +1652,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "lR3Ss1l/3+B2g2/p3ppkpp/6p2/1p2PS3/2p3P2/PP1p1+r2P/3GG1N2/LN2KG2L b B2NPs3p 65",
-    "maximum_ply": 11,
+    "maximum_ply": 19,
     "weight": 1
   },
   {
@@ -1808,7 +1664,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "lR4G1l/2+Nsg2k1/p2p1pp1n/3n4p/4+bN3/1P3PP1P/P1+pP1SKp1/9/L1G2G2L b BS2Prs3p 67",
-    "maximum_ply": 11,
+    "maximum_ply": 13,
     "weight": 1
   },
   {
@@ -1832,7 +1688,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l5+P1l/2s6/p4p3/2pPpbPk1/3S4p/P1P6/1GB2P2P/1K1pG4/LN4sN+p b 2GSNP2rnl3p 107",
-    "maximum_ply": 11,
+    "maximum_ply": 13,
     "weight": 1
   },
   {
@@ -1844,7 +1700,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l1k4+Pl/6+N2/1sGg2+R1p/b1s3p1s/1Npp5/LG6P/1+R2PP3/4Gp3/1N2K2NL b B8Psp 137",
-    "maximum_ply": 11,
+    "maximum_ply": 15,
     "weight": 1
   },
   {
@@ -1856,7 +1712,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln7/9/p1p5n/6p2/6+R1p/1pPB4k/Pg1P1P1+p1/1PGSLS3/LNK1G3+l b RB2SN4Pg3p 107",
-    "maximum_ply": 11,
+    "maximum_ply": 15,
     "weight": 1
   },
   {
@@ -1868,7 +1724,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l4+Ns1l/2R2rk2/3p1ppp1/p3B3p/3g3N1/1PP5b/PG1SPPP1N/2S1KS3/LN3G2L b G6P 95",
-    "maximum_ply": 11,
+    "maximum_ply": 13,
     "weight": 1
   },
   {
@@ -1880,7 +1736,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l2g4G/3k5/3p2+R1p/p4pp2/2PP5/4pB2P/P2S1PP2/1+rS1GSb2/LN2K2NL b S2NL4Pg2p 95",
-    "maximum_ply": 11,
+    "maximum_ply": 23,
     "weight": 1
   },
   {
@@ -1892,7 +1748,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "5S1nl/sp7/8p/4k1+Bp1/P1Pp1pL2/2G1P4/3PKP2P/2+n1G2+n1/1+r2G1P+n1 b G2L5Prb2sp 131",
-    "maximum_ply": 11,
+    "maximum_ply": 17,
     "weight": 1
   },
   {
@@ -1916,247 +1772,7 @@
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "+S2+Rp2nl/4g4/7k1/p3G1ps1/2P2N1pP/P3N1P2/3PP1GR1/5+p1K1/+s4+b1NL b BS2L4Pg3p 133",
-    "maximum_ply": 11,
-    "weight": 1
-  },
-  {
-    "tags": [
-      "library"
-    ],
-    "display": {
-      "description": "board_state.tlm_shogi.tsume",
-      "author": "board_state.tlm_shogi.tsume.author.unknown"
-    },
-    "data": "l1r6/4g1k2/p1spspnp1/4p3B/1p1P1Pp2/2L1P2+R1/PPGN1GN2/4K4/6s1L b GS3Pbnl3p 111",
-    "maximum_ply": 11,
-    "weight": 1
-  },
-  {
-    "tags": [
-      "library"
-    ],
-    "display": {
-      "description": "board_state.tlm_shogi.tsume",
-      "author": "board_state.tlm_shogi.tsume.author.unknown"
-    },
-    "data": "3gks1Rl/l4g1+P1/p2+Bppn2/1pp3p1p/9/2P5P/PP1P3p1/2SK5/LN2G2NL b BG2SNPr3p 63",
-    "maximum_ply": 11,
-    "weight": 1
-  },
-  {
-    "tags": [
-      "library"
-    ],
-    "display": {
-      "description": "board_state.tlm_shogi.tsume",
-      "author": "board_state.tlm_shogi.tsume.author.unknown"
-    },
-    "data": "l7l/3B2G2/1k2+P3p/2psp2p1/p4S1nP/2PpP4/P1n2Png1/4R4/L2+rG1KNL b B2S3Pg3p 127",
-    "maximum_ply": 11,
-    "weight": 1
-  },
-  {
-    "tags": [
-      "library"
-    ],
-    "display": {
-      "description": "board_state.tlm_shogi.tsume",
-      "author": "board_state.tlm_shogi.tsume.author.unknown"
-    },
-    "data": "ln2g3l/2+P6/p4k3/1p5+Rp/2S4n1/9/PP3P2P/2+pPGS1+b1/1+rP1K2NL b BS4P2gsnl3p 107",
-    "maximum_ply": 11,
-    "weight": 1
-  },
-  {
-    "tags": [
-      "library"
-    ],
-    "display": {
-      "description": "board_state.tlm_shogi.tsume",
-      "author": "board_state.tlm_shogi.tsume.author.unknown"
-    },
-    "data": "lp+P1pp1kl/5bng1/p1+Rp1+Nn2/4B1psp/9/2P3G2/P1sPPSN1P/7R1/5K2L b 2GS5Pl 131",
-    "maximum_ply": 11,
-    "weight": 1
-  },
-  {
-    "tags": [
-      "library"
-    ],
-    "display": {
-      "description": "board_state.tlm_shogi.tsume",
-      "author": "board_state.tlm_shogi.tsume.author.unknown"
-    },
-    "data": "l3k2nl/5rgb1/p2pPp1pp/1pG3P2/1n7/1BPP2pP1/PGNS+p3P/1KS2+r3/L3+s2NL b GSP2p 93",
-    "maximum_ply": 11,
-    "weight": 1
-  },
-  {
-    "tags": [
-      "library"
-    ],
-    "display": {
-      "description": "board_state.tlm_shogi.tsume",
-      "author": "board_state.tlm_shogi.tsume.author.unknown"
-    },
-    "data": "l1+PSk2nl/4g4/3p1ss+B1/p1p1p1ppp/9/1rP3P2/P1NPPSN1P/1+p5R1/L2GKG2L b GNPb2p 49",
-    "maximum_ply": 11,
-    "weight": 1
-  },
-  {
-    "tags": [
-      "library"
-    ],
-    "display": {
-      "description": "board_state.tlm_shogi.tsume",
-      "author": "board_state.tlm_shogi.tsume.author.unknown"
-    },
-    "data": "ln1g2B2/4p4/1S1k1s+Rpl/p1Np1p2b/2P5p/P3P3P/1PSP1PS2/2G6/LN2KG1RL b G5Pn 97",
-    "maximum_ply": 11,
-    "weight": 1
-  },
-  {
-    "tags": [
-      "library"
-    ],
-    "display": {
-      "description": "board_state.tlm_shogi.tsume",
-      "author": "board_state.tlm_shogi.tsume.author.unknown"
-    },
-    "data": "lR5n1/6g1P/p1nS1kpp1/4p3l/3p1pb2/1PG4R1/Pp1PPP2+p/3S5/LN1K1G3 b GS3Pbsnlp 99",
-    "maximum_ply": 11,
-    "weight": 1
-  },
-  {
-    "tags": [
-      "library"
-    ],
-    "display": {
-      "description": "board_state.tlm_shogi.tsume",
-      "author": "board_state.tlm_shogi.tsume.author.unknown"
-    },
-    "data": "l5snl/6+R2/2pp1p+Npp/p8/2R3p2/L1PP1SPk1/4P3P/1+pG1KS3/1+bS2G2+b b 2GN3Pnl2p 59",
-    "maximum_ply": 11,
-    "weight": 1
-  },
-  {
-    "tags": [
-      "library"
-    ],
-    "display": {
-      "description": "board_state.tlm_shogi.tsume",
-      "author": "board_state.tlm_shogi.tsume.author.unknown"
-    },
-    "data": "ln5n1/4+N+B2l/p+Pp2+B1sk/7p1/6p2/P1P4rp/1p1P1p3/2S6/L1KG1G1NL b 2GSPrs6p 125",
-    "maximum_ply": 11,
-    "weight": 1
-  },
-  {
-    "tags": [
-      "library"
-    ],
-    "display": {
-      "description": "board_state.tlm_shogi.tsume",
-      "author": "board_state.tlm_shogi.tsume.author.unknown"
-    },
-    "data": "l6nl/2R+Bsskl1/5p1g1/p1p+Rp1pp1/6N1p/2PPPP2P/P4sN2/7G1/+p2g2K1L b BSN3Pgp 95",
-    "maximum_ply": 11,
-    "weight": 1
-  },
-  {
-    "tags": [
-      "library"
-    ],
-    "display": {
-      "description": "board_state.tlm_shogi.tsume",
-      "author": "board_state.tlm_shogi.tsume.author.unknown"
-    },
-    "data": "l6nl/1r1sk4/p2p5/2plS1ppp/1p1n5/PGPB2P2/3PP1N1P/2SKG2R1/+p2G4L b BGPsn3p 59",
-    "maximum_ply": 11,
-    "weight": 1
-  },
-  {
-    "tags": [
-      "library"
-    ],
-    "display": {
-      "description": "board_state.tlm_shogi.tsume",
-      "author": "board_state.tlm_shogi.tsume.author.unknown"
-    },
-    "data": "+B6nl/4g1+P2/p1spkpp2/3P1lL2/2PBp1NN1/1P4P1p/P1G1PP3/5G3/LNS1KG1r+s b RS3Pp 79",
-    "maximum_ply": 11,
-    "weight": 1
-  },
-  {
-    "tags": [
-      "library"
-    ],
-    "display": {
-      "description": "board_state.tlm_shogi.tsume",
-      "author": "board_state.tlm_shogi.tsume.author.unknown"
-    },
-    "data": "l+R6l/2nks1g2/n2pp4/1p3pB2/4S3s/2pP2p2/PP2+brP1N/1SG6/L2KG3L b GN2P6p 101",
-    "maximum_ply": 11,
-    "weight": 1
-  },
-  {
-    "tags": [
-      "library"
-    ],
-    "display": {
-      "description": "board_state.tlm_shogi.tsume",
-      "author": "board_state.tlm_shogi.tsume.author.unknown"
-    },
-    "data": "l+R6l/4+S4/1ppp1p3/p2spkppp/5nnP1/2P3PBP/P2PPPNR1/1S2G4/LN2K1gSL b 2GPb 75",
-    "maximum_ply": 11,
-    "weight": 1
-  },
-  {
-    "tags": [
-      "library"
-    ],
-    "display": {
-      "description": "board_state.tlm_shogi.tsume",
-      "author": "board_state.tlm_shogi.tsume.author.unknown"
-    },
-    "data": "l3kp2l/3r2+RG1/1+bPp1g3/p3p3p/1N1Gn4/1P1S1P2P/P2PS1N2/1S2K4/L7L b BGS3Pn4p 127",
-    "maximum_ply": 11,
-    "weight": 1
-  },
-  {
-    "tags": [
-      "library"
-    ],
-    "display": {
-      "description": "board_state.tlm_shogi.tsume",
-      "author": "board_state.tlm_shogi.tsume.author.unknown"
-    },
-    "data": "r7l/1R1gG2+N1/p4ppp1/1spN4p/3k3P1/2P1L1P1P/PPBPPPN2/2GS2S2/LN2K1G1L b S3Pb 75",
-    "maximum_ply": 11,
-    "weight": 1
-  },
-  {
-    "tags": [
-      "library"
-    ],
-    "display": {
-      "description": "board_state.tlm_shogi.tsume",
-      "author": "board_state.tlm_shogi.tsume.author.unknown"
-    },
-    "data": "ln1gk2nl/4p1+P2/5pp2/1ppp+S2Bp/p5P2/2P2Pb2/PPGS4P/4G2+s1/LN2K3L b RGS3Prn 63",
-    "maximum_ply": 11,
-    "weight": 1
-  },
-  {
-    "tags": [
-      "library"
-    ],
-    "display": {
-      "description": "board_state.tlm_shogi.tsume",
-      "author": "board_state.tlm_shogi.tsume.author.unknown"
-    },
-    "data": "l+R5nl/1+B3+Sgk1/p2ppps2/2p3pp1/1p1N5/2P2PP1p/PP1GP4/2+nS1G3/L+rN1K2sL b BG3p 65",
-    "maximum_ply": 11,
+    "maximum_ply": 13,
     "weight": 1
   }
 ]
