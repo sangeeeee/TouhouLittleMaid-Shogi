@@ -42,7 +42,7 @@ The direct engine API now reads Sunfish's complete optimized `eval.bin` feature
 vector, uses a three-slot depth-preferred transposition table, and performs a
 single-threaded iterative-deepening Alpha-Beta search with quiescence, move
 ordering, fourfold-repetition draws, principal variations, and hard time/node/
-cancellation limits. It remains independent of Minecraft and native processes.
+cancellation limits. It remains independent of Minecraft.
 Resources may be supplied either as ordinary files for standalone tools or as
 classpath streams. The mod uses the latter so its evaluation and book data stay
 inside the distributable JAR and never need to be extracted to `config`.
@@ -50,3 +50,12 @@ inside the distributable JAR and never need to be extracted to `config`.
 This is the correctness-oriented search baseline. Sunfish's advanced pruning,
 parallel search, perpetual-check adjudication, and opening-book selection are
 left for later stages.
+
+## License and attribution
+
+This Java engine includes an implementation ported from the
+[Sunfish4](https://github.com/sunfish-shogi/sunfish4) source code. Sunfish4 is
+distributed under the MIT License, Copyright (c) 2015 Ryosuke Kubo. The
+original copyright notice and full license text are stored in
+[`SUNFISH.txt`](../src/main/resources/META-INF/licenses/tlm_shogi/SUNFISH.txt)
+and included in the distributable mod JAR.

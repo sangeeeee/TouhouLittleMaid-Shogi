@@ -6,7 +6,7 @@
 
 ## 対応プラットフォーム
 
-現在は純Java版のSunfishエンジンを内蔵しており、Windows用の `.exe` の展開・実行は行いません。Minecraft 1.21.1に必要なJava 21を実行できるクライアントであれば、プラットフォームを問わず対局できます。専用サーバー側では探索処理を実行しません。
+純Java版のSunfishエンジンを内蔵し、プレイヤーのクライアント上のバックグラウンドワーカーで動作します。Minecraft 1.21.1とJava 21を実行できるクライアントであれば、プラットフォームを問わず対局できます。専用サーバーは対局状態のみを管理し、探索処理は行いません。
 
 `eval.bin` と `book.bin` はMODのJAR内に保持され、クライアント初期化時にリソースストリームから直接メモリへ読み込まれます。エンジン用ファイルを `config` 以下へ展開・書き込みすることはありません。探索はクライアントのバックグラウンドワーカーで実行され、マルチプレイサーバーに計算負荷を移しません。
 
@@ -27,6 +27,10 @@
 ```text
 tlm_shogi-1.0.0-neoforge+mc1.21.1.jar
 ```
+
+## ライセンスと第三者ソフトウェア表記
+
+内蔵Java将棋エンジンには、[Sunfish4](https://github.com/sunfish-shogi/sunfish4) のソースコードを基に移植した実装が含まれています。Sunfish4はRyosuke Kubo氏により開発され、MIT Licenseの下で公開されています：Copyright (c) 2015 Ryosuke Kubo。元の著作権表示とライセンス全文は [SUNFISH.txt](src/main/resources/META-INF/licenses/tlm_shogi/SUNFISH.txt) に収録され、ビルドされたMODのJARにも同梱されます。
 
 ## クレジット
 

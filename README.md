@@ -6,7 +6,7 @@
 
 ## 平台支持
 
-模组现在使用直接内置的纯 Java Sunfish 引擎，不再解压或调用 Windows `.exe`。只要客户端能够运行 Minecraft 1.21.1 所需的 Java 21，就可以进行将棋对局；专用服务器不会执行搜索任务。
+模组内置纯 Java Sunfish 引擎。引擎在玩家客户端的后台线程中运行；任何能够运行 Minecraft 1.21.1 与 Java 21 的客户端都可以进行将棋对局，专用服务器只负责维护对局状态，不承担搜索计算。
 
 `eval.bin` 和 `book.bin` 均保留在模组 JAR 内，并在客户端初始化时直接通过资源流读入内存；模组不会为引擎向 `config` 解压或写入任何文件。搜索在玩家客户端的后台线程中完成，不会把计算压力转移到多人服务器。
 
@@ -21,6 +21,10 @@
 ```powershell
 .\gradlew.bat verifyDistributableJar
 ```
+
+## 许可证与第三方声明
+
+内置 Java 将棋引擎包含基于 [Sunfish4](https://github.com/sunfish-shogi/sunfish4) 源码移植的实现。Sunfish4 由 Ryosuke Kubo 开发，以 MIT License 发布：Copyright (c) 2015 Ryosuke Kubo。原始版权声明与完整许可文本见 [SUNFISH.txt](src/main/resources/META-INF/licenses/tlm_shogi/SUNFISH.txt)，并会随构建出的模组 JAR 一同分发。
 
 ## 致谢
 
