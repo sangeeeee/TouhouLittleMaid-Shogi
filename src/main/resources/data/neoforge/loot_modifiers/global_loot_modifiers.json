@@ -1,6 +1,7 @@
 {
   "replace": false,
   "entries": [
-    "tlm_shogi:stronghold_library_tsume"
+    "tlm_shogi:stronghold_library_tsume",
+    "tlm_shogi:stronghold_library_tsume_masterpiece"
   ]
 }

@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -26,6 +27,25 @@ public final class TsumePuzzleCatalogSelfTest {
             9, 50,
             11, 50
     );
+    private static final Map<Integer, Integer> EXPECTED_MASTERPIECE_COUNTS = Map.of(
+            7, 2,
+            9, 3,
+            11, 2,
+            13, 1,
+            15, 2
+    );
+    private static final List<String> MASTERPIECE_AUTHORS = List.of(
+            "波崎黒生",
+            "加藤徹",
+            "加藤徹",
+            "小湊奈美子",
+            "ドうえもん",
+            "岩田俊二",
+            "三枝・三木・岸本",
+            "菅野哲郎",
+            "吉田京平",
+            "駒場和男"
+    );
     private static final Pattern RECORD = Pattern.compile(
             "\\{\\s*\"tags\"\\s*:\\s*\\[\\s*\"library\"\\s*]\\s*,\\s*"
                     + "\"display\"\\s*:\\s*\\{\\s*\"description\"\\s*:\\s*\"([^\"]+)\"\\s*,\\s*"
@@ -38,19 +58,28 @@ public final class TsumePuzzleCatalogSelfTest {
     private int checks;
 
     public static void main(String[] args) throws IOException {
-        if (args.length != 1) {
-            throw new IllegalArgumentException("expected path to tsume.json");
+        if (args.length != 2) {
+            throw new IllegalArgumentException("expected paths to tsume.json and tsume_masterpieces.json");
         }
         TsumePuzzleCatalogSelfTest test = new TsumePuzzleCatalogSelfTest();
-        test.validate(Path.of(args[0]));
+        Set<String> positions = new HashSet<>();
+        test.validate(Path.of(args[0]), "ordinary",
+                "board_state.tlm_shogi.tsume.mate", null,
+                180, EXPECTED_COUNTS, positions, true);
+        test.validate(Path.of(args[1]), "masterpiece",
+                "board_state.tlm_shogi.tsume.masterpiece.mate", MASTERPIECE_AUTHORS,
+                10, EXPECTED_MASTERPIECE_COUNTS, positions, false);
+        test.equal(190, positions.size(), "combined catalog positions are unique");
         System.out.println("Tsume catalog self-test passed: " + test.checks + " checks");
     }
 
-    private void validate(Path path) throws IOException {
+    private void validate(Path path, String catalogName, String descriptionPrefix,
+                          List<String> expectedAuthors, int expectedTotal,
+                          Map<Integer, Integer> expectedCounts, Set<String> positions,
+                          boolean requireAttackerSafeAtStart) throws IOException {
         String json = Files.readString(path, StandardCharsets.UTF_8);
         Matcher matcher = RECORD.matcher(json);
         Map<Integer, Integer> actualCounts = new HashMap<>();
-        Set<String> positions = new HashSet<>();
         int records = 0;
         while (matcher.find()) {
             records++;
@@ -60,34 +89,37 @@ public final class TsumePuzzleCatalogSelfTest {
             int maximumPly = Integer.parseInt(matcher.group(4));
             int weight = Integer.parseInt(matcher.group(5));
 
-            equal("board_state.tlm_shogi.tsume.mate" + maximumPly, description,
-                    "record " + records + " description");
-            equal(UNKNOWN_AUTHOR, author, "record " + records + " author");
-            equal(1, weight, "record " + records + " weight");
+            equal(descriptionPrefix + maximumPly, description,
+                    catalogName + " record " + records + " description");
+            String expectedAuthor = expectedAuthors == null ? UNKNOWN_AUTHOR : expectedAuthors.get(records - 1);
+            equal(expectedAuthor, author, catalogName + " record " + records + " author");
+            equal(1, weight, catalogName + " record " + records + " weight");
             check(maximumPly > 0 && (maximumPly & 1) == 1,
-                    "record " + records + " has a positive odd move limit");
+                    catalogName + " record " + records + " has a positive odd move limit");
             actualCounts.merge(maximumPly, 1, Integer::sum);
 
             Position position = Position.fromSfen(sfen);
-            equal(Turn.BLACK, position.turn(), "record " + records + " starts with the player");
+            equal(Turn.BLACK, position.turn(), catalogName + " record " + records + " starts with the player");
             equal(1L, count(position, Piece.WHITE_KING),
-                    "record " + records + " has exactly one defender king");
+                    catalogName + " record " + records + " has exactly one defender king");
             check(count(position, Piece.BLACK_KING) <= 1,
-                    "record " + records + " has at most one attacker king");
-            check(!position.inCheck(Turn.BLACK),
-                    "record " + records + " does not start with the attacker in check");
+                    catalogName + " record " + records + " has at most one attacker king");
+            if (requireAttackerSafeAtStart) {
+                check(!position.inCheck(Turn.BLACK),
+                        catalogName + " record " + records + " does not start with the attacker in check");
+            }
             check(position.legalMoves().stream().anyMatch(position::isCheck),
-                    "record " + records + " has at least one legal checking move");
+                    catalogName + " record " + records + " has at least one legal checking move");
 
             String[] fields = sfen.trim().split("\\s+");
             check(positions.add(String.join(" ", fields[0], fields[1], fields[2])),
-                    "record " + records + " is unique");
+                    catalogName + " record " + records + " is unique across both catalogs");
         }
 
         String residue = matcher.replaceAll("").replaceAll("[\\s,\\[\\]]", "");
-        check(residue.isEmpty(), "catalog contains only recognized records");
-        equal(180, records, "catalog record count");
-        equal(EXPECTED_COUNTS, actualCounts, "catalog move-limit counts");
+        check(residue.isEmpty(), catalogName + " catalog contains only recognized records");
+        equal(expectedTotal, records, catalogName + " catalog record count");
+        equal(expectedCounts, actualCounts, catalogName + " catalog move-limit counts");
     }
 
     private static long count(Position position, Piece expected) {

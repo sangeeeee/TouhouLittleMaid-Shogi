@@ -1,0 +1,31 @@
+{
+  "parent": "tlm_shogi:favorability/win_jchess",
+  "criteria": {
+    "maid_event": {
+      "conditions": {
+        "event": "win_tsume_masterpiece"
+      },
+      "trigger": "touhou_little_maid:maid_event"
+    }
+  },
+  "display": {
+    "background": "touhou_little_maid:textures/advancements/backgrounds/stone.png",
+    "description": {
+      "translate": "advancements.tlm_shogi.favorability.win_tsume_masterpiece.description"
+    },
+    "frame": "challenge",
+    "icon": {
+      "count": 1,
+      "id": "tlm_shogi:jchess_board_state"
+    },
+    "title": {
+      "translate": "advancements.tlm_shogi.favorability.win_tsume_masterpiece.title"
+    }
+  },
+  "requirements": [
+    [
+      "maid_event"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

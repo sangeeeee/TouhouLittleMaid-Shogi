@@ -18,6 +18,12 @@ public final class InitDataComponents {
                     .networkSynchronized(ByteBufCodecs.VAR_INT)
                     .build());
 
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> TSUME_MASTERPIECE =
+            DATA_COMPONENTS.register("tsume_masterpiece", () -> DataComponentType.<Boolean>builder()
+                    .persistent(Codec.BOOL)
+                    .networkSynchronized(ByteBufCodecs.BOOL)
+                    .build());
+
     private InitDataComponents() {
     }
 }

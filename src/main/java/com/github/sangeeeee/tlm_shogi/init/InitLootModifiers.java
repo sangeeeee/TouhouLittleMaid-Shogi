@@ -2,6 +2,7 @@ package com.github.sangeeeee.tlm_shogi.init;
 
 import com.github.sangeeeee.tlm_shogi.TouhouLittleMaidShogi;
 import com.github.sangeeeee.tlm_shogi.loot.RandomTsumeBoardStateFunction;
+import com.github.sangeeeee.tlm_shogi.loot.RandomTsumeMasterpieceFunction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
@@ -16,6 +17,10 @@ public final class InitLootModifiers {
     public static final Supplier<LootItemFunctionType<? extends LootItemConditionalFunction>> TSUME_BOARD_STATE_RANDOMLY =
             LOOT_FUNCTION_TYPES.register("tsume_board_state_randomly",
                     () -> new LootItemFunctionType<>(RandomTsumeBoardStateFunction.CODEC));
+
+    public static final Supplier<LootItemFunctionType<? extends LootItemConditionalFunction>> TSUME_MASTERPIECE_RANDOMLY =
+            LOOT_FUNCTION_TYPES.register("tsume_masterpiece_randomly",
+                    () -> new LootItemFunctionType<>(RandomTsumeMasterpieceFunction.CODEC));
 
     private InitLootModifiers() {
     }

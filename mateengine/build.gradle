@@ -49,7 +49,10 @@ tasks.register('tsumePuzzleCatalogTest', JavaExec) {
     dependsOn selfTestClasses
     classpath = sourceSets.selfTest.runtimeClasspath
     mainClass = 'com.github.sangeeeee.tlm_shogi.mateengine.TsumePuzzleCatalogSelfTest'
-    args rootProject.file('src/main/resources/data/tlm_shogi/board_states/tsume.json').absolutePath
+    args(
+            rootProject.file('src/main/resources/data/tlm_shogi/board_states/tsume.json').absolutePath,
+            rootProject.file('src/main/resources/data/tlm_shogi/board_states/tsume_masterpieces.json').absolutePath
+    )
 }
 
 tasks.register('mateSearch', JavaExec) {

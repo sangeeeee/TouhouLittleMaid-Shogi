@@ -32,6 +32,7 @@ public class TileEntityJChess extends TileEntityJoy implements IBoardGameEntityB
     private static final String TSUME_MAX_PLY = "TsumeMaxPly";
     private static final String TSUME_PLY = "TsumePly";
     private static final String TSUME_INCORRECT = "TsumeIncorrect";
+    private static final String TSUME_MASTERPIECE = "TsumeMasterpiece";
 
 
     private final Position chessData;
@@ -54,6 +55,7 @@ public class TileEntityJChess extends TileEntityJoy implements IBoardGameEntityB
     private int tsumeMaxPly = 0;
     private int tsumePly = 0;
     private boolean tsumeIncorrect = false;
+    private boolean tsumeMasterpiece = false;
 
     public TileEntityJChess(BlockPos pos, BlockState blockState) {
         super(TYPE, pos, blockState);
@@ -75,6 +77,7 @@ public class TileEntityJChess extends TileEntityJoy implements IBoardGameEntityB
         data.putInt(TSUME_MAX_PLY, tsumeMaxPly);
         data.putInt(TSUME_PLY, tsumePly);
         data.putBoolean(TSUME_INCORRECT, tsumeIncorrect);
+        data.putBoolean(TSUME_MASTERPIECE, tsumeMasterpiece);
 
         ListTag histTag = new ListTag();
         for (String key : repetitionHistory) histTag.add(StringTag.valueOf(key));
@@ -98,6 +101,7 @@ public class TileEntityJChess extends TileEntityJoy implements IBoardGameEntityB
         tsumeMaxPly = data.getInt(TSUME_MAX_PLY);
         tsumePly = data.getInt(TSUME_PLY);
         tsumeIncorrect = data.getBoolean(TSUME_INCORRECT);
+        tsumeMasterpiece = data.getBoolean(TSUME_MASTERPIECE);
         // 读取局面历史
         repetitionHistory.clear();
         if (data.contains(REPETITION_HISTORY, Tag.TAG_LIST)) {
@@ -121,7 +125,7 @@ public class TileEntityJChess extends TileEntityJoy implements IBoardGameEntityB
     }
 
     /** Completely replaces any current game with a fresh player-first tsume position. */
-    public void resetToTsume(String sfen, String puzzleId, int maximumPly) {
+    public void resetToTsume(String sfen, String puzzleId, int maximumPly, boolean masterpiece) {
         if (maximumPly < 1 || (maximumPly & 1) == 0) {
             throw new IllegalArgumentException("Tsume maximum ply must be a positive odd number");
         }
@@ -152,6 +156,7 @@ public class TileEntityJChess extends TileEntityJoy implements IBoardGameEntityB
         this.tsumeMaxPly = maximumPly;
         this.tsumePly = 0;
         this.tsumeIncorrect = false;
+        this.tsumeMasterpiece = masterpiece;
     }
 
     private void clearTsumeState() {
@@ -160,6 +165,7 @@ public class TileEntityJChess extends TileEntityJoy implements IBoardGameEntityB
         this.tsumeMaxPly = 0;
         this.tsumePly = 0;
         this.tsumeIncorrect = false;
+        this.tsumeMasterpiece = false;
     }
 
     public void addHistoryAfterMove() {
@@ -248,6 +254,10 @@ public class TileEntityJChess extends TileEntityJoy implements IBoardGameEntityB
 
     public boolean isTsumeIncorrect() {
         return tsumeIncorrect;
+    }
+
+    public boolean isTsumeMasterpiece() {
+        return tsumeMode && tsumeMasterpiece;
     }
 
     public void markTsumeIncorrect() {

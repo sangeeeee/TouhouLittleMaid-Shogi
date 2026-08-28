@@ -46,13 +46,18 @@ public final class RandomTsumeBoardStateFunction extends LootItemConditionalFunc
         if (selected == null) {
             return stack;
         }
+        return applyRecord(stack, selected, false);
+    }
+
+    static ItemStack applyRecord(ItemStack stack, TsumeBoardStateRecord selected, boolean masterpiece) {
         TsumeBoardStateRecord.Display display = selected.display();
         ItemBoardState.setState(stack, selected.data(), display.description(), display.author());
         stack.set(InitDataComponents.TSUME_MAXIMUM_PLY, selected.maximumPly());
+        stack.set(InitDataComponents.TSUME_MASTERPIECE, masterpiece);
         return stack;
     }
 
-    private static TsumeBoardStateRecord pick(List<TsumeBoardStateRecord> records, RandomSource random) {
+    static TsumeBoardStateRecord pick(List<TsumeBoardStateRecord> records, RandomSource random) {
         int totalWeight = records.stream().mapToInt(record -> Math.max(0, record.weight())).sum();
         if (records.isEmpty()) {
             return null;

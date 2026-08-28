@@ -1,0 +1,102 @@
+[
+  {
+    "tags": ["library"],
+    "display": {
+      "description": "board_state.tlm_shogi.tsume.masterpiece.mate15",
+      "author": "波崎黒生"
+    },
+    "data": "9/9/9/4B1+R2/5+R1pl/7+pk/9/9/6P1G b Pb3g4s4n3l14p 1",
+    "maximum_ply": 15,
+    "weight": 1
+  },
+  {
+    "tags": ["library"],
+    "display": {
+      "description": "board_state.tlm_shogi.tsume.masterpiece.mate9",
+      "author": "加藤徹"
+    },
+    "data": "9/r8/9/9/2n6/9/2p6/p2Sk4/3L+pL3 b R2B4g3s3n2l15p 1",
+    "maximum_ply": 9,
+    "weight": 1
+  },
+  {
+    "tags": ["library"],
+    "display": {
+      "description": "board_state.tlm_shogi.tsume.masterpiece.mate11",
+      "author": "加藤徹"
+    },
+    "data": "5bRn1/7k1/9/6B2/7pp/9/9/9/9 b 2Gr2g4s3n4l16p 1",
+    "maximum_ply": 11,
+    "weight": 1
+  },
+  {
+    "tags": ["library"],
+    "display": {
+      "description": "board_state.tlm_shogi.tsume.masterpiece.mate13",
+      "author": "小湊奈美子"
+    },
+    "data": "9/5B3/5l3/4+p+p1pn/5p3/4R+P3/6+pks/6+p+p+p/9 b 4G2Srbs3n3l9p 1",
+    "maximum_ply": 13,
+    "weight": 1
+  },
+  {
+    "tags": ["library"],
+    "display": {
+      "description": "board_state.tlm_shogi.tsume.masterpiece.mate7",
+      "author": "ドうえもん"
+    },
+    "data": "6gnB/6l1k/6nsn/6G1p/6PgS/9/9/9/9 b 2S2rbgn3l16p 1",
+    "maximum_ply": 7,
+    "weight": 1
+  },
+  {
+    "tags": ["library"],
+    "display": {
+      "description": "board_state.tlm_shogi.tsume.masterpiece.mate7",
+      "author": "岩田俊二"
+    },
+    "data": "6l2/5S3/5p3/3+P1ksNR/5+b1N1/9/r5KN1/PP7/B8 b NL4g2s2l14p 1",
+    "maximum_ply": 7,
+    "weight": 1
+  },
+  {
+    "tags": ["library"],
+    "display": {
+      "description": "board_state.tlm_shogi.tsume.masterpiece.mate9",
+      "author": "三枝・三木・岸本"
+    },
+    "data": "7k1/9/9/9/9/9/9/9/9 b R4Gr2b4s4n4l18p 1",
+    "maximum_ply": 9,
+    "weight": 1
+  },
+  {
+    "tags": ["library"],
+    "display": {
+      "description": "board_state.tlm_shogi.tsume.masterpiece.mate11",
+      "author": "菅野哲郎"
+    },
+    "data": "5p2g/4slpl1/4gnkln/2ppSR2g/5s3/rb5KN/3NpsG2/1B7/6L2 b 13p 1",
+    "maximum_ply": 11,
+    "weight": 1
+  },
+  {
+    "tags": ["library"],
+    "display": {
+      "description": "board_state.tlm_shogi.tsume.masterpiece.mate9",
+      "author": "吉田京平"
+    },
+    "data": "1B3ggsl/1K+N2ggsl/5+p3/5pn2/R1+S2k3/4nn+lL1/6P2/1+r+p+p+p+p+p+p+p/+b+p+p+p+p+p+p+p+p b S 1",
+    "maximum_ply": 9,
+    "weight": 1
+  },
+  {
+    "tags": ["library"],
+    "display": {
+      "description": "board_state.tlm_shogi.tsume.masterpiece.mate15",
+      "author": "駒場和男"
+    },
+    "data": "3l1k3/1S5n1/2sSsGnpN/1pPP4G/1+Bp2PL1N/2r6/2b4r1/9/9 b 2g2l12p 1",
+    "maximum_ply": 15,
+    "weight": 1
+  }
+]

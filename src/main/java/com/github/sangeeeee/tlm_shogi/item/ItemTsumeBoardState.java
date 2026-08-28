@@ -31,6 +31,21 @@ public final class ItemTsumeBoardState extends ItemBoardState {
         return stack.getOrDefault(InitDataComponents.TSUME_MAXIMUM_PLY, DEFAULT_MAXIMUM_PLY);
     }
 
+    public static boolean isMasterpiece(ItemStack stack) {
+        return stack.getOrDefault(InitDataComponents.TSUME_MASTERPIECE, false);
+    }
+
+    @Override
+    public Component getName(ItemStack stack) {
+        Component name = super.getName(stack);
+        return isMasterpiece(stack) ? name.copy().withStyle(ChatFormatting.LIGHT_PURPLE) : name;
+    }
+
+    @Override
+    public boolean isFoil(ItemStack stack) {
+        return isMasterpiece(stack) || super.isFoil(stack);
+    }
+
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context,
                                 List<Component> tooltip, TooltipFlag tooltipFlag) {

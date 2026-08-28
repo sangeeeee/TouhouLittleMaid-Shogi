@@ -62,6 +62,11 @@ import java.util.List;
 import java.util.UUID;
 
 public class BlockJChess extends BlockJoy implements IBoardGameBlock {
+    private static final int MASTERPIECE_FAVOR_MULTIPLIER = 3;
+    private static final Type TSUME_MASTERPIECE_WIN = new Type(
+            "TsumeMasterpieceWin",
+            Type.WCHESS_WIN.getPoint() * MASTERPIECE_FAVOR_MULTIPLIER,
+            Type.WCHESS_WIN.getCooldown());
     public static final EnumProperty<ShogiPart> PART = EnumProperty.create("part", ShogiPart.class);
     public static final int plate = 6;
     public static final int height = 10;
@@ -298,7 +303,8 @@ public class BlockJChess extends BlockJoy implements IBoardGameBlock {
                 try {
                     String puzzleId = TsumePuzzleId.fromSfen(boardState[0]);
                     chess.resetToTsume(boardState[0], puzzleId,
-                            ItemTsumeBoardState.getMaximumPly(heldItem));
+                            ItemTsumeBoardState.getMaximumPly(heldItem),
+                            ItemTsumeBoardState.isMasterpiece(heldItem));
                 } catch (IllegalArgumentException exception) {
                     player.sendSystemMessage(Component.translatable("message.tlm_shogi.jchess.tsume.invalid"));
                     return ItemInteractionResult.FAIL;
@@ -516,13 +522,17 @@ public class BlockJChess extends BlockJoy implements IBoardGameBlock {
 
     private static void completeTsume(ServerPlayer player, Level level, BlockPos pos, TileEntityJChess chess) {
         chess.markTsumeSolved();
+        boolean masterpiece = chess.isTsumeMasterpiece();
         boolean firstCompletion = TsumePlayerProgress.markSolved(player, chess.getTsumePuzzleId());
+        if (masterpiece) {
+            InitTrigger.MAID_EVENT.get().trigger(player, TriggerType.WIN_TSUME_MASTERPIECE);
+        }
         EntityMaid maid = getSeatedMaid(level, chess);
         if (maid != null) {
             maid.swing(InteractionHand.MAIN_HAND);
             maid.getGameRecordManager().markStatue(false);
             if (firstCompletion && maid.isOwnedBy(player)) {
-                maid.getFavorabilityManager().apply(Type.WCHESS_WIN);
+                maid.getFavorabilityManager().apply(masterpiece ? TSUME_MASTERPIECE_WIN : Type.WCHESS_WIN);
                 InitTrigger.MAID_EVENT.get().trigger(player, TriggerType.WIN_JCHESS);
             }
         }

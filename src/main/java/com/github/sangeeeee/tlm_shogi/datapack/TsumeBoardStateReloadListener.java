@@ -14,21 +14,28 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.function.Consumer;
 
-/** Merges every data pack's {@code tlm_shogi:board_states/tsume.json}. */
+/** Merges ordinary and masterpiece tsume catalogs while keeping their pools independent. */
 public final class TsumeBoardStateReloadListener implements ResourceManagerReloadListener {
-    private static final ResourceLocation PATH = ResourceLocation.fromNamespaceAndPath(
+    private static final ResourceLocation ORDINARY_PATH = ResourceLocation.fromNamespaceAndPath(
             TouhouLittleMaidShogi.MOD_ID, "board_states/tsume.json");
+    private static final ResourceLocation MASTERPIECE_PATH = ResourceLocation.fromNamespaceAndPath(
+            TouhouLittleMaidShogi.MOD_ID, "board_states/tsume_masterpieces.json");
     private static final Gson GSON = new Gson();
 
     @Override
     public void onResourceManagerReload(ResourceManager resourceManager) {
         TsumeBoardStateData.clear();
-        resourceManager.listPacks().forEach(this::readPack);
+        resourceManager.listPacks().forEach(pack -> {
+            readPack(pack, ORDINARY_PATH, TsumeBoardStateData::addAll);
+            readPack(pack, MASTERPIECE_PATH, TsumeBoardStateData::addAllMasterpieces);
+        });
     }
 
-    private void readPack(PackResources pack) {
-        IoSupplier<InputStream> resource = pack.getResource(PackType.SERVER_DATA, PATH);
+    private void readPack(PackResources pack, ResourceLocation path,
+                          Consumer<List<TsumeBoardStateRecord>> destination) {
+        IoSupplier<InputStream> resource = pack.getResource(PackType.SERVER_DATA, path);
         if (resource == null) {
             return;
         }
@@ -37,10 +44,10 @@ public final class TsumeBoardStateReloadListener implements ResourceManagerReloa
             List<TsumeBoardStateRecord> records = GSON.fromJson(reader, new TypeToken<List<TsumeBoardStateRecord>>() {
             }.getType());
             if (records != null) {
-                TsumeBoardStateData.addAll(records);
+                destination.accept(records);
             }
         } catch (Exception exception) {
-            TouhouLittleMaidShogi.LOGGER.error("Failed to load tsume-shogi board states from {}", PATH, exception);
+            TouhouLittleMaidShogi.LOGGER.error("Failed to load tsume-shogi board states from {}", path, exception);
         }
     }
 }
