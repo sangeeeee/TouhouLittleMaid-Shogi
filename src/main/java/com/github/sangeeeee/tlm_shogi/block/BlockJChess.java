@@ -49,10 +49,12 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.UUID;
 
 public class BlockJChess extends BlockJoy implements IBoardGameBlock {
@@ -66,7 +68,8 @@ public class BlockJChess extends BlockJoy implements IBoardGameBlock {
     public static final VoxelShape SHAPE_LEFT_EW = Block.box(0, 0, 0, plate, height, plate);
 
     public BlockJChess() {
-        super(Properties.of().mapColor(MapColor.WOOD).sound(SoundType.WOOD).strength(2.0F, 3.0F).forceSolidOn().noOcclusion());
+        super(Properties.of().mapColor(MapColor.WOOD).sound(SoundType.WOOD).strength(2.0F, 3.0F)
+                .forceSolidOn().noOcclusion().dynamicShape());
         this.registerDefaultState(this.stateDefinition.any().setValue(PART, ShogiPart.CENTER).setValue(FACING, Direction.NORTH));
     }
 
@@ -288,7 +291,7 @@ public class BlockJChess extends BlockJoy implements IBoardGameBlock {
             }
 
             // 没有点击到棋盘上，返回
-            int nowClick = JChessUtil.getClickPosition(clickPos);
+            int nowClick = JChessUtil.getClickPosition(clickPos, chess.getChessData());
             if (nowClick < 0) {
                 return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
             }
@@ -443,12 +446,83 @@ public class BlockJChess extends BlockJoy implements IBoardGameBlock {
 
     @Override
     public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
-        return switch (pState.getValue(PART)) {
+        VoxelShape shape = getBaseShape(pState);
+        ShogiPart part = pState.getValue(PART);
+        BlockPos centerPos = pPos.subtract(new Vec3i(part.getPosX(), 0, part.getPosY()));
+        if (!(pLevel.getBlockEntity(centerPos) instanceof TileEntityJChess chess)) {
+            return shape;
+        }
+
+        List<int[]> hand = chess.getChessData().getBlackHand();
+        int slotCount = Math.min(hand.size(), JChessUtil.HAND_COLUMNS * JChessUtil.HAND_ROWS);
+        for (int index = 0; index < slotCount; index++) {
+            int count = hand.get(index)[0];
+            if (count < 1) {
+                continue;
+            }
+
+            int column = index % JChessUtil.HAND_COLUMNS;
+            int row = index / JChessUtil.HAND_COLUMNS;
+            double minX = JChessUtil.HAND_MIN_X + column * JChessUtil.HAND_SLOT_WIDTH;
+            double maxX = minX + JChessUtil.HAND_SLOT_WIDTH;
+            double minZ = JChessUtil.HAND_MIN_Z + row * JChessUtil.HAND_SLOT_DEPTH;
+            double maxZ = minZ + JChessUtil.HAND_SLOT_DEPTH;
+            VoxelShape stackShape = getHandStackShape(
+                    part, pState.getValue(FACING), minX, maxX, minZ, maxZ, count);
+            if (!stackShape.isEmpty()) {
+                shape = Shapes.or(shape, stackShape);
+            }
+        }
+        return shape;
+    }
+
+    /** Keep the rendered hand stacks selectable without making them physical obstacles. */
+    @Override
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return getBaseShape(state);
+    }
+
+    private static VoxelShape getBaseShape(BlockState state) {
+        return switch (state.getValue(PART)) {
             case CENTER -> SHAPE_CENTER;
             case LEFT_CENTER_EW -> SHAPE_LEFT_EW;
             case RIGHT_CENTER_EW -> SHAPE_RIGHT_EW;
             case LEFT_CENTER_NS -> SHAPE_LEFT_NS;
             case RIGHT_CENTER_NS -> SHAPE_RIGHT_NS;
         };
+    }
+
+    private static VoxelShape getHandStackShape(ShogiPart part, Direction facing,
+                                                 double minX, double maxX,
+                                                 double minZ, double maxZ, int count) {
+        double localMinX = Double.POSITIVE_INFINITY;
+        double localMaxX = Double.NEGATIVE_INFINITY;
+        double localMinZ = Double.POSITIVE_INFINITY;
+        double localMaxZ = Double.NEGATIVE_INFINITY;
+        float inverseRotation = -facing.toYRot() * Mth.DEG_TO_RAD;
+
+        for (double x : new double[]{minX, maxX}) {
+            for (double z : new double[]{minZ, maxZ}) {
+                Vec3 transformed = new Vec3(x, 0, z).yRot(inverseRotation);
+                double localX = transformed.x + 0.5 - part.getPosX();
+                double localZ = transformed.z + 0.5 - part.getPosY();
+                localMinX = Math.min(localMinX, localX);
+                localMaxX = Math.max(localMaxX, localX);
+                localMinZ = Math.min(localMinZ, localZ);
+                localMaxZ = Math.max(localMaxZ, localZ);
+            }
+        }
+
+        localMinX = Mth.clamp(localMinX, 0.0, 1.0);
+        localMaxX = Mth.clamp(localMaxX, 0.0, 1.0);
+        localMinZ = Mth.clamp(localMinZ, 0.0, 1.0);
+        localMaxZ = Mth.clamp(localMaxZ, 0.0, 1.0);
+        if (localMinX >= localMaxX || localMinZ >= localMaxZ) {
+            return Shapes.empty();
+        }
+
+        return Block.box(
+                localMinX * 16.0, JChessUtil.BOARD_SURFACE_Y * 16.0, localMinZ * 16.0,
+                localMaxX * 16.0, JChessUtil.handStackTopY(count) * 16.0, localMaxZ * 16.0);
     }
 }

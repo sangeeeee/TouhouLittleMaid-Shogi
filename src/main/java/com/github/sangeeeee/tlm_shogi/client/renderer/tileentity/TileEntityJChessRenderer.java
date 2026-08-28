@@ -8,6 +8,7 @@ import com.github.sangeeeee.tlm_shogi.client.model.JChessPiecesModel;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.SimpleBedrockModel;
 import com.github.sangeeeee.tlm_shogi.client.resource.BedrockModelLoader;
 import com.github.sangeeeee.tlm_shogi.tileentity.TileEntityJChess;
+import com.github.sangeeeee.tlm_shogi.util.JChessUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -236,21 +237,24 @@ public class TileEntityJChessRenderer implements BlockEntityRenderer<TileEntityJ
             int count = pair[0];
             int pieceId = pair[1];
 
-            // ---------- 数字区域：固定宽度 s1 ----------
-            float padding = s1;
-            if (count > 1) {
-                float numberWidth = renderNumber(poseStack, buff, light, overlay, count);
-                padding = s1 - numberWidth;
-            }
-            poseStack.translate(padding, 0, 0);
+            // Keep the old slot layout, but use its former number area as padding.
+            poseStack.translate(s1, 0, 0);
             rowOffset += s1;
 
-            // ---------- 棋子 ----------
+            // Render one physical piece for every captured piece. The renderer's
+            // Z rotation inverts local Y, so negative local Y stacks upward.
             JChessPiecesModel model = this.chessPiecesModels[pieceId];
-            model.renderToBuffer(poseStack, buff, light, overlay, 1, 1, 1, 1);
-            if (selectOnHand && selectedPoint == index) {
+            poseStack.pushPose();
+            for (int layer = 0; layer < count; layer++) {
+                if (layer > 0) {
+                    poseStack.translate(0, -JChessUtil.HAND_STACK_LAYER_HEIGHT, 0);
+                }
+                model.renderToBuffer(poseStack, buff, light, overlay, 1, 1, 1, 1);
+            }
+            if (count > 0 && selectOnHand && selectedPoint == index) {
                 selectedModels.renderToBuffer(poseStack, buff, light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
             }
+            poseStack.popPose();
             poseStack.translate(s2, 0, 0);
             rowOffset += s2;
 
@@ -263,33 +267,6 @@ public class TileEntityJChessRenderer implements BlockEntityRenderer<TileEntityJ
                 rowOffset = 0f;
                 rowCount = 0;
             }
-        }
-    }
-
-
-    private float renderNumber(PoseStack poseStack, VertexConsumer buff,
-                               int combinedLightIn, int combinedOverlayIn, int number) {
-        if (number < 2) return 0f;
-
-        float s0 = 0.0150f;
-        boolean twoDigits = number >= 10;
-
-        int first = twoDigits ? number / 10 : number;
-        JChessPiecesModel model = this.chessPiecesModels[first];
-        poseStack.mulPose(Axis.YN.rotationDegrees(180));
-        model.renderToBuffer(poseStack, buff, combinedLightIn, combinedOverlayIn, 1, 1, 1, 1);
-        poseStack.mulPose(Axis.YN.rotationDegrees(180));
-
-        if (twoDigits) {
-            poseStack.translate(s0, 0, 0);
-            int second = number % 10;
-            model = this.chessPiecesModels[second];
-            poseStack.mulPose(Axis.YN.rotationDegrees(180));
-            model.renderToBuffer(poseStack, buff, combinedLightIn, combinedOverlayIn, 1, 1, 1, 1);
-            poseStack.mulPose(Axis.YN.rotationDegrees(180));
-            return s0;  // 两位数占用 s0
-        } else {
-            return 0f;  // 一位数不额外占用（已在外部 s1）
         }
     }
 

@@ -20,17 +20,6 @@ public class JChessPiecesModel {
     public static JChessPiecesModel[] initModel() {
         JChessPiecesModel[] models = new JChessPiecesModel[38];
 
-        models[0] = new JChessPiecesModel("ZERO");
-        models[1] = new JChessPiecesModel("ONE");
-        models[2] = new JChessPiecesModel("TWO");
-        models[3] = new JChessPiecesModel("THREE");
-        models[4] = new JChessPiecesModel("FOUR");
-        models[5] = new JChessPiecesModel("FIVE");
-        models[6] = new JChessPiecesModel("SIX");
-        models[7] = new JChessPiecesModel("SEVEN");
-        models[8] = new JChessPiecesModel("EIGHT");
-        models[9] = new JChessPiecesModel("NINE");
-
         models[10] = new JChessPiecesModel("KING_B");
         models[11] = new JChessPiecesModel("GOLD_B");
         models[12] = new JChessPiecesModel("SILVER_B");
