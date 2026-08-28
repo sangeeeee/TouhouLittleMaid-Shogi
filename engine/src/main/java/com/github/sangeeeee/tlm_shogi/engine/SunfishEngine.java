@@ -53,7 +53,7 @@ public final class SunfishEngine implements ShogiEngine {
             return SearchResult.cancelled(Duration.ZERO, 0);
         }
 
-        throw new EngineException("Sunfish rule generation and search have not been ported yet");
+        throw new EngineException("Sunfish search has not been ported yet");
     }
 
     @Override

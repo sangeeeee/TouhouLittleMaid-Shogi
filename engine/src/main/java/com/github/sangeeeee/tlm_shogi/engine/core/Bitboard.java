@@ -83,6 +83,8 @@ public final class Bitboard {
     }
 
     public int count() { return Long.bitCount(first) + Long.bitCount(second); }
+    public boolean isEmpty() { return first == 0 && second == 0; }
+    public boolean intersects(Bitboard other) { return (first & other.first) != 0 || (second & other.second) != 0; }
 
     public Square findForward() {
         if (first != 0) return new Square(Long.numberOfTrailingZeros(first));

@@ -4,8 +4,11 @@ import com.github.sangeeeee.tlm_shogi.engine.core.Bitboard;
 import com.github.sangeeeee.tlm_shogi.engine.core.Direction;
 import com.github.sangeeeee.tlm_shogi.engine.core.Hand;
 import com.github.sangeeeee.tlm_shogi.engine.core.Move;
+import com.github.sangeeeee.tlm_shogi.engine.core.MoveGenerator;
+import com.github.sangeeeee.tlm_shogi.engine.core.MoveTables;
 import com.github.sangeeeee.tlm_shogi.engine.core.Piece;
 import com.github.sangeeeee.tlm_shogi.engine.core.PieceType;
+import com.github.sangeeeee.tlm_shogi.engine.core.Position;
 import com.github.sangeeeee.tlm_shogi.engine.core.RelativeSquare;
 import com.github.sangeeeee.tlm_shogi.engine.core.RotatedBitboard;
 import com.github.sangeeeee.tlm_shogi.engine.core.Square;
@@ -37,6 +40,9 @@ public final class EngineSelfTest {
         movePackingAndNotationMatchSunfish();
         handEnforcesPhysicalPieceLimits();
         bitboardsMatchSunfishLayoutAndOperations();
+        moveTablesMatchSunfishAttacks();
+        positionRoundTripsAndUndoesMoves();
+        legalMoveGenerationEnforcesShogiRules();
         cancellationIsVisibleThroughToken();
         casualLimitsMatchTheCurrentModConfiguration();
         requestDefensivelyCopiesMoveHistory();
@@ -221,6 +227,161 @@ public final class EngineSelfTest {
         equal(new RotatedBitboard(0x1L), rotated.and(new RotatedBitboard(0x5L)), "rotated bitboard and");
     }
 
+    private void moveTablesMatchSunfishAttacks() {
+        Square square67 = Square.of(6, 7);
+        Bitboard blackSilver = MoveTables.blackSilver(square67);
+        equal(5, blackSilver.count(), "black silver attack count");
+        check(blackSilver.contains(Square.of(6, 6)), "black silver forward attack");
+        check(blackSilver.contains(Square.of(7, 8)), "black silver backward diagonal");
+        check(!blackSilver.contains(Square.of(6, 8)), "black silver cannot move straight backward");
+
+        Bitboard occupied = Bitboard.zero().set(Square.of(4, 3)).set(Square.of(4, 8));
+        Bitboard blackLance = MoveTables.blackLance(occupied, Square.of(4, 7));
+        equal(4, blackLance.count(), "blocked black lance attack count");
+        check(blackLance.contains(Square.of(4, 3)), "lance attack includes blocker");
+        check(!blackLance.contains(Square.of(4, 2)), "lance attack stops after blocker");
+        equal(1, MoveTables.whiteLance(occupied, Square.of(4, 7)).count(), "blocked white lance attack");
+
+        RotatedBitboard horizontalOccupancy = RotatedBitboard.zero();
+        horizontalOccupancy.set(Square.of(6, 3).rotate90());
+        Bitboard horizontal = MoveTables.hor(horizontalOccupancy, Square.of(1, 3));
+        equal(5, horizontal.count(), "horizontal rotated attack count");
+        check(horizontal.contains(Square.of(6, 3)), "horizontal attack includes blocker");
+        check(!horizontal.contains(Square.of(7, 3)), "horizontal attack stops after blocker");
+
+        RotatedBitboard rightDiagonalOccupancy = RotatedBitboard.zero();
+        rightDiagonalOccupancy.set(Square.of(7, 6).rotateRight45());
+        Bitboard rightDiagonal = MoveTables.diagR45(rightDiagonalOccupancy, Square.of(4, 3));
+        equal(5, rightDiagonal.count(), "right diagonal rotated attack count");
+        check(rightDiagonal.contains(Square.of(2, 1)), "right diagonal upper edge");
+        check(rightDiagonal.contains(Square.of(7, 6)), "right diagonal includes blocker");
+        check(!rightDiagonal.contains(Square.of(8, 7)), "right diagonal stops after blocker");
+
+        RotatedBitboard leftDiagonalOccupancy = RotatedBitboard.zero();
+        leftDiagonalOccupancy.set(Square.of(7, 2).rotateLeft45());
+        leftDiagonalOccupancy.set(Square.of(2, 7).rotateLeft45());
+        Bitboard leftDiagonal = MoveTables.diagL45(leftDiagonalOccupancy, Square.of(3, 6));
+        equal(5, leftDiagonal.count(), "left diagonal rotated attack count");
+        check(leftDiagonal.contains(Square.of(7, 2)), "left diagonal first blocker");
+        check(leftDiagonal.contains(Square.of(2, 7)), "left diagonal second blocker");
+
+        Bitboard horse = MoveTables.attacks(Piece.BLACK_HORSE, Square.of(5, 5), Bitboard.zero());
+        equal(20, horse.count(), "center horse attack count");
+        check(MoveTables.isMovableInOneStep(Piece.BLACK_HORSE, Direction.UP), "horse king step flag");
+        check(MoveTables.isMovableInLongStep(Piece.BLACK_HORSE, Direction.LEFT_UP), "horse bishop ray flag");
+        check(!MoveTables.isMovableInLongStep(Piece.BLACK_HORSE, Direction.UP), "horse has no rook ray");
+    }
+
+    private void positionRoundTripsAndUndoesMoves() {
+        Position start = Position.startPosition();
+        equal(Position.START_SFEN, start.toSfen(), "start position SFEN round trip");
+        equal(Piece.WHITE_KING, start.pieceAt(Square.of(5, 1)), "white king placement");
+        equal(Piece.BLACK_ROOK, start.pieceAt(Square.of(2, 8)), "black rook placement");
+        equal(Square.of(5, 9), start.kingSquare(Turn.BLACK), "black king square");
+        check(start.hasBlackPawnInFile(1), "initial black pawn file");
+        check(!start.inCheck(), "initial position is not check");
+
+        String handSfen = "4k4/6+B2/9/9/9/3+p5/9/9/4K4 b P2G15p3n 1";
+        Position hands = Position.fromSfen(handSfen);
+        equal("4k4/6+B2/9/9/9/3+p5/9/9/4K4 b 2GP3n15p 1", hands.toSfen(),
+                "canonical hand and promoted piece SFEN");
+        equal(hands, Position.fromSfen(hands.toSfen()), "hand position SFEN round trip");
+        equal(2, hands.handCount(Turn.BLACK, PieceType.GOLD), "black hand count");
+        equal(15, hands.handCount(Turn.WHITE, PieceType.PAWN), "white hand count");
+        equal(Piece.BLACK_HORSE, hands.pieceAt(Square.of(3, 2)), "promoted SFEN piece");
+
+        equal(Move.board(Square.of(7, 7), Square.of(7, 6), false),
+                Move.parseSfen("7g7f").orElseThrow(), "parse board move SFEN");
+        equal(Move.drop(PieceType.GOLD, Square.of(4, 5)),
+                Move.parseSfen("G*4e").orElseThrow(), "parse drop move SFEN");
+        check(Move.parseSfen("7g7z").isEmpty(), "reject invalid move SFEN");
+
+        Position before = start.copy();
+        Move opening = Move.parseSfen("7g7f").orElseThrow();
+        Position.Undo undo = start.makeMove(opening);
+        equal(Piece.BLACK_PAWN, start.pieceAt(Square.of(7, 6)), "piece moved on board");
+        equal(Piece.EMPTY, start.pieceAt(Square.of(7, 7)), "source cleared");
+        equal(Turn.WHITE, start.turn(), "turn changed after move");
+        start.undoMove(undo);
+        equal(before, start, "position restored by undo");
+        equal(before.hash(), start.hash(), "position hash restored by undo");
+
+        Position capture = Position.fromSfen("k8/9/9/9/9/9/4s4/4R4/4K4 b - 1");
+        Position captureBefore = capture.copy();
+        Position.Undo captureUndo = capture.makeMove(Move.parseSfen("5h5g").orElseThrow());
+        equal(1, capture.handCount(Turn.BLACK, PieceType.SILVER), "capture adds unpromoted hand piece");
+        equal(Piece.BLACK_ROOK, capture.pieceAt(Square.of(5, 7)), "capturing piece destination");
+        capture.undoMove(captureUndo);
+        equal(captureBefore, capture, "capture restored by undo");
+
+        Position drop = Position.fromSfen("k8/9/9/9/9/9/9/9/4K4 b G 1");
+        Position dropBefore = drop.copy();
+        Position.Undo dropUndo = drop.makeMove(Move.parseSfen("G*5e").orElseThrow());
+        equal(0, drop.handCount(Turn.BLACK, PieceType.GOLD), "drop removes hand piece");
+        equal(Piece.BLACK_GOLD, drop.pieceAt(Square.of(5, 5)), "dropped piece placement");
+        drop.undoMove(dropUndo);
+        equal(dropBefore, drop, "drop restored by undo");
+    }
+
+    private void legalMoveGenerationEnforcesShogiRules() {
+        Position start = Position.startPosition();
+        equal(30, MoveGenerator.generateLegal(start).size(), "start position legal moves");
+        equal(900L, MoveGenerator.perft(start.copy(), 2), "start position perft depth 2");
+        equal(25_470L, MoveGenerator.perft(start.copy(), 3), "start position perft depth 3");
+
+        Position mandatoryPromotion = Position.fromSfen("k8/4P4/9/9/9/9/9/9/4K4 b - 1");
+        Move pawnPromotes = Move.parseSfen("5b5a+").orElseThrow();
+        Move deadPawn = Move.parseSfen("5b5a").orElseThrow();
+        check(MoveGenerator.isLegal(mandatoryPromotion, pawnPromotes), "last-rank pawn promotion generated");
+        check(!MoveGenerator.isLegal(mandatoryPromotion, deadPawn), "unpromoted pawn on last rank rejected");
+
+        Position optionalPromotion = Position.fromSfen("k8/9/4P4/9/9/9/9/9/4K4 b - 1");
+        check(MoveGenerator.isLegal(optionalPromotion, Move.parseSfen("5c5b+").orElseThrow()),
+                "optional pawn promotion accepted");
+        check(MoveGenerator.isLegal(optionalPromotion, Move.parseSfen("5c5b").orElseThrow()),
+                "optional non-promotion accepted");
+
+        Position nifu = Position.fromSfen("4k4/9/9/9/9/9/4P4/9/4K4 b P 1");
+        List<Move> nifuMoves = MoveGenerator.generateLegal(nifu);
+        check(nifuMoves.stream().noneMatch(move -> move.isDrop()
+                        && move.droppingPieceType().equals(PieceType.PAWN) && move.to().file() == 5),
+                "nifu pawn drops rejected");
+        check(nifuMoves.stream().noneMatch(move -> move.isDrop()
+                        && move.droppingPieceType().equals(PieceType.PAWN) && move.to().rank() == 1),
+                "dead-rank pawn drops rejected");
+
+        Position pinned = Position.fromSfen("k3r4/9/9/9/9/9/9/4G4/4K4 b - 1");
+        Move exposeKing = Move.board(Square.of(5, 8), Square.of(4, 8), false);
+        check(!MoveGenerator.isLegal(pinned, exposeKing), "pinned move exposing king rejected");
+        check(MoveGenerator.generateLegal(pinned).stream().noneMatch(exposeKing::equals),
+                "pinned move absent from generated moves");
+
+        Position checked = Position.fromSfen("k8/9/9/9/9/9/9/4r4/4K4 b - 1");
+        check(checked.inCheck(), "rook check detected");
+        List<Move> evasions = MoveGenerator.generateEvasions(checked);
+        check(!evasions.isEmpty(), "check has evasions");
+        for (Move move : evasions) {
+            Position escaped = checked.copy();
+            escaped.makeMove(move);
+            check(!escaped.inCheck(Turn.BLACK), "generated evasion resolves check: " + move.toSfen());
+        }
+
+        Position pawnDropMate = Position.fromSfen(
+                "3lkn3/3l5/5G3/9/9/pppp1pppp/PPPP1PPPP/9/4K4 b 3P 1");
+        Move illegalMate = Move.drop(PieceType.PAWN, Square.of(5, 2));
+        check(!MoveGenerator.isLegal(pawnDropMate, illegalMate), "pawn-drop mate rejected");
+        List<Move> pawnDropMateMoves = MoveGenerator.generateQuiets(pawnDropMate);
+        equal(17, pawnDropMateMoves.size(), "Sunfish pawn-drop-mate test move count");
+        check(pawnDropMateMoves.stream().noneMatch(illegalMate::equals), "pawn-drop mate absent from moves");
+
+        Position whitePawnDropMate = Position.fromSfen(
+                "4k4/9/pppp1pppp/PPPP1PPPP/9/9/5g3/3L5/3LKN3 w 3p 1");
+        Move illegalWhiteMate = Move.drop(PieceType.PAWN, Square.of(5, 8));
+        check(!MoveGenerator.isLegal(whitePawnDropMate, illegalWhiteMate), "white pawn-drop mate rejected");
+        equal(17, MoveGenerator.generateQuiets(whitePawnDropMate).size(),
+                "Sunfish white pawn-drop-mate test move count");
+    }
+
     private void cancellationIsVisibleThroughToken() {
         CancellationSource source = new CancellationSource();
         check(!source.token().isCancellationRequested(), "new token must not be cancelled");
@@ -290,7 +451,7 @@ public final class EngineSelfTest {
                     CancellationToken.none()
             ));
             equal(
-                    "Sunfish rule generation and search have not been ported yet",
+                    "Sunfish search has not been ported yet",
                     exception.getMessage(),
                     "unimplemented search message"
             );

@@ -55,6 +55,23 @@ public final class Hand {
         return new Hand(this);
     }
 
+    public boolean isEmpty() {
+        for (int count : counts) {
+            if (count != 0) return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return other instanceof Hand hand && Arrays.equals(counts, hand.counts);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(counts);
+    }
+
     private static int indexOf(PieceType pieceType) {
         int index = pieceType.raw();
         if (index < PieceType.PAWN.raw() || index >= PieceType.HAND_END) {

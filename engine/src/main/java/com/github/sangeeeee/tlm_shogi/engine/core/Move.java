@@ -1,6 +1,7 @@
 package com.github.sangeeeee.tlm_shogi.engine.core;
 
 import java.util.Objects;
+import java.util.Optional;
 
 /** Sunfish's packed 16-bit move with an additional 16-bit search-data field. */
 public final class Move {
@@ -45,6 +46,33 @@ public final class Move {
 
     public static Move deserialize16(int raw16) {
         return new Move(raw16 & 0xffff);
+    }
+
+    public static Optional<Move> parseSfen(String value) {
+        if (value == null) {
+            return Optional.empty();
+        }
+        if (value.equals("none")) {
+            return Optional.of(none());
+        }
+        if (value.length() == 4 && value.charAt(1) == '*') {
+            Piece piece = Piece.parseSfen(value.substring(0, 1));
+            Optional<Square> to = Square.parseSfen(value.substring(2));
+            if (piece.isEmpty() || piece.isWhite() || piece.type().raw() >= PieceType.HAND_END || to.isEmpty()) {
+                return Optional.empty();
+            }
+            return Optional.of(drop(piece.type(), to.orElseThrow()));
+        }
+        if ((value.length() == 4 || value.length() == 5)
+                && (value.length() == 4 || value.charAt(4) == '+')) {
+            Optional<Square> from = Square.parseSfen(value);
+            Optional<Square> to = Square.parseSfen(value.substring(2));
+            if (from.isEmpty() || to.isEmpty()) {
+                return Optional.empty();
+            }
+            return Optional.of(board(from.orElseThrow(), to.orElseThrow(), value.length() == 5));
+        }
+        return Optional.empty();
     }
 
     public boolean isNone() { return raw == NONE; }
