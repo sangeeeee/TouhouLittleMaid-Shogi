@@ -1,0 +1,62 @@
+plugins {
+    id 'java-library'
+    id 'application'
+}
+
+group = 'com.github.sangeeeee.tlm_shogi'
+version = rootProject.version
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
+}
+
+application {
+    mainClass = 'com.github.sangeeeee.tlm_shogi.mateengine.MateEngineMain'
+}
+
+dependencies {
+    api project(':engine')
+}
+
+sourceSets {
+    selfTest {
+        java.srcDir 'src/selfTest/java'
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += output + compileClasspath
+    }
+}
+
+configurations {
+    selfTestImplementation.extendsFrom implementation
+    selfTestRuntimeOnly.extendsFrom runtimeOnly
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+tasks.register('mateEngineTest', JavaExec) {
+    group = 'verification'
+    description = 'Runs the dependency-free defensive mate-engine tests.'
+    dependsOn selfTestClasses
+    classpath = sourceSets.selfTest.runtimeClasspath
+    mainClass = 'com.github.sangeeeee.tlm_shogi.mateengine.MateEngineSelfTest'
+}
+
+tasks.register('mateSearch', JavaExec) {
+    group = 'verification'
+    description = 'Finds a longest-surviving defense for a checked SFEN position.'
+    dependsOn classes
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = application.mainClass
+    args(
+            (findProperty('mateSfen') ?: '4B2R1/3G3k1/7S1/6L2/9/9/9/9/9 w - 1').toString(),
+            (findProperty('mateMaxPly') ?: '63').toString(),
+            (findProperty('mateMaxNodes') ?: '2000000').toString(),
+            (findProperty('mateMillis') ?: '10000').toString()
+    )
+}
+
+tasks.named('check') {
+    dependsOn mateEngineTest
+}

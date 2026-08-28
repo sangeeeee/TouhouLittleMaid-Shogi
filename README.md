@@ -22,6 +22,13 @@
 .\gradlew.bat verifyDistributableJar
 ```
 
+## 独立诘将棋守方引擎
+
+[`mateengine`](mateengine/README.md) 是一个不依赖 Minecraft 或评估文件的独立 Java
+子项目。它接收轮到守方应将的 SFEN，允许进攻方省略王将，并在存在逃脱手时
+优先逃脱；如果所有应手都会被诘，则返回能够将被诘手数拖得最长的应手。它目前作为
+独立引擎和测试入口，不替换模组中的普通对局引擎。
+
 ## 许可证与第三方声明
 
 内置 Java 将棋引擎包含基于 [Sunfish4](https://github.com/sunfish-shogi/sunfish4) 源码移植的实现。Sunfish4 由 Ryosuke Kubo 开发，以 MIT License 发布：Copyright (c) 2015 Ryosuke Kubo。原始版权声明与完整许可文本见 [SUNFISH.txt](src/main/resources/META-INF/licenses/tlm_shogi/SUNFISH.txt)，并会随构建出的模组 JAR 一同分发。

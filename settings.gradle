@@ -11,3 +11,4 @@ plugins {
 rootProject.name = 'TouhouLittleMaid-Shogi'
 
 include 'engine'
+include 'mateengine'
