@@ -27,6 +27,11 @@ public class TileEntityJChess extends TileEntityJoy implements IBoardGameEntityB
     private static final String REPEAT = "Repeat";
     private static final String MOVE_NUMBER_LIMIT = "MoveNumberLimit";
     private static final String REPETITION_HISTORY = "RepetitionHistory";
+    private static final String TSUME_MODE = "TsumeMode";
+    private static final String TSUME_PUZZLE_ID = "TsumePuzzleId";
+    private static final String TSUME_MAX_PLY = "TsumeMaxPly";
+    private static final String TSUME_PLY = "TsumePly";
+    private static final String TSUME_INCORRECT = "TsumeIncorrect";
 
 
     private final Position chessData;
@@ -43,6 +48,12 @@ public class TileEntityJChess extends TileEntityJoy implements IBoardGameEntityB
     private boolean repeat = false;
     // 50 回限着（判和）
     private boolean moveNumberLimit = false;
+    // 诘将棋状态独立于普通对局；ply 从载入题目后的 0 开始计数。
+    private boolean tsumeMode = false;
+    private String tsumePuzzleId = "";
+    private int tsumeMaxPly = 0;
+    private int tsumePly = 0;
+    private boolean tsumeIncorrect = false;
 
     public TileEntityJChess(BlockPos pos, BlockState blockState) {
         super(TYPE, pos, blockState);
@@ -59,6 +70,11 @@ public class TileEntityJChess extends TileEntityJoy implements IBoardGameEntityB
         data.putBoolean(CHECKMATE, checkmate);
         data.putBoolean(REPEAT, repeat);
         data.putBoolean(MOVE_NUMBER_LIMIT, moveNumberLimit);
+        data.putBoolean(TSUME_MODE, tsumeMode);
+        data.putString(TSUME_PUZZLE_ID, tsumePuzzleId);
+        data.putInt(TSUME_MAX_PLY, tsumeMaxPly);
+        data.putInt(TSUME_PLY, tsumePly);
+        data.putBoolean(TSUME_INCORRECT, tsumeIncorrect);
 
         ListTag histTag = new ListTag();
         for (String key : repetitionHistory) histTag.add(StringTag.valueOf(key));
@@ -77,6 +93,11 @@ public class TileEntityJChess extends TileEntityJoy implements IBoardGameEntityB
         checkmate = data.getBoolean(CHECKMATE);
         repeat = data.getBoolean(REPEAT);
         moveNumberLimit = data.getBoolean(MOVE_NUMBER_LIMIT);
+        tsumeMode = data.getBoolean(TSUME_MODE);
+        tsumePuzzleId = data.getString(TSUME_PUZZLE_ID);
+        tsumeMaxPly = data.getInt(TSUME_MAX_PLY);
+        tsumePly = data.getInt(TSUME_PLY);
+        tsumeIncorrect = data.getBoolean(TSUME_INCORRECT);
         // 读取局面历史
         repetitionHistory.clear();
         if (data.contains(REPETITION_HISTORY, Tag.TAG_LIST)) {
@@ -96,6 +117,49 @@ public class TileEntityJChess extends TileEntityJoy implements IBoardGameEntityB
         this.moveNumberLimit = false;
         this.chessData.applyUSI(JChessUtil.INIT);
         this.repetitionHistory.clear();
+        clearTsumeState();
+    }
+
+    /** Completely replaces any current game with a fresh player-first tsume position. */
+    public void resetToTsume(String sfen, String puzzleId, int maximumPly) {
+        if (maximumPly < 1 || (maximumPly & 1) == 0) {
+            throw new IllegalArgumentException("Tsume maximum ply must be a positive odd number");
+        }
+        Position replacement = new Position();
+        replacement.applyUSI(sfen);
+        if (!replacement.isPlayer()) {
+            throw new IllegalArgumentException("Tsume positions must start with the player (black) to move");
+        }
+        int defendingKings = 0;
+        for (int point = 0; point < 81; point++) {
+            if (replacement.getPieceByPointNum(point) == 24) {
+                defendingKings++;
+            }
+        }
+        if (defendingKings != 1) {
+            throw new IllegalArgumentException("Tsume defender must have exactly one king");
+        }
+        this.chessData.applyUSI(replacement.toUSI());
+
+        this.chessCounter = this.chessData.getMoveNumber();
+        this.selectChessPoint = -1;
+        this.checkmate = false;
+        this.repeat = false;
+        this.moveNumberLimit = false;
+        this.repetitionHistory.clear();
+        this.tsumeMode = true;
+        this.tsumePuzzleId = puzzleId;
+        this.tsumeMaxPly = maximumPly;
+        this.tsumePly = 0;
+        this.tsumeIncorrect = false;
+    }
+
+    private void clearTsumeState() {
+        this.tsumeMode = false;
+        this.tsumePuzzleId = "";
+        this.tsumeMaxPly = 0;
+        this.tsumePly = 0;
+        this.tsumeIncorrect = false;
     }
 
     public void addHistoryAfterMove() {
@@ -158,5 +222,45 @@ public class TileEntityJChess extends TileEntityJoy implements IBoardGameEntityB
 
     public void setMoveNumberLimit(boolean moveNumberLimit) {
         this.moveNumberLimit = moveNumberLimit;
+    }
+
+    public boolean isTsumeMode() {
+        return tsumeMode;
+    }
+
+    public String getTsumePuzzleId() {
+        return tsumePuzzleId;
+    }
+
+    public int getTsumeMaxPly() {
+        return tsumeMaxPly;
+    }
+
+    public int getTsumePly() {
+        return tsumePly;
+    }
+
+    public void advanceTsumePly() {
+        if (tsumeMode) {
+            tsumePly++;
+        }
+    }
+
+    public boolean isTsumeIncorrect() {
+        return tsumeIncorrect;
+    }
+
+    public void markTsumeIncorrect() {
+        if (tsumeMode) {
+            tsumeIncorrect = true;
+            checkmate = true;
+        }
+    }
+
+    public void markTsumeSolved() {
+        if (tsumeMode) {
+            tsumeIncorrect = false;
+            checkmate = true;
+        }
     }
 }

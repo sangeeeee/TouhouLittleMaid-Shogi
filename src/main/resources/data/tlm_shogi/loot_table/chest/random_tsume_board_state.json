@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "tlm_shogi:jchess_board_state",
+          "functions": [
+            {
+              "function": "tlm_shogi:tsume_board_state_randomly",
+              "tags": ["library"]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "random_sequence": "tlm_shogi:chest/random_tsume_board_state"
+}

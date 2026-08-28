@@ -34,6 +34,7 @@ public class TouhouLittleMaidShogi {
         InitBlocks.BLOCKS.register(eventBus);
         InitBlocks.TILE_ENTITIES.register(eventBus);
         InitItems.ITEMS.register(eventBus);
+        InitLootModifiers.LOOT_FUNCTION_TYPES.register(eventBus);
 
         eventBus.addListener(NetworkHandler::registerPacket);
     }

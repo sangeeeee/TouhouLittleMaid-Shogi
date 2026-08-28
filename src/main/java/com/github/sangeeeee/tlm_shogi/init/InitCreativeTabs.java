@@ -22,6 +22,7 @@ public final class InitCreativeTabs {
         if (tabId.equals(ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "main"))) {
             // 添加你的物品
             event.accept(new ItemStack(InitItems.JCHESS.get()));
+            event.accept(new ItemStack(InitItems.JCHESS_BOARD_STATE.get()));
         }
     }
 }

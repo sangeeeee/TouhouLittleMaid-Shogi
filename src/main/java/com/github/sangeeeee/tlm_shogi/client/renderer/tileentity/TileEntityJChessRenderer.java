@@ -63,12 +63,22 @@ public class TileEntityJChessRenderer implements BlockEntityRenderer<TileEntityJ
         Camera camera = this.dispatcher.camera;
         MutableComponent loseTips = null;
         MutableComponent resetTips = Component.translatable("message.tlm_shogi.jchess.reset").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.AQUA);
-        MutableComponent roundText = Component.translatable("message.touhou_little_maid.gomoku.round", chess.getChessCounter()).withStyle(ChatFormatting.WHITE);
+        MutableComponent roundText = chess.isTsumeMode()
+                ? Component.translatable("message.tlm_shogi.jchess.tsume.ply",
+                        chess.getTsumePly(), chess.getTsumeMaxPly()).withStyle(ChatFormatting.WHITE)
+                : Component.translatable("message.touhou_little_maid.gomoku.round",
+                        chess.getChessCounter()).withStyle(ChatFormatting.WHITE);
         MutableComponent preRoundIcon = Component.literal("⏹ ").withStyle(ChatFormatting.GREEN);
         MutableComponent postRoundIcon = Component.literal(" ⏹").withStyle(ChatFormatting.GREEN);
         MutableComponent roundTips = preRoundIcon.append(roundText).append(postRoundIcon);
 
-        if (chess.isCheckmate()) {
+        if (chess.isTsumeMode() && chess.isCheckmate()) {
+            loseTips = Component.translatable(chess.isTsumeIncorrect()
+                            ? "message.tlm_shogi.jchess.tsume.incorrect"
+                            : "message.tlm_shogi.jchess.tsume.correct")
+                    .withStyle(ChatFormatting.BOLD).withStyle(
+                            chess.isTsumeIncorrect() ? ChatFormatting.RED : ChatFormatting.GREEN);
+        } else if (chess.isCheckmate()) {
             if (!chess.isPlayerTurn()) {
                 loseTips = Component.translatable("message.touhou_little_maid.gomoku.win").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.DARK_PURPLE);
             } else {

@@ -5,11 +5,21 @@ import com.github.sangeeeee.tlm_shogi.engine.core.Position;
 import com.github.sangeeeee.tlm_shogi.engine.core.Turn;
 
 import java.time.Duration;
+import java.util.List;
 
 /** Dependency-free regression tests; no Minecraft launch or evaluation data is required. */
 public final class MateEngineSelfTest {
     private static final MateSearchLimits SMALL_LIMITS =
             new MateSearchLimits(Duration.ofSeconds(2), 15, 200_000);
+    private static final MateSearchLimits THREE_PLY_LIMITS =
+            new MateSearchLimits(Duration.ofSeconds(3), 2, 500_000);
+    private static final List<String> CURATED_THREE_PLY_PUZZLES = List.of(
+            "lns+R4l/1p1p5/p1pkppB1p/6p2/1R7/6P1P/P1PPnPS2/2+b1G1g2/L3K1sNL b 2GS3Pnp 51",
+            "lnsG5/4g4/prpp1p1pp/1p4p2/4+B3k/2P1P4/P+b1PSP1LP/4K2SL/2G2G1r1 b SP3nl3p 71",
+            "l5+R1l/4kS3/p4pnpp/2Pppb3/6p1P/P2s5/NP2+nPPR1/2+bS2GK1/L6NL b 3GSP4p 93",
+            "lR5nl/5k1b1/2gp3p1/2s1p1P2/p4N2p/P3PpR2/1PPP1P2P/2G1K2s1/LN6L b GSN2Pbgs2p 83",
+            "l1+R5l/2pS5/p2pp+P1pp/2k3p2/2N4P1/PP2R1P1P/2+pPP1N2/2GSG1bs1/LN1K4L b 2GSNPbp 73"
+    );
 
     private int checks;
 
@@ -30,6 +40,7 @@ public final class MateEngineSelfTest {
         duplicateAttackerKingsAreRejected();
         nonCheckPositionIsRejected();
         cancellationIsReported();
+        curatedThreePlyPuzzlesAreValid();
     }
 
     private void eitherColorCanBeTheDefender() {
@@ -106,6 +117,37 @@ public final class MateEngineSelfTest {
                 SMALL_LIMITS,
                 () -> true);
         equal(MateSearchOutcome.CANCELLED, result.outcome(), "cancellation outcome");
+    }
+
+    private void curatedThreePlyPuzzlesAreValid() {
+        for (int puzzleIndex = 0; puzzleIndex < CURATED_THREE_PLY_PUZZLES.size(); puzzleIndex++) {
+            Position position = Position.fromSfen(CURATED_THREE_PLY_PUZZLES.get(puzzleIndex));
+            equal(Turn.BLACK, position.turn(), "curated puzzle " + (puzzleIndex + 1) + " starts with player");
+
+            boolean foundExactThreePlySolution = false;
+            boolean foundImmediateMate = false;
+            for (Move firstMove : position.legalMoves()) {
+                if (!position.isCheck(firstMove)) {
+                    continue;
+                }
+                Position.Undo undo = position.makeMoveUnchecked(firstMove);
+                try {
+                    MateSearchResult result = new MateEngine().search(position.toSfen(), THREE_PLY_LIMITS);
+                    if (result.outcome() == MateSearchOutcome.FORCED_MATE && result.matePlies() == 0) {
+                        foundImmediateMate = true;
+                    }
+                    if (result.outcome() == MateSearchOutcome.FORCED_MATE && result.matePlies() == 2) {
+                        foundExactThreePlySolution = true;
+                    }
+                } finally {
+                    position.undoMove(undo);
+                }
+            }
+            check(foundExactThreePlySolution,
+                    "curated puzzle " + (puzzleIndex + 1) + " must have an exact three-ply solution");
+            check(!foundImmediateMate,
+                    "curated puzzle " + (puzzleIndex + 1) + " must not have a one-ply solution");
+        }
     }
 
     private void assertMatingPrincipalVariation(String sfen, MateSearchResult result) {

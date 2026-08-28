@@ -3,6 +3,9 @@ package com.github.sangeeeee.tlm_shogi.network.message;
 import com.github.sangeeeee.tlm_shogi.TouhouLittleMaidShogi;
 import com.github.sangeeeee.tlm_shogi.api.game.jchess.Position;
 import com.github.sangeeeee.tlm_shogi.api.game.jchess.ShogiEngineInteractor;
+import com.github.sangeeeee.tlm_shogi.mateengine.MateEngine;
+import com.github.sangeeeee.tlm_shogi.mateengine.MateSearchLimits;
+import com.github.sangeeeee.tlm_shogi.mateengine.MateSearchResult;
 import com.github.sangeeeee.tlm_shogi.util.JChessUtil;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.Util;
@@ -17,11 +20,12 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
 
 import static com.github.tartaricacid.touhoulittlemaid.util.ResourceLocationUtil.getResourceLocation;
 
-public record JChessToClientPackage(BlockPos pos, String fenData) implements CustomPacketPayload {
+public record JChessToClientPackage(BlockPos pos, String fenData, boolean tsume) implements CustomPacketPayload {
 
     public static final Type<JChessToClientPackage> TYPE = new Type<>(getResourceLocation("jchess_to_client"));
     public static final StreamCodec<ByteBuf, JChessToClientPackage> STREAM_CODEC = StreamCodec.composite(
@@ -29,6 +33,8 @@ public record JChessToClientPackage(BlockPos pos, String fenData) implements Cus
             JChessToClientPackage::pos,
             ByteBufCodecs.STRING_UTF8,
             JChessToClientPackage::fenData,
+            ByteBufCodecs.BOOL,
+            JChessToClientPackage::tsume,
             JChessToClientPackage::new
     );
 
@@ -48,6 +54,33 @@ public record JChessToClientPackage(BlockPos pos, String fenData) implements Cus
         int levelTime = 1000;
         long timeStart = System.currentTimeMillis();
         String move = "";
+
+        if (message.tsume) {
+            try {
+                MateSearchLimits limits = new MateSearchLimits(Duration.ofSeconds(3), 15, 500_000);
+                MateSearchResult result = new MateEngine().search(
+                        message.fenData,
+                        limits,
+                        () -> Thread.currentThread().isInterrupted());
+                move = result.bestMove().orElseThrow(() ->
+                        new IOException("Mate engine found no defensive move"));
+                TouhouLittleMaidShogi.LOGGER.debug(
+                        "Tsume defense: outcome={}, move={}, matePlies={}, nodes={}, elapsed={} ms",
+                        result.outcome(), move, result.matePlies(), result.nodes(), result.elapsed().toMillis());
+                waitForAnimation(timeStart, levelTime);
+            } catch (InterruptedException exception) {
+                Thread.currentThread().interrupt();
+                move = "engine error";
+            } catch (Exception exception) {
+                TouhouLittleMaidShogi.LOGGER.error("Java mate-engine search failed", exception);
+                move = "engine error";
+            }
+
+            final String moveFinal = move;
+            Minecraft.getInstance().submitAsync(() -> PacketDistributor.sendToServer(
+                    new JChessToServerPackage(message.pos, message.fenData, moveFinal, false, false)));
+            return;
+        }
 
         Position position = new Position();
         position.applyUSI(message.fenData);
@@ -80,10 +113,7 @@ public record JChessToClientPackage(BlockPos pos, String fenData) implements Cus
                 }
 
                 // 如果时间还有剩余，那么 sleep 一会儿
-                long timeRemain = Math.max(0, levelTime - (int) (System.currentTimeMillis() - timeStart));
-                if (timeRemain > 0) {
-                    Thread.sleep(timeRemain);
-                }
+                waitForAnimation(timeStart, levelTime);
             } catch (IOException e) {
                 TouhouLittleMaidShogi.LOGGER.error("Java shogi engine data or search failed", e);
                 move = setupCompleted ? "engine error" : "no engine";
@@ -102,6 +132,14 @@ public record JChessToClientPackage(BlockPos pos, String fenData) implements Cus
         final String moveFinal = move;
         final boolean playerLostFinal = playerLost;
         final boolean maidLostFinal = maidLost;
-        Minecraft.getInstance().submitAsync(() -> PacketDistributor.sendToServer(new JChessToServerPackage(message.pos, moveFinal, maidLostFinal, playerLostFinal)));
+        Minecraft.getInstance().submitAsync(() -> PacketDistributor.sendToServer(
+                new JChessToServerPackage(message.pos, message.fenData, moveFinal, maidLostFinal, playerLostFinal)));
+    }
+
+    private static void waitForAnimation(long timeStart, int minimumMillis) throws InterruptedException {
+        long timeRemain = Math.max(0, minimumMillis - (System.currentTimeMillis() - timeStart));
+        if (timeRemain > 0) {
+            Thread.sleep(timeRemain);
+        }
     }
 }

@@ -31,6 +31,7 @@ sourceSets {
         // Compile the same dependency-free sources into this project's
         // conventional output directory, which ModDev mounts into the module.
         java.srcDir project(':engine').file('src/main/java')
+        java.srcDir project(':mateengine').file('src/main/java')
         resources.setSrcDirs([])
     }
 }
@@ -123,6 +124,7 @@ configurations {
 
 dependencies {
     implementation project(':engine')
+    implementation project(':mateengine')
     implementation files("libs/touhoulittlemaid-1.4.5-neoforge+mc1.21.1-all.jar")
 }
 
@@ -141,7 +143,9 @@ tasks.named('processResources', ProcessResources).configure {
 
 tasks.named('jar', Jar).configure {
     dependsOn project(':engine').tasks.named('classes')
+    dependsOn project(':mateengine').tasks.named('classes')
     from(project(':engine').sourceSets.main.output)
+    from(project(':mateengine').sourceSets.main.output)
 }
 
 tasks.register('verifyDistributableJar', JavaExec) {

@@ -12,7 +12,8 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import static com.github.tartaricacid.touhoulittlemaid.util.ResourceLocationUtil.getResourceLocation;
 
-public record JChessPromoteResultPackage(BlockPos chessPos, int fromPos, int toPos, int choice)
+public record JChessPromoteResultPackage(BlockPos chessPos, String expectedSfen,
+                                         int fromPos, int toPos, int choice)
         implements CustomPacketPayload {
 
     public static final Type<JChessPromoteResultPackage> TYPE =
@@ -21,6 +22,7 @@ public record JChessPromoteResultPackage(BlockPos chessPos, int fromPos, int toP
     public static final StreamCodec<ByteBuf, JChessPromoteResultPackage> STREAM_CODEC =
             StreamCodec.composite(
                     BlockPos.STREAM_CODEC, JChessPromoteResultPackage::chessPos,
+                    ByteBufCodecs.STRING_UTF8, JChessPromoteResultPackage::expectedSfen,
                     ByteBufCodecs.INT,     JChessPromoteResultPackage::fromPos,
                     ByteBufCodecs.INT,     JChessPromoteResultPackage::toPos,
                     ByteBufCodecs.INT,     JChessPromoteResultPackage::choice,
@@ -37,7 +39,7 @@ public record JChessPromoteResultPackage(BlockPos chessPos, int fromPos, int toP
             context.enqueueWork(() -> {
                 if (context.player() instanceof ServerPlayer player && player.level() instanceof ServerLevel level) {
                     BlockJChess.handlePromoteResult(level, message.chessPos,
-                            message.fromPos, message.toPos, message.choice, player);
+                            message.expectedSfen, message.fromPos, message.toPos, message.choice, player);
                 }
             });
         }

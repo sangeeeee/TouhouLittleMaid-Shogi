@@ -20,12 +20,14 @@ public class JChessPromoteScreen extends Screen {
     private static final Component NO = Component.translatable("gui.no");
 
     private final BlockPos chessPos;
+    private final String expectedSfen;
     private final int fromPos;
     private final int toPos;
 
-    public JChessPromoteScreen(BlockPos chessPos, int fromPos, int toPos) {
+    public JChessPromoteScreen(BlockPos chessPos, String expectedSfen, int fromPos, int toPos) {
         super(TITLE);
         this.chessPos = chessPos;
+        this.expectedSfen = expectedSfen;
         this.fromPos = fromPos;
         this.toPos = toPos;
     }
@@ -37,12 +39,14 @@ public class JChessPromoteScreen extends Screen {
         int y = this.height / 4;
 
         this.addRenderableWidget(Button.builder(YES, btn -> {
-            PacketDistributor.sendToServer(new JChessPromoteResultPackage(chessPos, fromPos, toPos, 1));
+            PacketDistributor.sendToServer(new JChessPromoteResultPackage(
+                    chessPos, expectedSfen, fromPos, toPos, 1));
             this.onClose();
         }).pos(x + 15, y + 25).size(50, 20).build());
 
         this.addRenderableWidget(Button.builder(NO, btn -> {
-            PacketDistributor.sendToServer(new JChessPromoteResultPackage(chessPos, fromPos, toPos, 2));
+            PacketDistributor.sendToServer(new JChessPromoteResultPackage(
+                    chessPos, expectedSfen, fromPos, toPos, 2));
             this.onClose();
         }).pos(x + w - 65, y + 25).size(50, 20).build());
     }
@@ -53,7 +57,8 @@ public class JChessPromoteScreen extends Screen {
             return true;
         }
         // 没点到按钮 → 取消
-        PacketDistributor.sendToServer(new JChessPromoteResultPackage(chessPos, fromPos, toPos, 0));
+        PacketDistributor.sendToServer(new JChessPromoteResultPackage(
+                chessPos, expectedSfen, fromPos, toPos, 0));
         this.onClose();
         return true;
     }

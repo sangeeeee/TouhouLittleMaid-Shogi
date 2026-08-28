@@ -6,5 +6,16 @@
   "message.tlm_shogi.jchess.reset": "체스판 좌우 어느 쪽이든 우클릭으로 초기화",
   "gui.tlm_shogi.jchess.promote": "승급하시겠습니까?",
   "message.tlm_shogi.jchess.engineerr": "사고 엔진에 오류가 발생했습니다",
-  "message.tlm_shogi.jchess.noengine": "쇼기 엔진 데이터를 불러올 수 없습니다"
+  "message.tlm_shogi.jchess.noengine": "쇼기 엔진 데이터를 불러올 수 없습니다",
+  "item.tlm_shogi.jchess_board_state": "쓰메쇼기 기보 도구",
+  "board_state.tlm_shogi.tsume.mate3_1": "3수 쓰메 I",
+  "board_state.tlm_shogi.tsume.mate3_2": "3수 쓰메 II",
+  "board_state.tlm_shogi.tsume.mate3_3": "3수 쓰메 III",
+  "board_state.tlm_shogi.tsume.mate3_4": "3수 쓰메 IV",
+  "board_state.tlm_shogi.tsume.mate3_5": "3수 쓰메 V",
+  "message.tlm_shogi.jchess.tsume.invalid": "이 쓰메쇼기 도구에 유효한 선수 차례 국면이 없습니다",
+  "message.tlm_shogi.jchess.tsume.incorrect": "정답이 아닙니다",
+  "message.tlm_shogi.jchess.tsume.correct": "정답입니다!",
+  "message.tlm_shogi.jchess.tsume.solved_before": "이미 푼 문제이므로 메이드 호감도가 다시 오르지 않습니다",
+  "message.tlm_shogi.jchess.tsume.ply": "수순: %s/%s"
 }

@@ -1,0 +1,47 @@
+[
+  {
+    "tags": ["library"],
+    "display": {
+      "description": "board_state.tlm_shogi.tsume.mate3_1",
+      "author": "mate3.sfen"
+    },
+    "data": "lns+R4l/1p1p5/p1pkppB1p/6p2/1R7/6P1P/P1PPnPS2/2+b1G1g2/L3K1sNL b 2GS3Pnp 51",
+    "weight": 1
+  },
+  {
+    "tags": ["library"],
+    "display": {
+      "description": "board_state.tlm_shogi.tsume.mate3_2",
+      "author": "mate3.sfen"
+    },
+    "data": "lnsG5/4g4/prpp1p1pp/1p4p2/4+B3k/2P1P4/P+b1PSP1LP/4K2SL/2G2G1r1 b SP3nl3p 71",
+    "weight": 1
+  },
+  {
+    "tags": ["library"],
+    "display": {
+      "description": "board_state.tlm_shogi.tsume.mate3_3",
+      "author": "mate3.sfen"
+    },
+    "data": "l5+R1l/4kS3/p4pnpp/2Pppb3/6p1P/P2s5/NP2+nPPR1/2+bS2GK1/L6NL b 3GSP4p 93",
+    "weight": 1
+  },
+  {
+    "tags": ["library"],
+    "display": {
+      "description": "board_state.tlm_shogi.tsume.mate3_4",
+      "author": "mate3.sfen"
+    },
+    "data": "lR5nl/5k1b1/2gp3p1/2s1p1P2/p4N2p/P3PpR2/1PPP1P2P/2G1K2s1/LN6L b GSN2Pbgs2p 83",
+    "weight": 1
+  },
+  {
+    "tags": ["library"],
+    "display": {
+      "description": "board_state.tlm_shogi.tsume.mate3_5",
+      "author": "mate3.sfen"
+    },
+    "data": "l1+R5l/2pS5/p2pp+P1pp/2k3p2/2N4P1/PP2R1P1P/2+pPP1N2/2GSG1bs1/LN1K4L b 2GSNPbp 73",
+    "weight": 1
+  }
+]

@@ -13,7 +13,7 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import static com.github.tartaricacid.touhoulittlemaid.util.ResourceLocationUtil.getResourceLocation;
 
-public record JChessPromoteOpenPackage(BlockPos chessPos, int fromPos, int toPos)
+public record JChessPromoteOpenPackage(BlockPos chessPos, String expectedSfen, int fromPos, int toPos)
         implements CustomPacketPayload {
 
     public static final Type<JChessPromoteOpenPackage> TYPE =
@@ -22,6 +22,7 @@ public record JChessPromoteOpenPackage(BlockPos chessPos, int fromPos, int toPos
     public static final StreamCodec<ByteBuf, JChessPromoteOpenPackage> STREAM_CODEC =
             StreamCodec.composite(
                     BlockPos.STREAM_CODEC, JChessPromoteOpenPackage::chessPos,
+                    ByteBufCodecs.STRING_UTF8, JChessPromoteOpenPackage::expectedSfen,
                     ByteBufCodecs.INT,     JChessPromoteOpenPackage::fromPos,
                     ByteBufCodecs.INT,     JChessPromoteOpenPackage::toPos,
                     JChessPromoteOpenPackage::new
@@ -44,7 +45,8 @@ public record JChessPromoteOpenPackage(BlockPos chessPos, int fromPos, int toPos
     private static void onHandle(JChessPromoteOpenPackage message) {
         Minecraft.getInstance().execute(() ->
                 Minecraft.getInstance().setScreen(
-                        new JChessPromoteScreen(message.chessPos, message.fromPos, message.toPos)
+                        new JChessPromoteScreen(message.chessPos, message.expectedSfen,
+                                message.fromPos, message.toPos)
                 )
         );
     }
