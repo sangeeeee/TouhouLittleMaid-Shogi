@@ -251,10 +251,7 @@ public class BlockJChess extends BlockJoy implements IBoardGameBlock {
 
             // 点击坐标的转换
             Direction facing = state.getValue(FACING);
-            Vec3 clickPos = hit.getLocation()
-                    .subtract(pos.getX(), pos.getY(), pos.getZ())
-                    .add(part.getPosX() - 0.5, 0, part.getPosY() - 0.5)
-                    .yRot(facing.toYRot() * Mth.DEG_TO_RAD);
+            Vec3 clickPos = JChessUtil.toPlayerOrientedClick(hit.getLocation(), pos, part, facing);
 
             // 重置棋盘
             boolean clickResetArea = JChessUtil.isClickResetArea(clickPos);
@@ -461,14 +458,7 @@ public class BlockJChess extends BlockJoy implements IBoardGameBlock {
                 continue;
             }
 
-            int column = index % JChessUtil.HAND_COLUMNS;
-            int row = index / JChessUtil.HAND_COLUMNS;
-            double minX = JChessUtil.HAND_MIN_X + column * JChessUtil.HAND_SLOT_WIDTH;
-            double maxX = minX + JChessUtil.HAND_SLOT_WIDTH;
-            double minZ = JChessUtil.HAND_MIN_Z + row * JChessUtil.HAND_SLOT_DEPTH;
-            double maxZ = minZ + JChessUtil.HAND_SLOT_DEPTH;
-            VoxelShape stackShape = getHandStackShape(
-                    part, pState.getValue(FACING), minX, maxX, minZ, maxZ, count);
+            VoxelShape stackShape = getPlayerHandStackShape(pState, index, count);
             if (!stackShape.isEmpty()) {
                 shape = Shapes.or(shape, stackShape);
             }
@@ -490,6 +480,21 @@ public class BlockJChess extends BlockJoy implements IBoardGameBlock {
             case LEFT_CENTER_NS -> SHAPE_LEFT_NS;
             case RIGHT_CENTER_NS -> SHAPE_RIGHT_NS;
         };
+    }
+
+    /** The exact per-stack shape used by both ray picking and the client highlight renderer. */
+    public static VoxelShape getPlayerHandStackShape(BlockState state, int handIndex, int count) {
+        if (handIndex < 0 || handIndex >= JChessUtil.HAND_COLUMNS * JChessUtil.HAND_ROWS || count < 1) {
+            return Shapes.empty();
+        }
+        int column = handIndex % JChessUtil.HAND_COLUMNS;
+        int row = handIndex / JChessUtil.HAND_COLUMNS;
+        double minX = JChessUtil.HAND_MIN_X + column * JChessUtil.HAND_SLOT_WIDTH;
+        double maxX = minX + JChessUtil.HAND_SLOT_WIDTH;
+        double minZ = JChessUtil.HAND_MIN_Z + row * JChessUtil.HAND_SLOT_DEPTH;
+        double maxZ = minZ + JChessUtil.HAND_SLOT_DEPTH;
+        return getHandStackShape(state.getValue(PART), state.getValue(FACING),
+                minX, maxX, minZ, maxZ, count);
     }
 
     private static VoxelShape getHandStackShape(ShogiPart part, Direction facing,

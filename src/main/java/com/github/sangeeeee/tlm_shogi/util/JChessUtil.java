@@ -1,6 +1,10 @@
 package com.github.sangeeeee.tlm_shogi.util;
 
 import com.github.sangeeeee.tlm_shogi.api.game.jchess.Position;
+import com.github.sangeeeee.tlm_shogi.block.properties.ShogiPart;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -17,9 +21,11 @@ public final class JChessUtil {
     public static final int HAND_COLUMNS = 3;
     public static final int HAND_ROWS = 3;
 
-    /** The board/hand-stand surface and one rendered shogi-piece thickness, in blocks. */
+    /** The board/hand-stand surface and rendered shogi-piece stack geometry, in blocks. */
     public static final double BOARD_SURFACE_Y = 10.0 / 16.0;
-    public static final double HAND_STACK_LAYER_HEIGHT = 0.0160;
+    public static final double HAND_PIECE_HEIGHT = 0.3 * 0.85 / 16.0;
+    public static final double HAND_STACK_GAP = 0.0010;
+    public static final double HAND_STACK_LAYER_HEIGHT = HAND_PIECE_HEIGHT + HAND_STACK_GAP;
     private static final double CLICK_EPSILON = 1.0e-4;
 
     public static boolean isClickResetArea(Vec3 clickPos) {
@@ -46,6 +52,12 @@ public final class JChessUtil {
             return xFloor + zFloor * 9;
         }
 
+        int handIndex = getPlayerHandPosition(clickPos, position);
+        return handIndex < 0 ? -1 : 81 + handIndex;
+    }
+
+    /** Returns the occupied player-hand stack hit by this point, or {@code -1}. */
+    public static int getPlayerHandPosition(Vec3 clickPos, Position position) {
         int handIndex = getPlayerHandSlot(clickPos.x, clickPos.z);
         List<int[]> hand = position.getBlackHand();
         if (handIndex < 0 || handIndex >= hand.size()) {
@@ -58,7 +70,7 @@ public final class JChessUtil {
                 || clickPos.y - CLICK_EPSILON > handStackTopY(count)) {
             return -1;
         }
-        return 81 + handIndex;
+        return handIndex;
     }
 
     /** Returns a row-major player-hand slot, or {@code -1} outside the 3x3 stand grid. */
@@ -77,7 +89,19 @@ public final class JChessUtil {
     }
 
     public static double handStackTopY(int count) {
-        return BOARD_SURFACE_Y + Math.max(0, count) * HAND_STACK_LAYER_HEIGHT;
+        if (count < 1) {
+            return BOARD_SURFACE_Y;
+        }
+        return BOARD_SURFACE_Y + HAND_PIECE_HEIGHT + (count - 1) * HAND_STACK_LAYER_HEIGHT;
+    }
+
+    /** Converts a hit on any of the three board blocks into player-oriented board coordinates. */
+    public static Vec3 toPlayerOrientedClick(Vec3 hitLocation, BlockPos blockPos,
+                                              ShogiPart part, Direction facing) {
+        return hitLocation
+                .subtract(blockPos.getX(), blockPos.getY(), blockPos.getZ())
+                .add(part.getPosX() - 0.5, 0, part.getPosY() - 0.5)
+                .yRot(facing.toYRot() * Mth.DEG_TO_RAD);
     }
 
     public static boolean isWhite(int piecesIndex) {
