@@ -25,7 +25,7 @@
 ビルドされたJARは `build/libs` に出力されます。
 
 ```text
-tlm_shogi-1.0.0-neoforge+mc1.21.1.jar
+tlm_shogi-1.0.0-beta-neoforge+mc1.21.1.jar
 ```
 
 ## ライセンスと第三者ソフトウェア表記

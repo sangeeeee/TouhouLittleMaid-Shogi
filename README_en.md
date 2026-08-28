@@ -25,7 +25,7 @@ The packaged resources and one engine search can be verified directly from the d
 The built JAR is placed in `build/libs`:
 
 ```text
-tlm_shogi-1.0.0-neoforge+mc1.21.1.jar
+tlm_shogi-1.0.0-beta-neoforge+mc1.21.1.jar
 ```
 
 ## License and Third-Party Notice
