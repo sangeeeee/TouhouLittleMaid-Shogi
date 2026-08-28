@@ -43,6 +43,21 @@ tasks.register('enginePerft', JavaExec) {
     args((findProperty('perftDepth') ?: '4').toString())
 }
 
+tasks.register('engineSearch', JavaExec) {
+    group = 'verification'
+    description = 'Runs one eval.bin-backed Java search without launching Minecraft.'
+    dependsOn selfTestClasses
+    classpath = sourceSets.selfTest.runtimeClasspath
+    mainClass = 'com.github.sangeeeee.tlm_shogi.engine.EngineSearch'
+    args(
+            rootProject.layout.projectDirectory.dir('tem').asFile.absolutePath,
+            (findProperty('searchDepth') ?: '5').toString(),
+            (findProperty('searchMillis') ?: '3000').toString(),
+            (findProperty('searchNodes') ?: '30000').toString(),
+            (findProperty('searchSfen') ?: 'startpos').toString()
+    )
+}
+
 tasks.register('probeSunfishResources', JavaExec) {
     group = 'verification'
     description = 'Validates tem/eval.bin and tem/book.bin without launching Minecraft.'

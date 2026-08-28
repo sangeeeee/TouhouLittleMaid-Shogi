@@ -5,7 +5,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-/** Immutable result returned by the direct Java engine API. */
+/**
+ * Immutable result returned by the direct Java engine API.
+ *
+ * <p>{@code score} is relative to the side to move in the fully replayed root
+ * position. Positive values favor that side; mate scores approach +/-16000.</p>
+ */
 public record SearchResult(
         SearchOutcome outcome,
         Optional<String> bestMove,

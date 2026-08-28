@@ -204,7 +204,14 @@ public final class Position {
         return makeMoveUnchecked(move);
     }
 
-    Undo makeMoveUnchecked(Move move) {
+    /**
+     * Applies a move without regenerating the legal move list.
+     *
+     * <p>This is the search hot path. Callers must only pass a move obtained
+     * from {@link MoveGenerator#generateLegal(Position)} or independently
+     * validated with {@link MoveGenerator#isLegal(Position, Move)}.</p>
+     */
+    public Undo makeMoveUnchecked(Move move) {
         Objects.requireNonNull(move, "move");
         Turn movingTurn = turn;
         int previousMoveNumber = moveNumber;

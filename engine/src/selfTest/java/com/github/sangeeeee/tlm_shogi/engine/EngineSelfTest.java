@@ -14,6 +14,10 @@ import com.github.sangeeeee.tlm_shogi.engine.core.RotatedBitboard;
 import com.github.sangeeeee.tlm_shogi.engine.core.Square;
 import com.github.sangeeeee.tlm_shogi.engine.core.Turn;
 import com.github.sangeeeee.tlm_shogi.engine.core.Zobrist;
+import com.github.sangeeeee.tlm_shogi.engine.search.AlphaBetaSearcher;
+import com.github.sangeeeee.tlm_shogi.engine.search.SunfishEvaluator;
+import com.github.sangeeeee.tlm_shogi.engine.search.SunfishScore;
+import com.github.sangeeeee.tlm_shogi.engine.search.TranspositionTable;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -49,8 +53,11 @@ public final class EngineSelfTest {
         casualLimitsMatchTheCurrentModConfiguration();
         requestDefensivelyCopiesMoveHistory();
         resultRejectsMoveOutcomeWithoutMove();
-        engineInitializesAndHonorsCancellation();
-        engineReportsMissingSearchPort();
+        sunfishEvaluationLoadsAndIsSymmetric();
+        transpositionTableMatchesSunfishSemantics();
+        alphaBetaSearchFindsMaterialAndHonorsLimits();
+        engineInitializesSearchesAndHonorsCancellation();
+        truncatedEvaluationFailsInitialization();
         resourceVersionMismatchFailsInitialization();
     }
 
@@ -490,41 +497,171 @@ public final class EngineSelfTest {
         ));
     }
 
-    private void engineInitializesAndHonorsCancellation() throws Exception {
-        withTemporaryResources(SunfishResources.EXPECTED_EVAL_VERSION, directory -> {
-            SunfishEngine engine = new SunfishEngine(SunfishResources.fromDirectory(directory));
-            equal(EngineState.NEW, engine.state(), "initial engine state");
+    private void sunfishEvaluationLoadsAndIsSymmetric() throws Exception {
+        Path evalPath = repositoryResources().evalFile();
+        SunfishEvaluator evaluator = SunfishEvaluator.load(evalPath);
+        equal(SunfishEvaluator.WEIGHT_COUNT, evaluator.weightCount(), "optimized eval weight count");
+        equal(SunfishEvaluator.EXPECTED_FILE_BYTES, Files.size(evalPath), "optimized eval byte size");
 
-            engine.initialize();
-            equal(EngineState.READY, engine.state(), "ready engine state");
-            equal(SunfishResources.EXPECTED_EVAL_VERSION, engine.resourceInfo().evalVersion(), "eval version");
+        Position start = Position.startPosition();
+        equal(0, evaluator.calculateMaterialScore(start), "start position material symmetry");
+        equal(0, evaluator.evaluate(start), "start position total evaluation symmetry");
 
-            CancellationSource cancellation = new CancellationSource();
-            cancellation.cancel();
-            SearchResult result = engine.search(
-                    SearchRequest.currentPosition("startpos", SearchLimits.casualPlay()),
-                    cancellation.token()
-            );
-            equal(SearchOutcome.CANCELLED, result.outcome(), "cancelled outcome");
-
-            engine.close();
-            equal(EngineState.CLOSED, engine.state(), "closed engine state");
-        });
+        Position blackAdvance = Position.startPosition();
+        blackAdvance.makeMove(Move.parseSfen("7g7f").orElseThrow());
+        Position mirroredWhiteAdvance = Position.fromSfen(
+                Position.START_SFEN.replace(" b - 1", " w - 1")
+        );
+        mirroredWhiteAdvance.makeMove(Move.parseSfen("3c3d").orElseThrow());
+        int blackAdvanceScore = evaluator.evaluate(blackAdvance);
+        int mirroredScore = evaluator.evaluate(mirroredWhiteAdvance);
+        equal(blackAdvanceScore, -mirroredScore, "point-symmetric eval sign");
+        check(blackAdvanceScore != 0, "trained eval reacts to an opening pawn move");
     }
 
-    private void engineReportsMissingSearchPort() throws Exception {
+    private void transpositionTableMatchesSunfishSemantics() {
+        TranspositionTable table = new TranspositionTable(1);
+        equal(16_384, table.bucketCount(), "one MiB TT bucket count");
+
+        long hash = 0x1234_5678_9abc_def0L;
+        Move move = Move.parseSfen("7g7f").orElseThrow();
+        equal(TranspositionTable.StoreStatus.REPLACE,
+                table.store(hash, -123, 456, 77, 5, 3, move), "first TT store");
+        TranspositionTable.Entry entry = table.probe(hash, 8).orElseThrow();
+        equal(77, entry.score(), "TT exact score");
+        equal(5, entry.depth(), "TT depth");
+        equal(TranspositionTable.EXACT, entry.scoreType(), "TT exact bound");
+        equal(move, entry.move(), "TT move");
+
+        equal(TranspositionTable.StoreStatus.REJECT,
+                table.store(hash, -123, 456, 77, 3, 3, move), "shallower TT rejection");
+        table.store(hash + 1, -123, 456, SunfishScore.INFINITY - 7, 5, 3, move);
+        equal(SunfishScore.INFINITY - 8, table.probe(hash + 1, 4).orElseThrow().score(),
+                "positive mate-distance normalization");
+        table.store(hash + 2, -123, 456, -SunfishScore.INFINITY + 5, 5, 4, move);
+        equal(-SunfishScore.INFINITY + 6, table.probe(hash + 2, 5).orElseThrow().score(),
+                "negative mate-distance normalization");
+        check(table.usageRate() > 0.0f, "TT usage diagnostic");
+
+        table.clear();
+        long collisionStride = table.bucketCount();
+        long first = 0x55L;
+        long shallowest = first + collisionStride;
+        long deepest = first + collisionStride * 2L;
+        long replacement = first + collisionStride * 3L;
+        table.store(first, -10, 10, 0, 5, 0, move);
+        table.store(shallowest, -10, 10, 0, 2, 0, move);
+        table.store(deepest, -10, 10, 0, 7, 0, move);
+        table.store(replacement, -10, 10, 0, 4, 0, move);
+        check(table.probe(first, 0).isPresent(), "TT collision preserves first deeper slot");
+        check(table.probe(shallowest, 0).isEmpty(), "TT collision replaces shallowest slot");
+        check(table.probe(deepest, 0).isPresent(), "TT collision preserves deepest slot");
+        check(table.probe(replacement, 0).isPresent(), "TT collision stores replacement");
+    }
+
+    private void alphaBetaSearchFindsMaterialAndHonorsLimits() {
+        Position position = Position.fromSfen("k8/9/9/9/4r4/4R4/9/9/4K4 b - 1");
+        String before = position.toSfen();
+        SearchLimits limits = new SearchLimits(Duration.ofSeconds(1), 2, 10_000, 1, 1);
+        AlphaBetaSearcher searcher = new AlphaBetaSearcher(
+                SunfishEvaluator.materialOnly(),
+                new TranspositionTable(1),
+                limits,
+                CancellationToken.none(),
+                List.of(position.getHash())
+        );
+        SearchResult result = searcher.search(position);
+        equal(SearchOutcome.MOVE, result.outcome(), "standalone alpha-beta outcome");
+        equal("5f5e", result.bestMove().orElseThrow(), "standalone alpha-beta capture");
+        check(result.depth() >= 1, "standalone alpha-beta completed depth");
+        check(result.nodes() <= limits.maximumNodes(), "standalone alpha-beta node cap");
+        equal(before, position.toSfen(), "search restores root position");
+
+        Position mateInOne = Position.fromSfen("3lkl3/9/5G3/9/9/9/9/9/4K4 b R 1");
+        SearchResult mate = new AlphaBetaSearcher(
+                SunfishEvaluator.materialOnly(),
+                new TranspositionTable(1),
+                limits,
+                CancellationToken.none(),
+                List.of(mateInOne.getHash())
+        ).search(mateInOne);
+        equal("R*5b", mate.bestMove().orElseThrow(), "mate-in-one move");
+        equal(SunfishScore.INFINITY - 1, mate.score(), "mate-in-one distance score");
+
+        SearchLimits oneNode = new SearchLimits(Duration.ofSeconds(1), 8, 1, 1, 1);
+        SearchResult limited = new AlphaBetaSearcher(
+                SunfishEvaluator.materialOnly(),
+                new TranspositionTable(1),
+                oneNode,
+                CancellationToken.none(),
+                List.of(position.getHash())
+        ).search(position);
+        equal(SearchOutcome.MOVE, limited.outcome(), "node-limited fallback move");
+        equal(1L, limited.nodes(), "hard node limit");
+        equal(0, limited.depth(), "incomplete iteration is not reported as complete");
+
+        Position cancellationPosition = Position.startPosition();
+        String cancellationBefore = cancellationPosition.toSfen();
+        int[] cancellationChecks = {0};
+        CancellationToken delayedCancellation = () -> ++cancellationChecks[0] > 100;
+        SearchResult cancelled = new AlphaBetaSearcher(
+                SunfishEvaluator.materialOnly(),
+                new TranspositionTable(1),
+                new SearchLimits(Duration.ofSeconds(5), 8, 100_000, 1, 1),
+                delayedCancellation,
+                List.of(cancellationPosition.getHash())
+        ).search(cancellationPosition);
+        equal(SearchOutcome.CANCELLED, cancelled.outcome(), "mid-search cancellation outcome");
+        equal(cancellationBefore, cancellationPosition.toSfen(), "cancellation restores root position");
+    }
+
+    private void engineInitializesSearchesAndHonorsCancellation() throws Exception {
+        SunfishEngine engine = new SunfishEngine(repositoryResources());
+        equal(EngineState.NEW, engine.state(), "initial engine state");
+        engine.initialize();
+        equal(EngineState.READY, engine.state(), "ready engine state");
+        equal(SunfishResources.EXPECTED_EVAL_VERSION, engine.resourceInfo().evalVersion(), "eval version");
+
+        CancellationSource cancellation = new CancellationSource();
+        cancellation.cancel();
+        SearchResult cancelled = engine.search(
+                SearchRequest.currentPosition("startpos", SearchLimits.casualPlay()),
+                cancellation.token()
+        );
+        equal(SearchOutcome.CANCELLED, cancelled.outcome(), "cancelled outcome");
+
+        SearchLimits limits = new SearchLimits(Duration.ofSeconds(2), 2, 5_000, 1, 1);
+        SearchResult result = engine.search(
+                new SearchRequest("startpos", List.of("7g7f"), limits),
+                CancellationToken.none()
+        );
+        equal(SearchOutcome.MOVE, result.outcome(), "engine search outcome");
+        Position afterHistory = Position.startPosition();
+        afterHistory.makeMove(Move.parseSfen("7g7f").orElseThrow());
+        Move bestMove = Move.parseSfen(result.bestMove().orElseThrow()).orElseThrow();
+        check(afterHistory.validateMove(bestMove), "engine returns a legal move after replaying history");
+        check(!result.principalVariation().isEmpty(), "engine returns a principal variation");
+        check(result.nodes() <= limits.maximumNodes(), "engine search node cap");
+
+        expect(EngineException.class, () -> engine.search(
+                new SearchRequest("startpos", List.of("7g7z"), limits),
+                CancellationToken.none()
+        ));
+        expect(EngineException.class, () -> engine.search(
+                SearchRequest.currentPosition("9/9/9/9/9/9/9/9/4K4 b - 1", limits),
+                CancellationToken.none()
+        ));
+        engine.close();
+        equal(EngineState.CLOSED, engine.state(), "closed engine state");
+    }
+
+    private void truncatedEvaluationFailsInitialization() throws Exception {
         withTemporaryResources(SunfishResources.EXPECTED_EVAL_VERSION, directory -> {
             SunfishEngine engine = new SunfishEngine(SunfishResources.fromDirectory(directory));
-            engine.initialize();
-            EngineException exception = expect(EngineException.class, () -> engine.search(
-                    SearchRequest.currentPosition("startpos", SearchLimits.casualPlay()),
-                    CancellationToken.none()
-            ));
-            equal(
-                    "Sunfish search has not been ported yet",
-                    exception.getMessage(),
-                    "unimplemented search message"
-            );
+            EngineException exception = expect(EngineException.class, engine::initialize);
+            check(exception.getMessage().startsWith("Invalid eval.bin size:"),
+                    "truncated eval size message");
+            equal(EngineState.NEW, engine.state(), "truncated eval leaves engine new");
         });
     }
 
@@ -534,6 +671,15 @@ public final class EngineSelfTest {
             expect(EngineException.class, engine::initialize);
             equal(EngineState.NEW, engine.state(), "failed initialization state");
         });
+    }
+
+    private static SunfishResources repositoryResources() {
+        Path direct = Path.of("tem");
+        if (Files.isRegularFile(direct.resolve("eval.bin"))) {
+            return SunfishResources.fromDirectory(direct);
+        }
+        Path parent = Path.of("..", "tem");
+        return SunfishResources.fromDirectory(parent);
     }
 
     private void withTemporaryResources(String version, ThrowingConsumer<Path> test) throws Exception {

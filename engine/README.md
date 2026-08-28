@@ -21,6 +21,16 @@ Validate the upstream `eval.bin` and `book.bin` currently stored in `tem`:
 gradlew.bat :engine:probeSunfishResources
 ```
 
+Run one real Java search using the bundled Sunfish evaluation data:
+
+```text
+gradlew.bat :engine:engineSearch
+```
+
+The standalone search accepts optional Gradle properties such as
+`-PsearchDepth=6`, `-PsearchMillis=5000`, `-PsearchNodes=100000`, and
+`-PsearchSfen="..."`.
+
 The self-test is implemented with only the Java standard library, so it can run
 offline without downloading a test framework. It covers the engine lifecycle,
 resource contracts, Sunfish-compatible base types, movement tables, SFEN
@@ -28,6 +38,12 @@ positions, incremental bitboards, exact Sunfish Zobrist values, lightweight
 make/undo, check detection, legal move generation, drops, promotion, the
 pawn-drop-mate rule, and verified start-position perft through depth five.
 
-The search and evaluation layers are not connected yet. Calling the engine's
-search entry point therefore still reports that Sunfish search has not been
-ported, while the rule layer can be exercised directly without Minecraft.
+The direct engine API now reads Sunfish's complete optimized `eval.bin` feature
+vector, uses a three-slot depth-preferred transposition table, and performs a
+single-threaded iterative-deepening Alpha-Beta search with quiescence, move
+ordering, fourfold-repetition draws, principal variations, and hard time/node/
+cancellation limits. It remains independent of Minecraft and native processes.
+
+This is the correctness-oriented search baseline. Sunfish's advanced pruning,
+parallel search, perpetual-check adjudication, and opening-book selection are
+left for later stages.
