@@ -8,6 +8,7 @@ import com.github.sangeeeee.tlm_shogi.engine.SearchLimits;
 import com.github.sangeeeee.tlm_shogi.engine.SearchRequest;
 import com.github.sangeeeee.tlm_shogi.engine.SearchResult;
 import com.github.sangeeeee.tlm_shogi.engine.SunfishEngine;
+import com.github.sangeeeee.tlm_shogi.engine.SunfishResources;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
@@ -22,6 +23,7 @@ import java.util.List;
 /** Compatibility facade for the old USI-process call site, backed by Java. */
 @OnlyIn(Dist.CLIENT)
 public final class ShogiEngineInteractor {
+    private static final String BUNDLED_RESOURCE_DIRECTORY = "assets/tlm_shogi/sunfish";
     private static final Object ENGINE_LOCK = new Object();
     private static final SearchLimits DEFAULT_LIMITS = SearchLimits.casualPlay();
 
@@ -41,7 +43,11 @@ public final class ShogiEngineInteractor {
                 return;
             }
 
-            SunfishEngine candidate = new SunfishEngine(SunfishDataFiles.prepare());
+            SunfishResources resources = SunfishResources.fromClasspath(
+                    ShogiEngineInteractor.class.getClassLoader(),
+                    BUNDLED_RESOURCE_DIRECTORY
+            );
+            SunfishEngine candidate = new SunfishEngine(resources);
             try {
                 candidate.initialize();
                 sharedEngine = candidate;

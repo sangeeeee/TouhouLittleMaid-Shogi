@@ -8,12 +8,18 @@
 
 現在は純Java版のSunfishエンジンを内蔵しており、Windows用の `.exe` の展開・実行は行いません。Minecraft 1.21.1に必要なJava 21を実行できるクライアントであれば、プラットフォームを問わず対局できます。専用サーバー側では探索処理を実行しません。
 
-初回起動時、クライアントは `eval.bin` と `book.bin` のデータのみを `config/touhou_little_maid/shogi_engine/sunfish4-java-2018.05.29.0` に展開します。探索はクライアントのバックグラウンドワーカーで実行され、マルチプレイサーバーに計算負荷を移しません。
+`eval.bin` と `book.bin` はMODのJAR内に保持され、クライアント初期化時にリソースストリームから直接メモリへ読み込まれます。エンジン用ファイルを `config` 以下へ展開・書き込みすることはありません。探索はクライアントのバックグラウンドワーカーで実行され、マルチプレイサーバーに計算負荷を移しません。
 
 ## ビルド
 
 ```powershell
 .\gradlew.bat build
+```
+
+配布用JARから内蔵データを読み込み、探索を1回実行する検証も可能です。
+
+```powershell
+.\gradlew.bat verifyDistributableJar
 ```
 
 ビルドされたJARは `build/libs` に出力されます。

@@ -144,6 +144,15 @@ tasks.named('jar', Jar).configure {
     from(project(':engine').sourceSets.main.output)
 }
 
+tasks.register('verifyDistributableJar', JavaExec) {
+    group = 'verification'
+    description = 'Loads resources from the built mod JAR and performs one pure-Java engine search.'
+    dependsOn tasks.named('jar')
+    classpath = files(tasks.named('jar', Jar).flatMap { it.archiveFile })
+    mainClass = 'com.github.sangeeeee.tlm_shogi.engine.tool.BundledEngineSmoke'
+    maxHeapSize = '512m'
+}
+
 // Example configuration to allow publishing using the maven-publish plugin
 publishing {
     publications {

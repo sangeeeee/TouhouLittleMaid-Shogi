@@ -53,7 +53,7 @@ public final class SunfishEngine implements ShogiEngine {
         }
 
         SunfishResourceInfo inspected = resources.inspect();
-        SunfishEvaluator loadedEvaluator = SunfishEvaluator.load(resources.evalFile());
+        SunfishEvaluator loadedEvaluator = SunfishEvaluator.load(resources);
         resourceInfo = inspected;
         evaluator = loadedEvaluator;
         state.set(EngineState.READY);

@@ -8,12 +8,18 @@
 
 模组现在使用直接内置的纯 Java Sunfish 引擎，不再解压或调用 Windows `.exe`。只要客户端能够运行 Minecraft 1.21.1 所需的 Java 21，就可以进行将棋对局；专用服务器不会执行搜索任务。
 
-客户端首次运行时会把 `eval.bin` 和 `book.bin` 数据释放到 `config/touhou_little_maid/shogi_engine/sunfish4-java-2018.05.29.0`。搜索在玩家客户端的后台线程中完成，不会把计算压力转移到多人服务器。
+`eval.bin` 和 `book.bin` 均保留在模组 JAR 内，并在客户端初始化时直接通过资源流读入内存；模组不会为引擎向 `config` 解压或写入任何文件。搜索在玩家客户端的后台线程中完成，不会把计算压力转移到多人服务器。
 
 ## 构建
 
 ```powershell
 .\gradlew.bat build
+```
+
+可分发的 JAR 位于 `build/libs`。还可以直接从该 JAR 加载内置数据并执行一次搜索验证：
+
+```powershell
+.\gradlew.bat verifyDistributableJar
 ```
 
 ## 致谢

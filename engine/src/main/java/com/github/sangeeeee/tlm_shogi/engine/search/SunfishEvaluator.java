@@ -14,13 +14,9 @@ import com.github.sangeeeee.tlm_shogi.engine.core.Turn;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -136,50 +132,81 @@ public final class SunfishEvaluator {
         Path normalized = path.toAbsolutePath().normalize();
         try {
             long size = Files.size(normalized);
-            if (size != EXPECTED_FILE_BYTES) {
-                throw new EngineException("Invalid eval.bin size: " + size
-                        + " bytes; expected " + EXPECTED_FILE_BYTES);
-            }
-
-            int headerBytes;
             try (InputStream input = Files.newInputStream(normalized)) {
-                int length = input.read();
-                if (length < 1 || length > 31) {
-                    throw new EngineException("eval.bin contains an invalid version length: " + length);
-                }
-                byte[] versionBytes = input.readNBytes(length);
-                if (versionBytes.length != length) {
-                    throw new EngineException("eval.bin ended inside its version header");
-                }
-                String version = new String(versionBytes, StandardCharsets.US_ASCII);
-                if (!SunfishResources.EXPECTED_EVAL_VERSION.equals(version)) {
-                    throw new EngineException("Unsupported eval.bin version: " + version
-                            + "; expected " + SunfishResources.EXPECTED_EVAL_VERSION);
-                }
-                headerBytes = 1 + length;
-            }
-
-            try (FileChannel channel = FileChannel.open(normalized, StandardOpenOption.READ)) {
-                short[] loadedWeights = new short[WEIGHT_COUNT];
-                ByteBuffer buffer = ByteBuffer.allocate(1 << 20).order(ByteOrder.LITTLE_ENDIAN);
-                channel.position(headerBytes);
-                int weightIndex = 0;
-                while (channel.read(buffer) >= 0) {
-                    buffer.flip();
-                    while (buffer.remaining() >= Short.BYTES) {
-                        loadedWeights[weightIndex++] = buffer.getShort();
-                    }
-                    buffer.compact();
-                    if (weightIndex == WEIGHT_COUNT) break;
-                }
-                if (weightIndex != WEIGHT_COUNT || buffer.position() != 0) {
-                    throw new EngineException("eval.bin contained " + weightIndex
-                            + " complete weights; expected " + WEIGHT_COUNT);
-                }
-                return new SunfishEvaluator(normalized, loadedWeights, true);
+                return load(input, size, normalized.toString(), normalized);
             }
         } catch (IOException exception) {
             throw new EngineException("Failed to load Sunfish evaluation data: " + normalized, exception);
+        }
+    }
+
+    /** Opens evaluation data through a filesystem or classpath resource descriptor. */
+    public static SunfishEvaluator load(SunfishResources resources) throws EngineException {
+        Objects.requireNonNull(resources, "resources");
+        long size = resources.evalBytes();
+        try (InputStream input = resources.openEval()) {
+            return load(input, size, resources.evalDescription(), null);
+        } catch (IOException exception) {
+            throw new EngineException(
+                    "Failed to close Sunfish evaluation data: " + resources.evalDescription(),
+                    exception
+            );
+        }
+    }
+
+    /**
+     * Reads an optimized feature vector from an already-open stream.
+     * The caller remains responsible for closing the stream.
+     */
+    public static SunfishEvaluator load(InputStream input, long size, String description) throws EngineException {
+        return load(input, size, description, null);
+    }
+
+    private static SunfishEvaluator load(InputStream input, long size, String description, Path source)
+            throws EngineException {
+        Objects.requireNonNull(input, "input");
+        Objects.requireNonNull(description, "description");
+        if (size != EXPECTED_FILE_BYTES) {
+            throw new EngineException("Invalid eval.bin size: " + size
+                    + " bytes; expected " + EXPECTED_FILE_BYTES);
+        }
+
+        try {
+            int length = input.read();
+            if (length < 1 || length > 31) {
+                throw new EngineException("eval.bin contains an invalid version length: " + length);
+            }
+            byte[] versionBytes = input.readNBytes(length);
+            if (versionBytes.length != length) {
+                throw new EngineException("eval.bin ended inside its version header");
+            }
+            String version = new String(versionBytes, StandardCharsets.US_ASCII);
+            if (!SunfishResources.EXPECTED_EVAL_VERSION.equals(version)) {
+                throw new EngineException("Unsupported eval.bin version: " + version
+                        + "; expected " + SunfishResources.EXPECTED_EVAL_VERSION);
+            }
+
+            short[] loadedWeights = new short[WEIGHT_COUNT];
+            byte[] buffer = new byte[1 << 20];
+            int weightIndex = 0;
+            while (weightIndex < WEIGHT_COUNT) {
+                int bytesNeeded = Math.min(buffer.length, (WEIGHT_COUNT - weightIndex) * Short.BYTES);
+                int bytesRead = input.readNBytes(buffer, 0, bytesNeeded);
+                if (bytesRead != bytesNeeded) {
+                    throw new EngineException("eval.bin ended after " + weightIndex
+                            + " complete weights; expected " + WEIGHT_COUNT);
+                }
+                for (int offset = 0; offset < bytesRead; offset += Short.BYTES) {
+                    loadedWeights[weightIndex++] = (short) ((buffer[offset] & 0xff)
+                            | ((buffer[offset + 1] & 0xff) << 8));
+                }
+            }
+            if (input.read() != -1) {
+                throw new EngineException("eval.bin contains data after its expected feature vector");
+            }
+            return new SunfishEvaluator(source, loadedWeights, true);
+        } catch (IOException exception) {
+            throw new EngineException("Failed to load Sunfish evaluation data: " + description, exception);
         }
     }
 

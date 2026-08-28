@@ -8,12 +8,18 @@ An add-on for **[Touhou Little Maid](https://github.com/TartaricAcid/TouhouLittl
 
 The mod now embeds a pure-Java Sunfish engine and no longer extracts or invokes a Windows `.exe`. Shogi matches are available on any client platform capable of running the Java 21 runtime required by Minecraft 1.21.1. Dedicated servers do not perform engine searches.
 
-On first launch, the client extracts only `eval.bin` and `book.bin` data to `config/touhou_little_maid/shogi_engine/sunfish4-java-2018.05.29.0`. Search runs on a client background worker and does not move its computational load to multiplayer servers.
+Both `eval.bin` and `book.bin` remain inside the mod JAR and are read directly into memory through resource streams during client initialization. The engine does not extract or write any files under `config`. Search runs on a client background worker and does not move its computational load to multiplayer servers.
 
 ## Build
 
 ```powershell
 .\gradlew.bat build
+```
+
+The packaged resources and one engine search can be verified directly from the distributable JAR:
+
+```powershell
+.\gradlew.bat verifyDistributableJar
 ```
 
 The built JAR is placed in `build/libs`:

@@ -43,6 +43,9 @@ vector, uses a three-slot depth-preferred transposition table, and performs a
 single-threaded iterative-deepening Alpha-Beta search with quiescence, move
 ordering, fourfold-repetition draws, principal variations, and hard time/node/
 cancellation limits. It remains independent of Minecraft and native processes.
+Resources may be supplied either as ordinary files for standalone tools or as
+classpath streams. The mod uses the latter so its evaluation and book data stay
+inside the distributable JAR and never need to be extracted to `config`.
 
 This is the correctness-oriented search baseline. Sunfish's advanced pruning,
 parallel search, perpetual-check adjudication, and opening-book selection are

@@ -18,7 +18,7 @@ public final class SunfishResourceProbe {
 
         SunfishResources resources = SunfishResources.fromDirectory(Path.of(args[0]));
         SunfishResourceInfo info = resources.inspect();
-        SunfishEvaluator evaluator = SunfishEvaluator.load(resources.evalFile());
+        SunfishEvaluator evaluator = SunfishEvaluator.load(resources);
 
         System.out.println("Sunfish resources are valid.");
         System.out.println("eval version: " + info.evalVersion());
