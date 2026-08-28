@@ -3,6 +3,8 @@
   "advancements.tlm_shogi.favorability.win_jchess.description": "日本将棋で1勝する",
   "advancements.tlm_shogi.favorability.win_tsume_masterpiece.title": "詰将棋マスター",
   "advancements.tlm_shogi.favorability.win_tsume_masterpiece.description": "詰将棋の名作を一題解く",
+  "advancements.tlm_shogi.favorability.win_microcosmos.title": "あ．．．ありえない！",
+  "advancements.tlm_shogi.favorability.win_microcosmos.description": "1525手詰「ミクロコスモス」を解く",
   "block.tlm_shogi.jchess": "日本将棋",
   "message.tlm_shogi.jchess.move_limit": "200手制限！",
   "message.tlm_shogi.jchess.reset": "盤の左右どちらかを右クリックでリセット",
@@ -10,13 +12,16 @@
   "message.tlm_shogi.jchess.engineerr": "思考エンジンにエラーが発生しました",
   "message.tlm_shogi.jchess.noengine": "将棋エンジンのデータを読み込めません",
   "item.tlm_shogi.jchess_board_state": "詰将棋局面道具",
+  "item.tlm_shogi.microcosmos": "ミクロコスモス",
   "board_state.tlm_shogi.tsume": "%s手詰",
   "board_state.tlm_shogi.tsume.masterpiece": "%s手詰・名作",
+  "board_state.tlm_shogi.tsume.microcosmos": "1525手詰・ミクロコスモス",
   "board_state.tlm_shogi.tsume.author.unknown": "不明",
   "tooltip.tlm_shogi.tsume.engine_hand_all": "☖持駒：残り駒全部",
   "message.tlm_shogi.jchess.tsume.invalid": "この詰将棋道具には有効な先手局面がありません",
   "message.tlm_shogi.jchess.tsume.incorrect": "不正解",
   "message.tlm_shogi.jchess.tsume.correct": "正解！",
   "message.tlm_shogi.jchess.tsume.solved_before": "この問題は解答済みのため、好感度は再度上がりません",
-  "message.tlm_shogi.jchess.tsume.ply": "手数：%s/%s"
+  "message.tlm_shogi.jchess.tsume.ply": "手数：%s/%s",
+  "message.tlm_shogi.jchess.microcosmos.introduction": "橋本孝治作「ミクロコスモス」。1519手の原図は1986年に発表され看寿賞を受賞し、1995年に1525手へ改良された超長編詰将棋の名作です。"
 }

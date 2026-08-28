@@ -25,7 +25,8 @@ import java.util.concurrent.CompletableFuture;
 
 import static com.github.tartaricacid.touhoulittlemaid.util.ResourceLocationUtil.getResourceLocation;
 
-public record JChessToClientPackage(BlockPos pos, String fenData, boolean tsume) implements CustomPacketPayload {
+public record JChessToClientPackage(BlockPos pos, String fenData, boolean tsume,
+                                    String scriptedMove) implements CustomPacketPayload {
 
     public static final Type<JChessToClientPackage> TYPE = new Type<>(getResourceLocation("jchess_to_client"));
     public static final StreamCodec<ByteBuf, JChessToClientPackage> STREAM_CODEC = StreamCodec.composite(
@@ -35,6 +36,8 @@ public record JChessToClientPackage(BlockPos pos, String fenData, boolean tsume)
             JChessToClientPackage::fenData,
             ByteBufCodecs.BOOL,
             JChessToClientPackage::tsume,
+            ByteBufCodecs.STRING_UTF8,
+            JChessToClientPackage::scriptedMove,
             JChessToClientPackage::new
     );
 
@@ -57,16 +60,20 @@ public record JChessToClientPackage(BlockPos pos, String fenData, boolean tsume)
 
         if (message.tsume) {
             try {
-                MateSearchLimits limits = new MateSearchLimits(Duration.ofSeconds(3), 15, 500_000);
-                MateSearchResult result = new MateEngine().search(
-                        message.fenData,
-                        limits,
-                        () -> Thread.currentThread().isInterrupted());
-                move = result.bestMove().orElseThrow(() ->
-                        new IOException("Mate engine found no defensive move"));
-                TouhouLittleMaidShogi.LOGGER.debug(
-                        "Tsume defense: outcome={}, move={}, matePlies={}, nodes={}, elapsed={} ms",
-                        result.outcome(), move, result.matePlies(), result.nodes(), result.elapsed().toMillis());
+                if (!message.scriptedMove.isBlank()) {
+                    move = message.scriptedMove;
+                } else {
+                    MateSearchLimits limits = new MateSearchLimits(Duration.ofSeconds(3), 15, 500_000);
+                    MateSearchResult result = new MateEngine().search(
+                            message.fenData,
+                            limits,
+                            () -> Thread.currentThread().isInterrupted());
+                    move = result.bestMove().orElseThrow(() ->
+                            new IOException("Mate engine found no defensive move"));
+                    TouhouLittleMaidShogi.LOGGER.debug(
+                            "Tsume defense: outcome={}, move={}, matePlies={}, nodes={}, elapsed={} ms",
+                            result.outcome(), move, result.matePlies(), result.nodes(), result.elapsed().toMillis());
+                }
                 waitForAnimation(timeStart, levelTime);
             } catch (InterruptedException exception) {
                 Thread.currentThread().interrupt();

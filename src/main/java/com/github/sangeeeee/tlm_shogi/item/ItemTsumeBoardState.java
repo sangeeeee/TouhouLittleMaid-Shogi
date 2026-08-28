@@ -19,7 +19,7 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 
 /** A Touhou Little Maid board-state item whose payload is a tsume-shogi SFEN. */
-public final class ItemTsumeBoardState extends ItemBoardState {
+public class ItemTsumeBoardState extends ItemBoardState {
     public static final int DEFAULT_MAXIMUM_PLY = 3;
     public static final String DESCRIPTION = "board_state.tlm_shogi.tsume";
     public static final String MASTERPIECE_DESCRIPTION = DESCRIPTION + ".masterpiece";

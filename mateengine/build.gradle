@@ -55,6 +55,15 @@ tasks.register('tsumePuzzleCatalogTest', JavaExec) {
     )
 }
 
+tasks.register('microcosmosRecordTest', JavaExec) {
+    group = 'verification'
+    description = 'Validates all 1,525 plies of the bundled Microcosmos record.'
+    dependsOn selfTestClasses
+    classpath = sourceSets.selfTest.runtimeClasspath
+    mainClass = 'com.github.sangeeeee.tlm_shogi.mateengine.MicrocosmosRecordSelfTest'
+    args(rootProject.file('src/main/resources/data/tlm_shogi/tsume/microcosmos.usi').absolutePath)
+}
+
 tasks.register('mateSearch', JavaExec) {
     group = 'verification'
     description = 'Finds a longest-surviving defense for a checked SFEN position.'
@@ -72,4 +81,5 @@ tasks.register('mateSearch', JavaExec) {
 tasks.named('check') {
     dependsOn mateEngineTest
     dependsOn tsumePuzzleCatalogTest
+    dependsOn microcosmosRecordTest
 }

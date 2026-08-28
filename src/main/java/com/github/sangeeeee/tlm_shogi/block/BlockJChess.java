@@ -16,6 +16,7 @@ import com.github.tartaricacid.touhoulittlemaid.init.InitTrigger;
 import com.github.sangeeeee.tlm_shogi.network.message.JChessPromoteOpenPackage;
 import com.github.sangeeeee.tlm_shogi.network.message.JChessToClientPackage;
 import com.github.sangeeeee.tlm_shogi.tileentity.TileEntityJChess;
+import com.github.sangeeeee.tlm_shogi.tsume.MicrocosmosRecord;
 import com.github.sangeeeee.tlm_shogi.tsume.TsumePlayerProgress;
 import com.github.sangeeeee.tlm_shogi.tsume.TsumePuzzleId;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityJoy;
@@ -63,9 +64,14 @@ import java.util.UUID;
 
 public class BlockJChess extends BlockJoy implements IBoardGameBlock {
     private static final int MASTERPIECE_FAVOR_MULTIPLIER = 3;
+    private static final int MICROCOSMOS_FAVOR_MULTIPLIER = 5;
     private static final Type TSUME_MASTERPIECE_WIN = new Type(
             "TsumeMasterpieceWin",
             Type.WCHESS_WIN.getPoint() * MASTERPIECE_FAVOR_MULTIPLIER,
+            Type.WCHESS_WIN.getCooldown());
+    private static final Type MICROCOSMOS_WIN = new Type(
+            "MicrocosmosWin",
+            Type.WCHESS_WIN.getPoint() * MICROCOSMOS_FAVOR_MULTIPLIER,
             Type.WCHESS_WIN.getCooldown());
     public static final EnumProperty<ShogiPart> PART = EnumProperty.create("part", ShogiPart.class);
     public static final int plate = 6;
@@ -162,6 +168,13 @@ public class BlockJChess extends BlockJoy implements IBoardGameBlock {
 
     private static void applyTsumeDefense(ServerPlayer player, Level level, BlockPos pos,
                                           TileEntityJChess chess, String move) {
+        if (chess.isMicrocosmosOnRecord()
+                && MicrocosmosRecord.defenseAfter(chess.getTsumePly())
+                .filter(move::equals)
+                .isEmpty()) {
+            player.sendSystemMessage(Component.translatable("message.tlm_shogi.jchess.engineerr"));
+            return;
+        }
         if (!isLegalEngineMove(chess.getChessData().toUSI(), move)) {
             player.sendSystemMessage(Component.translatable("message.tlm_shogi.jchess.engineerr"));
             return;
@@ -295,6 +308,20 @@ public class BlockJChess extends BlockJoy implements IBoardGameBlock {
 
             // Board-state loading deliberately precedes every turn/game-over check: it always
             // replaces the current game, including an in-flight engine search or finished game.
+            if (heldItem.is(InitItems.MICROCOSMOS.get())) {
+                String puzzleId = TsumePuzzleId.fromSfen(MicrocosmosRecord.INITIAL_SFEN);
+                chess.resetToMicrocosmos(puzzleId);
+                EntityMaid seatedMaid = getSeatedMaid(level, chess);
+                if (seatedMaid != null) {
+                    seatedMaid.getGameRecordManager().resetStatue();
+                }
+                chess.refresh();
+                level.playSound(null, pos, InitSounds.GOMOKU_RESET.get(), SoundSource.BLOCKS, 1.0f, 1.0f);
+                player.sendSystemMessage(Component.translatable(
+                        "message.tlm_shogi.jchess.microcosmos.introduction"));
+                return ItemInteractionResult.SUCCESS;
+            }
+
             if (heldItem.is(InitItems.JCHESS_BOARD_STATE.get())) {
                 String[] boardState = ItemBoardState.getState(heldItem);
                 if (boardState == null || boardState[0].isBlank()) {
@@ -420,8 +447,9 @@ public class BlockJChess extends BlockJoy implements IBoardGameBlock {
                                 || !isCheckingTsumeMove(chess, copy)) {
                             return ItemInteractionResult.FAIL;
                         }
+                        String playerMove = toUsiMove(preClick, nowClick, true, prePiece);
                         chessData.move(preClick, nowClick, true);
-                        finishMove(chess, nowClick, level, pos, player, centerPos);
+                        finishMove(chess, nowClick, level, pos, player, centerPos, playerMove);
                     }
                 } else if (can) {
                     // 弹出升变选择框
@@ -437,8 +465,9 @@ public class BlockJChess extends BlockJoy implements IBoardGameBlock {
                                 || !isCheckingTsumeMove(chess, copy)) {
                             return ItemInteractionResult.FAIL;
                         }
+                        String playerMove = toUsiMove(preClick, nowClick, false, prePiece);
                         chessData.move(preClick, nowClick, false);
-                        finishMove(chess, nowClick, level, pos, player, centerPos);
+                        finishMove(chess, nowClick, level, pos, player, centerPos, playerMove);
                     }
                 }
                 return ItemInteractionResult.SUCCESS;
@@ -448,7 +477,8 @@ public class BlockJChess extends BlockJoy implements IBoardGameBlock {
         return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
     }
 
-    private static void finishMove(TileEntityJChess chess, int nowClick, Level level, BlockPos pos, Player player, BlockPos centerPos) {
+    private static void finishMove(TileEntityJChess chess, int nowClick, Level level, BlockPos pos,
+                                   Player player, BlockPos centerPos, String playerMove) {
         chess.setSelectChessPoint(nowClick);
         chess.setChessCounter(chess.getChessData().getMoveNumber());
         if (chess.isTsumeMode()) {
@@ -472,8 +502,17 @@ public class BlockJChess extends BlockJoy implements IBoardGameBlock {
                 markTsumeIncorrect(serverPlayer, level, centerPos, chess);
                 return;
             }
+            String scriptedMove = "";
+            if (chess.isMicrocosmosOnRecord()) {
+                if (MicrocosmosRecord.isRecordedMove(chess.getTsumePly() - 1, playerMove)) {
+                    scriptedMove = MicrocosmosRecord.defenseAfter(chess.getTsumePly()).orElse("");
+                } else {
+                    chess.leaveMicrocosmosRecord();
+                    chess.refresh();
+                }
+            }
             PacketDistributor.sendToPlayer(serverPlayer,
-                    new JChessToClientPackage(centerPos, position.toUSI(), true));
+                    new JChessToClientPackage(centerPos, position.toUSI(), true, scriptedMove));
             return;
         }
 
@@ -481,8 +520,32 @@ public class BlockJChess extends BlockJoy implements IBoardGameBlock {
 
         if (player instanceof ServerPlayer serverPlayer) {
             PacketDistributor.sendToPlayer(serverPlayer,
-                    new JChessToClientPackage(centerPos, chess.getChessData().toUSI(), false));
+                    new JChessToClientPackage(centerPos, chess.getChessData().toUSI(), false, ""));
         }
+    }
+
+    private static String toUsiMove(int fromPos, int toPos, boolean promote, int pieceId) {
+        String destination = toUsiSquare(toPos);
+        if (fromPos >= 81) {
+            String piece = switch (pieceId) {
+                case 17 -> "P";
+                case 16 -> "L";
+                case 15 -> "N";
+                case 12 -> "S";
+                case 11 -> "G";
+                case 14 -> "B";
+                case 13 -> "R";
+                default -> "?";
+            };
+            return piece + "*" + destination;
+        }
+        return toUsiSquare(fromPos) + destination + (promote ? "+" : "");
+    }
+
+    private static String toUsiSquare(int point) {
+        int file = 9 - point % 9;
+        char rank = (char) ('a' + point / 9);
+        return Integer.toString(file) + rank;
     }
 
     /** Tsume attackers conventionally may omit their king; ordinary games may not. */
@@ -523,16 +586,22 @@ public class BlockJChess extends BlockJoy implements IBoardGameBlock {
     private static void completeTsume(ServerPlayer player, Level level, BlockPos pos, TileEntityJChess chess) {
         chess.markTsumeSolved();
         boolean masterpiece = chess.isTsumeMasterpiece();
+        boolean microcosmos = chess.isMicrocosmos();
         boolean firstCompletion = TsumePlayerProgress.markSolved(player, chess.getTsumePuzzleId());
         if (masterpiece) {
             InitTrigger.MAID_EVENT.get().trigger(player, TriggerType.WIN_TSUME_MASTERPIECE);
+        }
+        if (microcosmos) {
+            InitTrigger.MAID_EVENT.get().trigger(player, TriggerType.WIN_MICROCOSMOS);
         }
         EntityMaid maid = getSeatedMaid(level, chess);
         if (maid != null) {
             maid.swing(InteractionHand.MAIN_HAND);
             maid.getGameRecordManager().markStatue(false);
             if (firstCompletion && maid.isOwnedBy(player)) {
-                maid.getFavorabilityManager().apply(masterpiece ? TSUME_MASTERPIECE_WIN : Type.WCHESS_WIN);
+                Type reward = microcosmos ? MICROCOSMOS_WIN
+                        : masterpiece ? TSUME_MASTERPIECE_WIN : Type.WCHESS_WIN;
+                maid.getFavorabilityManager().apply(reward);
                 InitTrigger.MAID_EVENT.get().trigger(player, TriggerType.WIN_JCHESS);
             }
         }
@@ -594,8 +663,10 @@ public class BlockJChess extends BlockJoy implements IBoardGameBlock {
                         || !isCheckingTsumeMove(chess, copy)) {
                     return;
                 }
+                int pieceId = data.getPieceByPointNum(fromPos);
+                String playerMove = toUsiMove(fromPos, toPos, promote, pieceId);
                 data.move(fromPos, toPos, promote);
-                finishMove(chess, toPos, level, centerPos, player, centerPos);
+                finishMove(chess, toPos, level, centerPos, player, centerPos, playerMove);
             }
         }
     }

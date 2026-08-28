@@ -3,6 +3,7 @@ package com.github.sangeeeee.tlm_shogi.tileentity;
 import com.github.tartaricacid.touhoulittlemaid.api.block.IBoardGameEntityBlock;
 import com.github.sangeeeee.tlm_shogi.api.game.jchess.Position;
 import com.github.sangeeeee.tlm_shogi.init.InitBlocks;
+import com.github.sangeeeee.tlm_shogi.tsume.MicrocosmosRecord;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityJoy;
 import com.github.sangeeeee.tlm_shogi.util.JChessUtil;
 import net.minecraft.core.BlockPos;
@@ -33,6 +34,8 @@ public class TileEntityJChess extends TileEntityJoy implements IBoardGameEntityB
     private static final String TSUME_PLY = "TsumePly";
     private static final String TSUME_INCORRECT = "TsumeIncorrect";
     private static final String TSUME_MASTERPIECE = "TsumeMasterpiece";
+    private static final String TSUME_MICROCOSMOS = "TsumeMicrocosmos";
+    private static final String MICROCOSMOS_ON_RECORD = "MicrocosmosOnRecord";
 
 
     private final Position chessData;
@@ -56,6 +59,8 @@ public class TileEntityJChess extends TileEntityJoy implements IBoardGameEntityB
     private int tsumePly = 0;
     private boolean tsumeIncorrect = false;
     private boolean tsumeMasterpiece = false;
+    private boolean tsumeMicrocosmos = false;
+    private boolean microcosmosOnRecord = false;
 
     public TileEntityJChess(BlockPos pos, BlockState blockState) {
         super(TYPE, pos, blockState);
@@ -78,6 +83,8 @@ public class TileEntityJChess extends TileEntityJoy implements IBoardGameEntityB
         data.putInt(TSUME_PLY, tsumePly);
         data.putBoolean(TSUME_INCORRECT, tsumeIncorrect);
         data.putBoolean(TSUME_MASTERPIECE, tsumeMasterpiece);
+        data.putBoolean(TSUME_MICROCOSMOS, tsumeMicrocosmos);
+        data.putBoolean(MICROCOSMOS_ON_RECORD, microcosmosOnRecord);
 
         ListTag histTag = new ListTag();
         for (String key : repetitionHistory) histTag.add(StringTag.valueOf(key));
@@ -102,6 +109,8 @@ public class TileEntityJChess extends TileEntityJoy implements IBoardGameEntityB
         tsumePly = data.getInt(TSUME_PLY);
         tsumeIncorrect = data.getBoolean(TSUME_INCORRECT);
         tsumeMasterpiece = data.getBoolean(TSUME_MASTERPIECE);
+        tsumeMicrocosmos = data.getBoolean(TSUME_MICROCOSMOS);
+        microcosmosOnRecord = tsumeMicrocosmos && data.getBoolean(MICROCOSMOS_ON_RECORD);
         // 读取局面历史
         repetitionHistory.clear();
         if (data.contains(REPETITION_HISTORY, Tag.TAG_LIST)) {
@@ -157,6 +166,16 @@ public class TileEntityJChess extends TileEntityJoy implements IBoardGameEntityB
         this.tsumePly = 0;
         this.tsumeIncorrect = false;
         this.tsumeMasterpiece = masterpiece;
+        this.tsumeMicrocosmos = false;
+        this.microcosmosOnRecord = false;
+    }
+
+    /** Replaces any current game with Microcosmos and starts on its fixed solution record. */
+    public void resetToMicrocosmos(String puzzleId) {
+        resetToTsume(MicrocosmosRecord.INITIAL_SFEN, puzzleId,
+                MicrocosmosRecord.MAXIMUM_PLY, true);
+        this.tsumeMicrocosmos = true;
+        this.microcosmosOnRecord = true;
     }
 
     private void clearTsumeState() {
@@ -166,6 +185,8 @@ public class TileEntityJChess extends TileEntityJoy implements IBoardGameEntityB
         this.tsumePly = 0;
         this.tsumeIncorrect = false;
         this.tsumeMasterpiece = false;
+        this.tsumeMicrocosmos = false;
+        this.microcosmosOnRecord = false;
     }
 
     public void addHistoryAfterMove() {
@@ -258,6 +279,21 @@ public class TileEntityJChess extends TileEntityJoy implements IBoardGameEntityB
 
     public boolean isTsumeMasterpiece() {
         return tsumeMode && tsumeMasterpiece;
+    }
+
+    public boolean isMicrocosmos() {
+        return tsumeMode && tsumeMicrocosmos;
+    }
+
+    public boolean isMicrocosmosOnRecord() {
+        return isMicrocosmos() && microcosmosOnRecord;
+    }
+
+    /** Once the player deviates, later transpositions must not re-enter the fixed record. */
+    public void leaveMicrocosmosRecord() {
+        if (isMicrocosmos()) {
+            microcosmosOnRecord = false;
+        }
     }
 
     public void markTsumeIncorrect() {

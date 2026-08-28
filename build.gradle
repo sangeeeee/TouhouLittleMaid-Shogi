@@ -34,6 +34,11 @@ sourceSets {
         java.srcDir project(':mateengine').file('src/main/java')
         resources.setSrcDirs([])
     }
+    selfTest {
+        java.srcDir 'src/selfTest/java'
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += output + compileClasspath
+    }
 }
 
 neoForge {
@@ -120,6 +125,8 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 // "optional", meaning it will not be pulled by dependents of this mod.
 configurations {
     runtimeClasspath.extendsFrom localRuntime
+    selfTestImplementation.extendsFrom implementation
+    selfTestRuntimeOnly.extendsFrom runtimeOnly
 }
 
 dependencies {
@@ -155,6 +162,19 @@ tasks.register('verifyDistributableJar', JavaExec) {
     classpath = files(tasks.named('jar', Jar).flatMap { it.archiveFile })
     mainClass = 'com.github.sangeeeee.tlm_shogi.engine.tool.BundledEngineSmoke'
     maxHeapSize = '512m'
+}
+
+tasks.register('microcosmosGameplayTest', JavaExec) {
+    group = 'verification'
+    description = 'Replays Microcosmos through the Minecraft board-position implementation.'
+    dependsOn selfTestClasses
+    classpath = sourceSets.selfTest.runtimeClasspath
+    mainClass = 'com.github.sangeeeee.tlm_shogi.tsume.MicrocosmosGameplaySelfTest'
+    args(layout.projectDirectory.file('src/main/resources/data/tlm_shogi/tsume/microcosmos.usi'))
+}
+
+tasks.named('check') {
+    dependsOn microcosmosGameplayTest
 }
 
 // Example configuration to allow publishing using the maven-publish plugin

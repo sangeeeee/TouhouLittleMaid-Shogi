@@ -3,6 +3,8 @@
   "advancements.tlm_shogi.favorability.win_jchess.description": "在日本將棋中贏得一局",
   "advancements.tlm_shogi.favorability.win_tsume_masterpiece.title": "詰將棋大師",
   "advancements.tlm_shogi.favorability.win_tsume_masterpiece.description": "破解任意一道詰將棋名作",
+  "advancements.tlm_shogi.favorability.win_microcosmos.title": "這...這不可能！",
+  "advancements.tlm_shogi.favorability.win_microcosmos.description": "破解1525手詰《ミクロコスモス》",
   "block.tlm_shogi.jchess": "日本將棋",
   "message.tlm_shogi.jchess.move_limit": "二百手限制！",
   "message.tlm_shogi.jchess.reset": "右鍵點擊棋墩左右任意一側進行重置",
@@ -10,13 +12,16 @@
   "message.tlm_shogi.jchess.engineerr": "思考引擎發生錯誤",
   "message.tlm_shogi.jchess.noengine": "無法載入將棋引擎資料",
   "item.tlm_shogi.jchess_board_state": "詰將棋殘局道具",
+  "item.tlm_shogi.microcosmos": "ミクロコスモス",
   "board_state.tlm_shogi.tsume": "%s手詰",
   "board_state.tlm_shogi.tsume.masterpiece": "%s手詰·名作",
+  "board_state.tlm_shogi.tsume.microcosmos": "1525手詰·ミクロコスモス",
   "board_state.tlm_shogi.tsume.author.unknown": "未知",
   "tooltip.tlm_shogi.tsume.engine_hand_all": "☖持駒：剩餘全部棋子",
   "message.tlm_shogi.jchess.tsume.invalid": "這個詰將棋道具沒有有效的先手局面",
   "message.tlm_shogi.jchess.tsume.incorrect": "不正確",
   "message.tlm_shogi.jchess.tsume.correct": "正確！",
   "message.tlm_shogi.jchess.tsume.solved_before": "你已解過這道題，本次不再增加女僕好感度",
-  "message.tlm_shogi.jchess.tsume.ply": "手數：%s/%s"
+  "message.tlm_shogi.jchess.tsume.ply": "手數：%s/%s",
+  "message.tlm_shogi.jchess.microcosmos.introduction": "《ミクロコスモス》由橋本孝治創作。1519手原圖於1986年發表並獲看壽獎，1995年改良為1525手，是詰將棋史上的超長篇名作。"
 }

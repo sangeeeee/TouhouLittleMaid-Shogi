@@ -3,6 +3,8 @@
   "advancements.tlm_shogi.favorability.win_jchess.description": "일본 장기에서 한 판 승리하기",
   "advancements.tlm_shogi.favorability.win_tsume_masterpiece.title": "쓰메쇼기 마스터",
   "advancements.tlm_shogi.favorability.win_tsume_masterpiece.description": "쓰메쇼기 명작을 하나 해결하기",
+  "advancements.tlm_shogi.favorability.win_microcosmos.title": "이... 이럴 수가!",
+  "advancements.tlm_shogi.favorability.win_microcosmos.description": "1525수 쓰메쇼기 《ミクロコスモス》 풀기",
   "block.tlm_shogi.jchess": "일본 장기",
   "message.tlm_shogi.jchess.move_limit": "200수 제한!",
   "message.tlm_shogi.jchess.reset": "체스판 좌우 어느 쪽이든 우클릭으로 초기화",
@@ -10,13 +12,16 @@
   "message.tlm_shogi.jchess.engineerr": "사고 엔진에 오류가 발생했습니다",
   "message.tlm_shogi.jchess.noengine": "쇼기 엔진 데이터를 불러올 수 없습니다",
   "item.tlm_shogi.jchess_board_state": "쓰메쇼기 기보 도구",
+  "item.tlm_shogi.microcosmos": "ミクロコスモス",
   "board_state.tlm_shogi.tsume": "%s수 쓰메",
   "board_state.tlm_shogi.tsume.masterpiece": "%s수 쓰메 · 명작",
+  "board_state.tlm_shogi.tsume.microcosmos": "1525수 쓰메 · ミクロコスモス",
   "board_state.tlm_shogi.tsume.author.unknown": "알 수 없음",
   "tooltip.tlm_shogi.tsume.engine_hand_all": "☖보유말: 나머지 기물 전부",
   "message.tlm_shogi.jchess.tsume.invalid": "이 쓰메쇼기 도구에 유효한 선수 차례 국면이 없습니다",
   "message.tlm_shogi.jchess.tsume.incorrect": "정답이 아닙니다",
   "message.tlm_shogi.jchess.tsume.correct": "정답입니다!",
   "message.tlm_shogi.jchess.tsume.solved_before": "이미 푼 문제이므로 메이드 호감도가 다시 오르지 않습니다",
-  "message.tlm_shogi.jchess.tsume.ply": "수순: %s/%s"
+  "message.tlm_shogi.jchess.tsume.ply": "수순: %s/%s",
+  "message.tlm_shogi.jchess.microcosmos.introduction": "橋本孝治가 만든 《ミクロコスモス》. 1519수 원도는 1986년에 발표되어 간주상을 받았고, 1995년에 1525수로 개량된 초장편 쓰메쇼기 명작입니다."
 }

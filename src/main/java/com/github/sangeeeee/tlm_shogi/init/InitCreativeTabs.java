@@ -23,6 +23,7 @@ public final class InitCreativeTabs {
             // 添加你的物品
             event.accept(new ItemStack(InitItems.JCHESS.get()));
             event.accept(new ItemStack(InitItems.JCHESS_BOARD_STATE.get()));
+            event.accept(new ItemStack(InitItems.MICROCOSMOS.get()));
         }
     }
 }
