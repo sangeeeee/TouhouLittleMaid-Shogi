@@ -64,10 +64,10 @@ public final class TsumePuzzleCatalogSelfTest {
         TsumePuzzleCatalogSelfTest test = new TsumePuzzleCatalogSelfTest();
         Set<String> positions = new HashSet<>();
         test.validate(Path.of(args[0]), "ordinary",
-                "board_state.tlm_shogi.tsume.mate", null,
+                "board_state.tlm_shogi.tsume", null,
                 180, EXPECTED_COUNTS, positions, true);
         test.validate(Path.of(args[1]), "masterpiece",
-                "board_state.tlm_shogi.tsume.masterpiece.mate", MASTERPIECE_AUTHORS,
+                "board_state.tlm_shogi.tsume.masterpiece", MASTERPIECE_AUTHORS,
                 10, EXPECTED_MASTERPIECE_COUNTS, positions, false);
         test.equal(190, positions.size(), "combined catalog positions are unique");
         System.out.println("Tsume catalog self-test passed: " + test.checks + " checks");
@@ -89,7 +89,7 @@ public final class TsumePuzzleCatalogSelfTest {
             int maximumPly = Integer.parseInt(matcher.group(4));
             int weight = Integer.parseInt(matcher.group(5));
 
-            equal(descriptionPrefix + maximumPly, description,
+            equal(descriptionPrefix, description,
                     catalogName + " record " + records + " description");
             String expectedAuthor = expectedAuthors == null ? UNKNOWN_AUTHOR : expectedAuthors.get(records - 1);
             equal(expectedAuthor, author, catalogName + " record " + records + " author");

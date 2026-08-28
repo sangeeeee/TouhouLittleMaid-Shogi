@@ -4,7 +4,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate3",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "lns+R4l/1p1p5/p1pkppB1p/6p2/1R7/6P1P/P1PPnPS2/2+b1G1g2/L3K1sNL b 2GS3Pnp 51",
@@ -16,7 +16,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate3",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "lnsG5/4g4/prpp1p1pp/1p4p2/4+B3k/2P1P4/P+b1PSP1LP/4K2SL/2G2G1r1 b SP3nl3p 71",
@@ -28,7 +28,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate3",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l5+R1l/4kS3/p4pnpp/2Pppb3/6p1P/P2s5/NP2+nPPR1/2+bS2GK1/L6NL b 3GSP4p 93",
@@ -40,7 +40,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate3",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "lR5nl/5k1b1/2gp3p1/2s1p1P2/p4N2p/P3PpR2/1PPP1P2P/2G1K2s1/LN6L b GSN2Pbgs2p 83",
@@ -52,7 +52,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate3",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l1+R5l/2pS5/p2pp+P1pp/2k3p2/2N4P1/PP2R1P1P/2+pPP1N2/2GSG1bs1/LN1K4L b 2GSNPbp 73",
@@ -64,7 +64,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate3",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "lnsg4l/1r1b5/p1pp1+N1+R1/4p3p/9/P3SSk2/NpPPPPg1P/2GK5/L1S4NL b 2Pbg4p 91",
@@ -76,7 +76,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate3",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l3k2G1/1+B4gPl/n2+Nppsp1/pP2R2bp/9/Pps1P1N1P/2GG1P3/3S5/LNK5L b R6Ps 97",
@@ -88,7 +88,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate3",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "lnkgp1+R1l/1rs4+P1/p1ppG2p1/4N3p/3S5/P7P/2+lPP4/2G1KP3/L1S4+b1 b BN2Pgsn4p 83",
@@ -100,7 +100,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate3",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "3g2S1l/3s2k2/3ppplpp/2p3R2/rP7/1LP1P2P1/N2P1P2P/2GSG4/3KN2NL b BG4Pbsnp 89",
@@ -112,7 +112,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate3",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l1G1k2nl/2Rs2+R2/pp2bp2p/4p1p2/1n1p1N2P/4P1P2/PPG1SP3/2p1G4/LN1K1s2L b 3Pbgsp 85",
@@ -124,7 +124,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate5",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln5+Pl/3s1kg+R1/p2ppl2p/2ps1Bp2/P8/2P3P1P/N2gP4/5KS2/L+r3G1N+b b GS3Pn3p 57",
@@ -136,7 +136,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate5",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l3k3l/1r1sg1B2/3p2+R1p/2p1pN2P/9/pPP1PP3/3PK1P2/2G1sg3/LNS2+n1NL b 5Pbgsp 69",
@@ -148,7 +148,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate5",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln1+P1GBnl/s8/p1p1p1kpp/3P2p2/5p3/Pp3PPP1/1P1SP3P/2R6/1N1GKG1NL b BGLr2sp 67",
@@ -160,7 +160,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate5",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln1s3nl/1+S4+B2/p1p1k2pp/3p2P2/7P1/P1Pnpp1R1/1P1P+lP2P/2G1G4/L1SKP2N+b b R2GPsp 73",
@@ -172,7 +172,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate5",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln1k1g3/5s3/p1p1pp1pp/3p5/5+Bp2/2P2PPP1/P3S+n2P/2G3+l2/+p3K3L b RBG2SNL2Prgnp 73",
@@ -184,7 +184,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate5",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln1G3nl/1ks1n+PR2/p1pp4p/5ppp1/8b/1P2p4/PGPPP+s2P/1B7/LNSK1G2L b RGSP2p 71",
@@ -196,7 +196,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate5",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l5g1+R/3g1s3/p2p1p1k1/1r2p1Npp/3P+bPL2/1b4P1P/P+n2PS3/4GGL2/LN3K1P1 b SN3Ps2p 103",
@@ -208,7 +208,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate5",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "1n4R1l/2k3GR1/p1sp1pg2/1p2+B1p1p/2P6/P1pL5/1PNsPPP1P/4g1S2/Lb3GKNL b SN4P 99",
@@ -220,7 +220,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate5",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "lnr2k1nl/6gp1/pl2S3p/2p1p1p2/1P1N1P1N1/P2S1pP1P/3P5/1+p1SG2B1/L1PK5 b BGPrgs2p 105",
@@ -232,7 +232,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate5",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln1+R3+Pl/5n3/4pp3/p1k5p/bp7/7p1/PP+pPPP+B1P/5K3/LN1G1G2L b R2G2S3P2snp 81",
@@ -244,7 +244,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate5",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "5+R2l/5n1k1/p2p+LR1p1/2p2ppbp/9/P1P2P1gP/1PN1+n1P2/1G1PS4/L1S1KS1NL b GS2Pbg2p 105",
@@ -256,7 +256,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate5",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln1+R4l/2+N1R1gk1/p4pbpp/6P2/6SP1/PpG5P/1PG1PP3/4K2s1/L3b1sNL b GN5Psp 101",
@@ -268,7 +268,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate5",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "5S1nl/4+RgG2/l3sp2p/4pksp1/2+B6/p2P+b2K1/1Pp2PN1P/5g1R1/L7L b 2N4Pgs4p 93",
@@ -280,7 +280,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate5",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l2g2gnl/9/2s1B+N2p/p1p3pk1/9/P3P2rS/2PP1P1R1/1S1G1G3/LN1K1+B3 b L7Psn2p 101",
@@ -292,7 +292,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate5",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "lnS5l/6k2/p2G2ppp/2pnp1G2/2PK1P3/1p2Sp1P1/P2GP3P/4+b2+b1/LNS6 b 2RGSN3Plp 115",
@@ -304,7 +304,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate5",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l4k1gl/3+Sg1p2/p2p1p1P1/4p1+S1p/1p3+bB2/3P4P/P2+RP4/1G2G2+R1/LN1K3NL b SN4Psn2p 103",
@@ -316,7 +316,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate5",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "+R2g5/3gk4/1+L2Np1+S1/2p1L1pb1/3G3p1/P1PPpP3/6P1p/1LKR5/LN4SN1 b BG2SN3P4p 123",
@@ -328,7 +328,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate5",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "1g5n1/l1s1+S2sk/p2p1+B+Ppl/5+R2p/9/P4PGP1/2PP2BnP/5R3/L4K1NL b GSN7Pg 121",
@@ -340,7 +340,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate5",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "lnSrk3l/4g1p2/1Pp1p4/p2p1N+R1p/1S1n5/3+BsP2P/PG1P5/9/LK6L b B2GS4Pn3p 119",
@@ -352,7 +352,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate5",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l+R6l/7g1/p1k3np1/2r3p2/3+B1p2p/P4PN1P/1P1+b+p1K2/1S4G2/6sNL b 2GSNLPs7p 111",
@@ -364,7 +364,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln1g2B+Rl/2s6/pPppppk2/6p1p/9/4P1P1P/P1PPSP3/3+psK3/L+r3G1NL b SNb2gn2p 39",
@@ -376,7 +376,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l6nl/3k2+B2/p1n1g2pp/2G1ppp2/2P2N1P1/3P2P1P/Ps1GP4/1+rSK2R2/LN6L b G3Pb2s2p 77",
@@ -388,7 +388,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "3g4l/+R1sg2S2/p1npk1s+Rp/2pb2p2/4g2N1/1p7/P1PP1PP1P/1P1S5/LNK2G1+lL b N3Pb2p 71",
@@ -400,7 +400,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l1gks1gnl/3s5/p1S1pp3/2+Bp4p/1p2P4/P1PP1P1P1/1P6P/1BKG5/LN4+rNL b GSN4Pr 101",
@@ -412,7 +412,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln2+Rg1nl/5g1k1/p2+B1p1gp/4p2R1/2pK2p2/P3P1P1P/3+b1PN2/5S3/L7L b 2SN7Pgs 81",
@@ -424,7 +424,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "lnsg1+R2l/k3+P4/pP1p4p/1G2p1p2/1N+B6/P1P1lg3/2+bP1PP1P/1p3S3/K4G1NL b 3Pr2snp 81",
@@ -436,7 +436,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "1ng2p1S1/4kg2+R/pBp1psnpp/3P2p2/9/2n1PPPP1/PP2l3P/1+p3LG2/6KNL b RGSPbslp 91",
@@ -448,7 +448,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "2s1kg2l/1p3g1P1/+R1Npps+B1p/3l1lp2/p8/2P1P1P2/PPNP1SN1P/1+bS1G2R1/1+p1K4L b GN3P 91",
@@ -460,7 +460,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln1B1k3/5r3/p2pp+Pgs1/2ps3pl/P4+bp2/1PP2n3/1G1PP2R1/2SK5/LN7 b GLgsn6p 97",
@@ -472,7 +472,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l2+R4l/6ks1/3sg2pp/p1pbp1p2/3pbp1P1/2P2PN2/P3G1P1P/4GKSR1/LN5NL b GSPn3p 93",
@@ -484,7 +484,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l3+S1k1l/6g2/p4p1pp/1Bpln1p2/3nsN3/PPP1PSP2/1G3R2P/2S1G4/LNK6 b RG5Pbp 103",
@@ -496,7 +496,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l2s2g1l/3k3p1/1+PNppps1p/ppPs5/3nPs3/PK6P/N5Pg1/1B+bP5/L7L b RG4Prgn 101",
@@ -508,7 +508,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln2Rs2l/5k3/3p1pnp1/p3p1p1p/1n5P1/P2PPSP1P/1+p4N1+B/4K4/L1PR4L b 4G3Pb2s 121",
@@ -520,7 +520,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "lR2g1S2/3gks+R2/5p3/p1pppbp2/9/PP3SP2/L1+nPPPNP+p/3S5/4G1K1L b BG2NL4P 109",
@@ -532,7 +532,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l+S4Snl/4+P1g1k/p3+R3p/2G2p3/1p7/Pg4sN1/B1PP1+b3/1S2P4/LN1K4+p b RL5Pgn3p 109",
@@ -544,7 +544,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l+r2p1snl/2+RSk1gb1/p2p1p3/4N1p1p/9/2P2P2P/P2PP1P2/3SK4/L2G1G1NS b NL5Pbg 65",
@@ -556,7 +556,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "+B7l/3G1+R1s1/p2p1+N2p/1pp1p1pk1/7p1/2P2G1l1/PP1P1PPLP/4G2S1/2+n2K1NL b RG2S2Pbnp 91",
@@ -568,7 +568,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "1p+L2G1kl/4b1g2/1L2+S1+Pp1/4p3P/2ppn4/2PP1P3/1P2P4/1G1K2G1L/+r1S5R b 2S3N6Pb 111",
@@ -580,7 +580,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln1g2Gnl/4pp3/pk1+P2pP1/8p/9/1P1nP+RP2/P1P5P/3S5/L+p1BK1GNL b RB3SPg3p 83",
@@ -592,7 +592,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l+S2gk1nl/1R1g1s1g1/2+Bpppp2/2N1l2NP/p8/2p1+B1P2/P2P5/6G2/+p4K1RL b 2SNP6p 97",
@@ -604,7 +604,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "+Rg6l/2kg1+P3/1p1sppp2/p1p5p/1N2S1S2/2P3P1P/P1+r1gP3/2b6/L4GKNL b BSNL5Pn 67",
@@ -616,7 +616,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l7l/7+S1/2nppG1+rp/p1N3p1k/2s6/PP1PnPP1P/2G1G4/5S3/L2K2N1L b BS4Prbg3p 109",
@@ -628,7 +628,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l5kpG/3B+Prs2/2np2n2/p1p6/n4Pp1+R/1PPP1bP2/P1KG5/4+p4/LN6L b GS4Pg2slp 115",
@@ -640,7 +640,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "r7l/3g1B3/4ns1k1/p7p/4P4/1PP1G1P1P/P2PS1N2/7S1/LN2KG2L b GSL8Prbnp 129",
@@ -652,7 +652,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln2n1+R2/2kg2+P1s/3l4p/p1pp2s2/1L2B1P2/P1PP2pr1/3KP3P/1G3G3/L3b3+p b G2S2N5P 129",
@@ -664,7 +664,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "5g2l/1+S7/l1p1+bp1k1/6p1p/Pp1P1N3/K1PS5/1PN1P1P1P/1bG1G4/R6N1 b GSN4Prs2l2p 141",
@@ -676,7 +676,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln7/4+RG3/1S1p1p+N2/p1pspkp1p/1N5g1/P1+B1PP3/+b2P1SPp1/2G1G4/2P1K2NL b RS2L3Pp 101",
@@ -688,7 +688,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln6l/4+B4/3p3kp/p3ppPp1/2ps4P/Pr7/2PPP4/1G1K1G1+B1/LN3s2L b GN2Prg2sn3p 101",
@@ -700,7 +700,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln6l/2+N3g2/k1p+S2b2/5bppP/P8/1rP3P2/1+p1PPP3/3SGS+n2/LNG1K3L b GS6Prp 75",
@@ -712,7 +712,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l1R1n1knl/5g1b1/2+PBp1gp1/p2p1S1Pp/3n1P3/1P2S3P/P3P1S2/2G6/LN2KG2L b S4Pr2p 89",
@@ -724,7 +724,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l4S1nl/1+N1+R2n2/p1n1p2k1/2S3p1p/2P6/1P3lP1P/P2PPP3/3G1KS+b1/+br3G+p1L b GS4Pgp 85",
@@ -736,7 +736,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l2g3nl/1r1s2kb1/p2ppp1Pp/2p3P2/1p4s2/2PB5/PP1PPP2P/2+ns1K1R1/LN3G1NL b Ggs2p 47",
@@ -748,7 +748,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "+Rppk3nl/5sS2/3pp2p1/p1L3p1p/1P2+n2P1/P5P1P/1+BG2rN2/9/LNK3s1L b BGP2gs4p 103",
@@ -760,7 +760,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "3Bp2n1/5+R2+B/p2p1GSp1/8p/Pn5l1/1n2SNP2/2pPPS1Pk/1P1SK1G2/L1G1G4 b RL3Pl3p 131",
@@ -772,7 +772,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln4p2/1r1s2g2/p1pP1s1p1/1kg1p3p/2Pp1P+B2/1p+RnNK1P1/P3P2SP/9/L2G1BG1L b SNL2Pp 157",
@@ -784,7 +784,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l6+Rl/4+PG1g1/p4p2k/1p3sppp/2P5b/4SPP2/PPS1n1N1P/4K1GR1/L5g1L b BS2N5P 111",
@@ -796,7 +796,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "3ks2n1/7+L1/2+Bnppp2/2pLs1gP1/3pl4/prP1P1P2/P2PGPNp1/2S3S2/LN1GK2R1 b BG2P2p 79",
@@ -808,7 +808,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l+B6l/5kg2/2n1ps1p1/p1p2pP1P/n6S1/P1P1P1+R2/2+p2PN2/K7L/L1S6 b RB2GSN4Pg2p 113",
@@ -820,7 +820,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l4+R2l/9/3B1+N3/P1pppp2p/pp4g2/1+b6P/2PPksP2/1P1R2S2/LN3GKNL b GS4Pgsnp 115",
@@ -832,7 +832,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l4s3/3k5/3p2+B+R1/p1rB1pp1p/1p4L2/2p3P2/PP1PKP2P/1SG3S2/LN3G1NL b GSN2Pgn3p 75",
@@ -844,7 +844,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln4spl/1k1SS4/p1pG2n1p/1B1ppgpN1/2P5P/1P2P1P2/P1K2G3/1G7/L3+r3L b N5Prbs 117",
@@ -856,7 +856,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln4knl/1r2Gp3/1sp+R1+N1s1/p6sp/6P2/2P1P1S1P/P1+b1BP3/4K1G2/L7L b GPgn7p 95",
@@ -868,7 +868,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "1+B7/2skn4/p5s2/G1pppN1S1/K2n1p1p1/PPP1G1p2/1+r1P1P3/4P4/3L1G1+l1 b BGSNL5Prl 151",
@@ -880,7 +880,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln2n1s1l/3k2S2/3p1+R3/p1r1S3P/1p4p2/P1G6/1P1P+p4/K5S2/LNb2G2L b B2GN6P3p 117",
@@ -892,7 +892,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "2+R+L3nl/G2S1spk1/4p2sp/1Kp2pP2/2g3S2/P4P3/3PP3P/3+n3R1/2+p2G1NL b BGNL5Pbp 115",
@@ -904,7 +904,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l+R2plknl/2R2s3/p4pp2/4+b3p/3p2NS1/2BPPP3/PP4P1P/4GK3/5G1NS b 2GN5Psl 113",
@@ -916,7 +916,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln6l/2GB1s+R2/p2p1p3/2pkp2Pp/4P2G1/1nP2B1KP/P1gP1s3/9/5+r2L b 2SL4Pg2n2p 117",
@@ -928,7 +928,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l2g4l/9/pkbp+S1G1p/1sR2p3/BpsNp1p1P/2n2P3/P2PP1P+p1/2GS5/LN1K1GN+rL b 3Pp 91",
@@ -940,7 +940,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "6S+Pl/1P+N6/1p2p1k1p/2G2psp1/2Pp3lP/2n1PP3/1+lbPKSn2/4G2b1/R7L b RGN3Pgs2p 143",
@@ -952,7 +952,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate7",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "8l/+P7k/pP1G+Np1sn/6P2/2R1P1B1p/8P/PSp+pSPp2/1S7/LB2KG1NL b R2GN4Plp 115",
@@ -964,7 +964,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l4kb1+R/4gs1+P1/2+Pp2p1n/p3pS2p/9/P1pP2PbP/4PPN2/2+pS1K1s1/L+r3G1NL b GL2Pgnp 59",
@@ -976,7 +976,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln1gk3l/5p3/p2pp2+R1/2p2+Bp1p/9/P3P4/N+rPP2P1P/2gSKS3/L1+s2G1NL b GNbs5p 65",
@@ -988,7 +988,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l+S4+N1l/6+R2/p2p1p2p/1pp1pkp2/3n5/2P1G3P/PP2PPP+b1/2GS5/1N2KGS+pL b GSLPrbnp 55",
@@ -1000,7 +1000,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "3+Rbk1Sl/4gg3/p2p1pp+P1/4s2PP/1p5N1/8p/PPSKPPP2/3B1G3/LN1G3+r1 b N2LPsn3p 107",
@@ -1012,7 +1012,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "+B5knl/4+Pg3/3+Rppspp/1p7/3N2pP1/7sP/PP3+pPS1/5g1K1/L7L b RB2GS2NLP4p 93",
@@ -1024,7 +1024,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "4g3l/R2+N1kg2/3pppn1p/ppp4p1/3P5/P1Pl1P2P/6+p2/1PG1+s4/L1K1B3+n b BG2SLrsn3p 101",
@@ -1036,7 +1036,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l7l/3+B5/p4g1k1/4pppp1/P1+B4np/1PpPP1P1P/1S3P3/1pG1K4/L5SNg b R2SL2Prg2np 93",
@@ -1048,7 +1048,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l1+R1sks2/2Gg5/p3pp1+P1/2psnlp2/7Np/P1P1G1S1P/3+BPPP+p1/1+r1L5/3PKG1NL b BN3P 93",
@@ -1060,7 +1060,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln1g3+R1/3k2G2/2spspp2/p1p1p4/3nl4/1PPP2P2/Pp2PP3/1BS1KG3/LN1G1+n1+l1 b RBS4P 71",
@@ -1072,7 +1072,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "6k2/5r2p/+L1ngpg1+P1/2pps1pBP/1p2Pn1LR/2PP2P2/1PNS2n+p1/p1GK1G3/6s2 b BS2LP2p 119",
@@ -1084,7 +1084,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "+P6nB/4S1ggl/3+L3p1/1B3kg1p/3SPspS1/K1G5P/1P1+r2+p2/2+n2P3/L6RL b 2N6P3p 151",
@@ -1096,7 +1096,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l3g1s2/1k1L2+P2/ps1pp+R3/1p1s1B2L/N8/2P1P4/PPNP1PP2/2G3G+n1/L4K3 b RBGSN6P 83",
@@ -1108,7 +1108,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l1Rpn3l/5g1k1/p4p1pp/9/2sP4P/P3PPS2/1P+p1K1N2/1pS6/L1R5L b 2B2GSN4Pgnp 133",
@@ -1120,7 +1120,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l1+Rl2+Bnl/3g2+P2/pspppkp1p/1P5s1/9/2P6/P1NPPPP1P/5S1p1/2rSKG1NL b BGNg2p 53",
@@ -1132,7 +1132,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l3g1snl/5kg2/p2ppp1p1/4P1p1p/5N3/1Bp6/P2nSPP1P/1KG3SR1/L2+r1G1NL b BS3P2p 63",
@@ -1144,7 +1144,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l3p1g2/1+P2n3+R/4kgn2/p1Bp2p1B/4Pp2p/PpP1S1Pp1/5P1gP/4gS3/L1+R3KNL b SNLPs2p 135",
@@ -1156,7 +1156,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "lnB6/2r1k2+L1/p1p2g3/1p1Bpp1p1/1n6N/2P2sp2/PP1S5/3K5/LN5R1 b 2GSLPgs7p 111",
@@ -1168,7 +1168,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l6kl/2G1R4/6pg1/p2p1BN2/1l1s4b/P1P2PP2/GP1G4+s/4s4/LNK6 b S8Pr2n2p 145",
@@ -1180,7 +1180,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "4G3l/1+Rp6/3sNpN1p/3np4/L1P1PLpk1/2S3P1P/1K2SP1p1/3R5/5b2L b B3GSN5P2p 129",
@@ -1192,7 +1192,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l6nl/3+N2+S2/p1k2+P1p1/2s1p3p/3n2pP1/P2bP1P1P/1PppsK3/6G2/L2G3RL b RGN3Pbgsp 95",
@@ -1204,7 +1204,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l3k2n1/1r7/ppnppS1p1/2Bsl+B3/3n5/2PS1SRP1/PPpPPP3/2GK2+p2/LN6+l b G3P2gp 73",
@@ -1216,7 +1216,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "1+N+L5l/p5Ssk/5+B1g1/4pNppp/3p1r3/nPP2p2P/G2P5/1r1+p1KS2/+l4G2L b BGNPs5p 125",
@@ -1228,7 +1228,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln1+R3+P1/1k1rp4/1N1Gs1p1l/ppp5g/3sN1Pl1/2P1P4/PP3PS2/2GS5/LN1K1G1+p1 b 2BP4p 83",
@@ -1240,7 +1240,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l2g3s+B/r4sk2/p2+P3P1/5p1pp/3P2N2/1P3P2P/PSB2S+p2/2G1P4/LN2KG2L b GNLPrn4p 85",
@@ -1252,7 +1252,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "lG5kl/5S1b1/p3p1Gs1/2pp1p1pp/1N2N4/2P1P3P/PP1S1PP2/2G1KS1r1/L3G2NL b Rbn4p 85",
@@ -1264,7 +1264,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "5B1ll/5s1r1/p5p2/1pP2p3/6Ppk/2S3S2/PPNKPP3/4+nS3/L3G4 b RBGN3P2gnl4p 135",
@@ -1276,7 +1276,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "1R3g1nl/2sgk4/2nNp1lP1/2p2SPBp/9/2SPKB3/1GP2P2P/4g4/+l4+r1NL b S8Pp 135",
@@ -1288,7 +1288,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l3+R2nl/3p3g1/p4p3/1p1NpkN1p/2PS5/6psP/PPbPPP3/2g2K3/Ls3GGNL b RS4Pb 83",
@@ -1300,7 +1300,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "1+R4+B1l/3s2g2/p1g2k1p1/2p2pp1p/4s4/1PP1p1SlP/P1NP1PK2/2G1+r1G2/L6NL b SNbn5p 131",
@@ -1312,7 +1312,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l6nl/2R3S1n/3p2p1p/pp2pp1k1/8+b/2pP5/PP1GPP2N/1S2K4/LN1G2S1L b B2GSPr4p 95",
@@ -1324,7 +1324,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l4R2l/4+N2k1/2+P1pb1p1/p2pP3p/1P2S1P2/P1pPg3P/4n1+s2/2GB5/LN2KG2L b RGSNPs4p 121",
@@ -1336,7 +1336,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln1+B4l/3G5/p1ppp1n1p/2k4p1/9/8P/P+p1SP1P+n1/5KG2/L1+p2G1+rL b B3SPrgn5p 79",
@@ -1348,7 +1348,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln4S1l/r2g3n1/2n1B3k/p1K1Lpgp1/1p2GP2P/2P1P+r3/PPN1b4/9/L4+p2+p b G2S4Ps2p 143",
@@ -1360,7 +1360,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l1r1kg2l/3s2G2/pS1p1p3/4P1p2/1pp6/P1gP3pp/1P3R3/1B7/LN1K1G1NL b BSN2Psn4p 113",
@@ -1372,7 +1372,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "7Rl/+L3+L2s1/2np1p1k1/6p1p/2P2P3/1B1P2P1P/4P4/2G1+s4/1NK3s1L b RSN7Pb3gnp 109",
@@ -1384,7 +1384,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l5g1l/3+P3P1/p1p+RgkpSn/4p3p/3l5/2P3P1P/P2PPP3/2g+b1KSb1/+s4G1NL b SN2Prn2p 81",
@@ -1396,7 +1396,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "Gn+B5l/1R3sk2/p1p2pnpp/3pP1p2/1s7/P1PKpS2P/1P1P2N2/1SG1+r4/LN4P1L b GL2Pbgp 91",
@@ -1408,7 +1408,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l2+R1nskl/3b1Gs2/pp1p1pp2/4R2p1/3N4p/3P4P/PBK1PPP2/7S1/L4G1NL b 2GSN5P 95",
@@ -1420,7 +1420,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l+Rp3k1l/2gs2g2/p2p1p3/1pGnp1NPp/6S2/1B2P1B1P/PPN1+RPK2/9/L7L b G2SN5P 167",
@@ -1432,7 +1432,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "8l/2n2kb2/p1+Rs3p+b/1p3Gp1p/2P1PP1P1/6P1P/PPN+sgS1R1/4G4/L5K1L b GSN4Pnlp 107",
@@ -1444,7 +1444,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l5s1l/3k5/1rnppG2p/pSR4p1/2nb5/PGP2Sp2/3PP3P/2KS5/LN2G4 b BG5Pnl2p 103",
@@ -1456,7 +1456,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l2g4l/2s3+R2/2n1p1p2/p2P2kgp/1P2Gpg2/P1P1B3P/2N1P1PK1/3+p2S2/L2r2+bNL b 2S2Pn3p 101",
@@ -1468,7 +1468,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l3ks1+R1/4gg3/n1p+N1pp2/p2pp4/6S2/P1P3Ppp/3PPPNb1/1+r2SK3/L1+p2G2L b BGSnl3p 63",
@@ -1480,7 +1480,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "lnsk1g2l/5+P1+R1/p+Npp1p2p/4p1p2/5g3/1p2P4/P1PP1P1pP/1Bg+b4R/LN3GKNL b 3S2p 95",
@@ -1492,7 +1492,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l4+B+S1l/1r1s1b3/p1N2k3/2p1pp1pp/1p1p2p2/2P5P/PP1PPPN2/2G6/L1S1KG2L b GSNrgn2p 77",
@@ -1504,7 +1504,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "3S3+P+B/1s2g2+R1/pr1skp1p1/1pppp3p/1n3gL2/1B2gP3/P7P/2K1P4/LN5NL b GSNL5p 125",
@@ -1516,7 +1516,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln1R2g2/2gs+Bl3/pk1p1pp2/1pP1ps2p/1N1P5/+rP1S4P/2N+BPPP1N/6S2/1L2KG2L b G4P 99",
@@ -1528,7 +1528,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "lg6l/2s+BR+R+S2/k1np1p3/2p2s3/p2n1N3/1GG1PP2P/2PP5/1P1S+p4/LNKb4L b G6Pp 111",
@@ -1540,7 +1540,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l1k2p2+P/3g2+R2/p1n2+S2p/1ppp4b/4pP3/1PP5P/PSSG1S3/4P4/LN1K1G2L b BGNL4Prn 115",
@@ -1552,7 +1552,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate9",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l8/4+P4/p4p3/4p2k1/6pp1/1PpP2P2/P2pPPNL1/5S2+l/LSBGKG3 b R2G2SN2Prb2n2p 95",
@@ -1564,7 +1564,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "+P2+Rb1gnl/7k1/n1p1+Bp1pp/p5p2/1p1pP2P1/2+s6/PsNGSPP1P/3KG4/L5RNL b SL3Pg 83",
@@ -1576,7 +1576,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l3+Rpknl/9/4G1pg1/pP+B2Ssp1/1npnP4/4KP2P/P2P4L/2GS4G/LR7 b SN6Pbp 151",
@@ -1588,7 +1588,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l4rg2/2+B1g1sl1/p2n1kn2/2p1Ppp2/3+R5/1PPP2P2/P1S2PN1P/3GGS3/+p3K3L b SN3Pbl2p 89",
@@ -1600,7 +1600,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln6+B/1+B2gkp2/p1ppspn2/4ps2p/3N3N1/2PP1PPRP/P2SG4/1PG2KS2/L7L b RGL3Pp 89",
@@ -1612,7 +1612,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "1nslksG+R1/l2g1r3/p+B1pppp2/9/2P6/3B1PP2/PP1PP4/3S5/LN1GKG1N1 b SN6Pl 77",
@@ -1624,7 +1624,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l7l/1+Rskg4/p3pp1+B1/1pp1s1N1p/2g2P3/4S3P/PPPPP1P2/3K2GP1/1+b1G1+r2L b S3N3Pl 117",
@@ -1636,7 +1636,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "1+Rn1g3+P/2+Nsk2p+R/3psp+L2/2p1p1P2/1S5g1/1+l2PSp2/2NG1P1+p1/2gB5/L3K1+b2 b NL4P3p 121",
@@ -1648,7 +1648,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l2+R2snl/4+Sgk2/pgnpp1pp1/2R2p1Pp/bpP6/9/PP1PPPP1P/5K3/LNSG1GSNL b Bp 51",
@@ -1660,7 +1660,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln1g2+B2/1rk6/1n1pBp1P1/p1P2g2p/2N1p4/2pS2P1P/P2PPPp2/2K2G2+r/LN4S2 b SPgs2l2p 103",
@@ -1672,7 +1672,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "4G2nl/6G2/p2pp+R2p/2p3ppk/5N3/2P5P/3PPPPb1/2+p+rLK3/1N3GSNL b SL2Pbg2s2p 77",
@@ -1684,7 +1684,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "1n6+R/l1s1gk1+L1/p4snp1/1rPppp3/9/1P1PP2P1/PG1S1P3/1K2+p4/LN7 b 2BGL3Pgsn2p 71",
@@ -1696,7 +1696,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "lnS3+R2/+b3G4/p3+P2pp/1kps1B3/Pp5P1/1PP6/G2+n4P/KG2r2+n1/LNs5L b GLs7p 129",
@@ -1708,7 +1708,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l1+N2n1+Rl/2G2g3/p2kpp2p/3pr1P2/2p2s3/2PB5/PP1PPK2P/2G6/LNS3G1L b B2S4Pnp 83",
@@ -1720,7 +1720,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l+R1n2s+R1/1s1g1kS2/2pp3p1/p+B3p3/4g4/PPP1l+B3/1p+nPSPPP1/6G2/L2K3N+l b N4Pgp 97",
@@ -1732,7 +1732,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "lG3r1n1/1+S2g3l/1Sp1p4/pp1ps1P1p/1kN1+B4/2P4P1/PP1P1P1+RP/2GS1+b3/LNK3gNL b 2P2p 93",
@@ -1744,7 +1744,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "2p1g1S2/l+P4G1l/p2k2ppp/4pR3/3s5/P1gN5/1+p2PP2P/1B1G5/LNSKL3+r b BSN2Pn4p 141",
@@ -1756,7 +1756,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln1g2Rnl/3k5/3sps1gp/p1pP1p1p1/6p1B/PP1SP3P/5P3/2GK2+s2/LN5rL b B4Pgnp 69",
@@ -1768,7 +1768,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l2gk2bl/2s3s2/2np4p/p1p3K2/1+r4+B1P/P4P1p1/2PPP1P2/9/L2+p1G1gL b GS2N4Prsnp 75",
@@ -1780,7 +1780,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l6n+B/2n6/p1p+R2s1p/+b3pk1p1/2GN1pp2/3P3s1/PP1l1P2P/3S1G3/+r1PK4L b 2GSNPl4p 95",
@@ -1792,7 +1792,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "lR3Ss1l/3+B2g2/p3ppkpp/6p2/1p2PS3/2p3P2/PP1p1+r2P/3GG1N2/LN2KG2L b B2NPs3p 65",
@@ -1804,7 +1804,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "lR4G1l/2+Nsg2k1/p2p1pp1n/3n4p/4+bN3/1P3PP1P/P1+pP1SKp1/9/L1G2G2L b BS2Prs3p 67",
@@ -1816,7 +1816,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "2bg2+P1l/5k3/r1+Spp3p/ppp1npP2/4+B4/2P1P4/PPSPKPSpP/6S2/LN1G1G2+r b G2N2LP 71",
@@ -1828,7 +1828,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l5+P1l/2s6/p4p3/2pPpbPk1/3S4p/P1P6/1GB2P2P/1K1pG4/LN4sN+p b 2GSNP2rnl3p 107",
@@ -1840,7 +1840,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l1k4+Pl/6+N2/1sGg2+R1p/b1s3p1s/1Npp5/LG6P/1+R2PP3/4Gp3/1N2K2NL b B8Psp 137",
@@ -1852,7 +1852,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln7/9/p1p5n/6p2/6+R1p/1pPB4k/Pg1P1P1+p1/1PGSLS3/LNK1G3+l b RB2SN4Pg3p 107",
@@ -1864,7 +1864,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l4+Ns1l/2R2rk2/3p1ppp1/p3B3p/3g3N1/1PP5b/PG1SPPP1N/2S1KS3/LN3G2L b G6P 95",
@@ -1876,7 +1876,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l2g4G/3k5/3p2+R1p/p4pp2/2PP5/4pB2P/P2S1PP2/1+rS1GSb2/LN2K2NL b S2NL4Pg2p 95",
@@ -1888,7 +1888,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "5S1nl/sp7/8p/4k1+Bp1/P1Pp1pL2/2G1P4/3PKP2P/2+n1G2+n1/1+r2G1P+n1 b G2L5Prb2sp 131",
@@ -1900,7 +1900,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "lnS+r+R3l/3+B5/kppp4p/p3p1p1b/9/P3SPS1P/2PPPKP2/9/L1+pg1G1NL b 2G2Ns3p 67",
@@ -1912,7 +1912,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "+S2+Rp2nl/4g4/7k1/p3G1ps1/2P2N1pP/P3N1P2/3PP1GR1/5+p1K1/+s4+b1NL b BS2L4Pg3p 133",
@@ -1924,7 +1924,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l1r6/4g1k2/p1spspnp1/4p3B/1p1P1Pp2/2L1P2+R1/PPGN1GN2/4K4/6s1L b GS3Pbnl3p 111",
@@ -1936,7 +1936,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "3gks1Rl/l4g1+P1/p2+Bppn2/1pp3p1p/9/2P5P/PP1P3p1/2SK5/LN2G2NL b BG2SNPr3p 63",
@@ -1948,7 +1948,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l7l/3B2G2/1k2+P3p/2psp2p1/p4S1nP/2PpP4/P1n2Png1/4R4/L2+rG1KNL b B2S3Pg3p 127",
@@ -1960,7 +1960,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln2g3l/2+P6/p4k3/1p5+Rp/2S4n1/9/PP3P2P/2+pPGS1+b1/1+rP1K2NL b BS4P2gsnl3p 107",
@@ -1972,7 +1972,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "lp+P1pp1kl/5bng1/p1+Rp1+Nn2/4B1psp/9/2P3G2/P1sPPSN1P/7R1/5K2L b 2GS5Pl 131",
@@ -1984,7 +1984,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l3k2nl/5rgb1/p2pPp1pp/1pG3P2/1n7/1BPP2pP1/PGNS+p3P/1KS2+r3/L3+s2NL b GSP2p 93",
@@ -1996,7 +1996,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l1+PSk2nl/4g4/3p1ss+B1/p1p1p1ppp/9/1rP3P2/P1NPPSN1P/1+p5R1/L2GKG2L b GNPb2p 49",
@@ -2008,7 +2008,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln1g2B2/4p4/1S1k1s+Rpl/p1Np1p2b/2P5p/P3P3P/1PSP1PS2/2G6/LN2KG1RL b G5Pn 97",
@@ -2020,7 +2020,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "lR5n1/6g1P/p1nS1kpp1/4p3l/3p1pb2/1PG4R1/Pp1PPP2+p/3S5/LN1K1G3 b GS3Pbsnlp 99",
@@ -2032,7 +2032,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l5snl/6+R2/2pp1p+Npp/p8/2R3p2/L1PP1SPk1/4P3P/1+pG1KS3/1+bS2G2+b b 2GN3Pnl2p 59",
@@ -2044,7 +2044,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln5n1/4+N+B2l/p+Pp2+B1sk/7p1/6p2/P1P4rp/1p1P1p3/2S6/L1KG1G1NL b 2GSPrs6p 125",
@@ -2056,7 +2056,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l6nl/2R+Bsskl1/5p1g1/p1p+Rp1pp1/6N1p/2PPPP2P/P4sN2/7G1/+p2g2K1L b BSN3Pgp 95",
@@ -2068,7 +2068,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l6nl/1r1sk4/p2p5/2plS1ppp/1p1n5/PGPB2P2/3PP1N1P/2SKG2R1/+p2G4L b BGPsn3p 59",
@@ -2080,7 +2080,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "+B6nl/4g1+P2/p1spkpp2/3P1lL2/2PBp1NN1/1P4P1p/P1G1PP3/5G3/LNS1KG1r+s b RS3Pp 79",
@@ -2092,7 +2092,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l+R6l/2nks1g2/n2pp4/1p3pB2/4S3s/2pP2p2/PP2+brP1N/1SG6/L2KG3L b GN2P6p 101",
@@ -2104,7 +2104,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l+R6l/4+S4/1ppp1p3/p2spkppp/5nnP1/2P3PBP/P2PPPNR1/1S2G4/LN2K1gSL b 2GPb 75",
@@ -2116,7 +2116,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l3kp2l/3r2+RG1/1+bPp1g3/p3p3p/1N1Gn4/1P1S1P2P/P2PS1N2/1S2K4/L7L b BGS3Pn4p 127",
@@ -2128,7 +2128,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "r7l/1R1gG2+N1/p4ppp1/1spN4p/3k3P1/2P1L1P1P/PPBPPPN2/2GS2S2/LN2K1G1L b S3Pb 75",
@@ -2140,7 +2140,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "ln1gk2nl/4p1+P2/5pp2/1ppp+S2Bp/p5P2/2P2Pb2/PPGS4P/4G2+s1/LN2K3L b RGS3Prn 63",
@@ -2152,7 +2152,7 @@
       "library"
     ],
     "display": {
-      "description": "board_state.tlm_shogi.tsume.mate11",
+      "description": "board_state.tlm_shogi.tsume",
       "author": "board_state.tlm_shogi.tsume.author.unknown"
     },
     "data": "l+R5nl/1+B3+Sgk1/p2ppps2/2p3pp1/1p1N5/2P2PP1p/PP1GP4/2+nS1G3/L+rN1K2sL b BG3p 65",
