@@ -11,6 +11,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySit;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.sangeeeee.tlm_shogi.init.InitItems;
 import com.github.sangeeeee.tlm_shogi.item.ItemTsumeBoardState;
+import com.github.sangeeeee.tlm_shogi.mateengine.TsumeRules;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import com.github.tartaricacid.touhoulittlemaid.init.InitTrigger;
 import com.github.sangeeeee.tlm_shogi.network.message.JChessPromoteOpenPackage;
@@ -196,6 +197,10 @@ public class BlockJChess extends BlockJoy implements IBoardGameBlock {
             markTsumeIncorrect(player, level, pos, chess);
             return;
         }
+        if (!TsumeRules.hasLegalCheckingMove(chess.getChessData().toUSI())) {
+            markTsumeIncorrect(player, level, pos, chess);
+            return;
+        }
 
         EntityMaid maid = getSeatedMaid(level, chess);
         if (maid != null) {
@@ -316,6 +321,7 @@ public class BlockJChess extends BlockJoy implements IBoardGameBlock {
                     seatedMaid.getGameRecordManager().resetStatue();
                 }
                 chess.refresh();
+                markIfNoCheckingMove(player, level, centerPos, chess);
                 level.playSound(null, pos, InitSounds.GOMOKU_RESET.get(), SoundSource.BLOCKS, 1.0f, 1.0f);
                 player.sendSystemMessage(Component.translatable(
                         "message.tlm_shogi.jchess.microcosmos.introduction"));
@@ -342,6 +348,7 @@ public class BlockJChess extends BlockJoy implements IBoardGameBlock {
                     seatedMaid.getGameRecordManager().resetStatue();
                 }
                 chess.refresh();
+                markIfNoCheckingMove(player, level, centerPos, chess);
                 level.playSound(null, pos, InitSounds.GOMOKU_RESET.get(), SoundSource.BLOCKS, 1.0f, 1.0f);
                 return ItemInteractionResult.SUCCESS;
             }
@@ -619,6 +626,17 @@ public class BlockJChess extends BlockJoy implements IBoardGameBlock {
         }
         player.sendSystemMessage(Component.translatable("message.tlm_shogi.jchess.tsume.incorrect"));
         chess.refresh();
+    }
+
+    private static void markIfNoCheckingMove(Player player, Level level, BlockPos pos,
+                                             TileEntityJChess chess) {
+        if (player instanceof ServerPlayer serverPlayer
+                && chess.isTsumeMode()
+                && chess.isPlayerTurn()
+                && !chess.isCheckmate()
+                && !TsumeRules.hasLegalCheckingMove(chess.getChessData().toUSI())) {
+            markTsumeIncorrect(serverPlayer, level, pos, chess);
+        }
     }
 
     @Nullable

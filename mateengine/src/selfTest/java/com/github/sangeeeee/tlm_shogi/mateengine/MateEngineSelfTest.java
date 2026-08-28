@@ -44,6 +44,7 @@ public final class MateEngineSelfTest {
         missingDefenderKingIsRejected();
         duplicateAttackerKingsAreRejected();
         nonCheckPositionIsRejected();
+        checkingMoveAvailabilityIsDetected();
         cancellationIsReported();
         curatedThreePlyPuzzlesAreValid();
     }
@@ -114,6 +115,15 @@ public final class MateEngineSelfTest {
     private void nonCheckPositionIsRejected() {
         expect(IllegalArgumentException.class, () -> new MateEngine().search(
                 "4k4/9/9/9/9/9/9/9/9 w - 1", SMALL_LIMITS));
+    }
+
+    private void checkingMoveAvailabilityIsDetected() {
+        check(TsumeRules.hasLegalCheckingMove(
+                        "4k4/9/9/9/9/9/9/9/4R4 b - 1"),
+                "attacker has a legal checking rook move");
+        check(!TsumeRules.hasLegalCheckingMove(
+                        "4k4/9/9/9/9/9/9/9/9 b - 1"),
+                "attacker with no pieces has no legal checking move");
     }
 
     private void cancellationIsReported() {
