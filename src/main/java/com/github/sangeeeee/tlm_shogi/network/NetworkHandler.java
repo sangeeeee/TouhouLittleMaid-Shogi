@@ -17,7 +17,6 @@ public class NetworkHandler {
 
         registrar.playToClient(JChessToClientPackage.TYPE, JChessToClientPackage.STREAM_CODEC, JChessToClientPackage::handle);
         registrar.playToServer(JChessToServerPackage.TYPE, JChessToServerPackage.STREAM_CODEC, JChessToServerPackage::handle);
-        registrar.playToServer(JChessPlatformSupportPackage.TYPE, JChessPlatformSupportPackage.STREAM_CODEC, JChessPlatformSupportPackage::handle);
         registrar.playToClient(JChessPromoteOpenPackage.TYPE, JChessPromoteOpenPackage.STREAM_CODEC, JChessPromoteOpenPackage::handle);
         registrar.playToServer(JChessPromoteResultPackage.TYPE, JChessPromoteResultPackage.STREAM_CODEC, JChessPromoteResultPackage::handle);
     }

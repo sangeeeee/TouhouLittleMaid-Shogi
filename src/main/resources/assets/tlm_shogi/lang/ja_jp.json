@@ -5,8 +5,6 @@
   "message.tlm_shogi.jchess.move_limit": "200手制限！",
   "message.tlm_shogi.jchess.reset": "盤の左右どちらかを右クリックでリセット",
   "gui.tlm_shogi.jchess.promote": "成りますか？",
-  "message.tlm_shogi.jchess.notwindows": "将棋はWindowsでのみプレイ可能です",
-  "message.tlm_shogi.jchess.unsupported_platform": "現在のプラットフォームでは将棋をプレイできません",
   "message.tlm_shogi.jchess.engineerr": "思考エンジンにエラーが発生しました",
-  "message.tlm_shogi.jchess.noengine": "将棋エンジンが見つかりません"
+  "message.tlm_shogi.jchess.noengine": "将棋エンジンのデータを読み込めません"
 }

@@ -23,6 +23,18 @@ base {
 // Mojang ships Java 21 to end users in 1.21.1, so mods should target Java 21.
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
+// ModDevGradle identifies bound source sets by name. Both projects have a
+// source set called "main", so expose the engine classes through a uniquely
+// named proxy source set for development launches.
+sourceSets {
+    embeddedEngine {
+        // Compile the same dependency-free sources into this project's
+        // conventional output directory, which ModDev mounts into the module.
+        java.srcDir project(':engine').file('src/main/java')
+        resources.setSrcDirs([])
+    }
+}
+
 neoForge {
     // Specify the version of NeoForge to use.
     version = project.neo_version
@@ -91,6 +103,9 @@ neoForge {
         // multi mod projects should define one per mod
         "${mod_id}" {
             sourceSet(sourceSets.main)
+            // Development runs load source-set outputs directly instead of the
+            // assembled JAR, so bind the standalone engine output to this mod too.
+            sourceSet(sourceSets.embeddedEngine)
         }
     }
 }
@@ -107,7 +122,26 @@ configurations {
 }
 
 dependencies {
+    implementation project(':engine')
     implementation files("libs/touhoulittlemaid-1.4.5-neoforge+mc1.21.1-all.jar")
+}
+
+// The engine remains independently testable, but its pure-Java classes and
+// Sunfish data files must also be present in the distributable mod JAR.
+tasks.named('processResources', ProcessResources).configure {
+    from(layout.projectDirectory.dir('tem')) {
+        include 'eval.bin'
+        include 'book.bin'
+        into 'assets/tlm_shogi/sunfish'
+    }
+
+    // Do not ship the superseded Windows-only YaneuraOu executable and NNUE data.
+    exclude 'assets/tlm_shogi/shogi_engine/**'
+}
+
+tasks.named('jar', Jar).configure {
+    dependsOn project(':engine').tasks.named('classes')
+    from(project(':engine').sourceSets.main.output)
 }
 
 // Example configuration to allow publishing using the maven-publish plugin

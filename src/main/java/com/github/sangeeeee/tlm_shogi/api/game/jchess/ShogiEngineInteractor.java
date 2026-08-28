@@ -1,155 +1,157 @@
 package com.github.sangeeeee.tlm_shogi.api.game.jchess;
 
+import com.github.sangeeeee.tlm_shogi.TouhouLittleMaidShogi;
+import com.github.sangeeeee.tlm_shogi.engine.CancellationToken;
+import com.github.sangeeeee.tlm_shogi.engine.EngineException;
+import com.github.sangeeeee.tlm_shogi.engine.EngineState;
+import com.github.sangeeeee.tlm_shogi.engine.SearchLimits;
+import com.github.sangeeeee.tlm_shogi.engine.SearchRequest;
+import com.github.sangeeeee.tlm_shogi.engine.SearchResult;
+import com.github.sangeeeee.tlm_shogi.engine.SunfishEngine;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
-import java.io.*;
-import java.util.concurrent.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.io.IOException;
+import java.time.Duration;
+import java.util.Arrays;
+import java.util.List;
 
-public class ShogiEngineInteractor {
-    private Process process;
-    private BufferedReader reader;
-    private PrintWriter writer;
-    private final String enginePath = EngineExtractor.getEnginePath().toString();
-    private final String evalDir    = EngineExtractor.getEvalDir().toString();
-    private final String bookDir    = EngineExtractor.getBookPath().getParent().toString();
+/** Compatibility facade for the old USI-process call site, backed by Java. */
+@OnlyIn(Dist.CLIENT)
+public final class ShogiEngineInteractor {
+    private static final Object ENGINE_LOCK = new Object();
+    private static final SearchLimits DEFAULT_LIMITS = SearchLimits.casualPlay();
 
-    // Setup method: Initializes the engine and sends setup commands
-    public String setup(String jsonParams) throws IOException, InterruptedException {
-        // Start the engine process
-        ProcessBuilder pb = new ProcessBuilder(enginePath);
-        process = pb.start();
+    private static volatile SunfishEngine sharedEngine;
+    private SearchLimits limits = DEFAULT_LIMITS;
 
-        // Get input/output streams
-        reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        writer = new PrintWriter(new OutputStreamWriter(process.getOutputStream()), true);
-
-        // Send USI command
-        writer.println("usi");
-        // Read responses until "usiok"
-        String line;
-        while ((line = reader.readLine()) != null) {
-            if (line.equals("usiok")) {
-                break;
-            }
+    /** Loads the engine once for the whole client. Safe to call from a worker thread. */
+    public static void initializeSharedEngine() throws EngineException {
+        SunfishEngine existing = sharedEngine;
+        if (existing != null && existing.state() == EngineState.READY) {
+            return;
         }
 
-        // Parse JSON params if provided
-        if (jsonParams != null && !jsonParams.isEmpty()) {
+        synchronized (ENGINE_LOCK) {
+            existing = sharedEngine;
+            if (existing != null && existing.state() == EngineState.READY) {
+                return;
+            }
+
+            SunfishEngine candidate = new SunfishEngine(SunfishDataFiles.prepare());
             try {
-                Gson gson = new Gson();
-                JsonObject options = gson.fromJson(jsonParams, JsonObject.class);
-                for (String key : options.keySet()) {
-                    String value = options.get(key).getAsString();
-                    writer.println("setoption name " + key + " value " + value);
-                }
-            } catch (JsonSyntaxException e) {
-                throw new IllegalArgumentException("Invalid JSON format: " + e.getMessage());
+                candidate.initialize();
+                sharedEngine = candidate;
+                TouhouLittleMaidShogi.LOGGER.info(
+                        "Java Sunfish engine initialized (eval {}, book {} bytes)",
+                        candidate.resourceInfo().evalBytes(),
+                        candidate.resourceInfo().bookBytes()
+                );
+            } catch (EngineException | RuntimeException exception) {
+                candidate.close();
+                throw exception;
             }
         }
-        writer.println("setoption name EvalDir value " + evalDir);
-        writer.println("setoption name bookDir value " + bookDir);
+    }
 
-        // Send isready
-        writer.println("isready");
-        // Wait for readyok
-        while ((line = reader.readLine()) != null) {
-            if (line.equals("readyok")) {
-                break;
-            }
+    /** Best-effort startup warm-up; a later search retries initialization on failure. */
+    public static void warmUp() {
+        try {
+            initializeSharedEngine();
+        } catch (EngineException | RuntimeException exception) {
+            TouhouLittleMaidShogi.LOGGER.error(
+                    "Unable to warm up the Java Sunfish engine; it will retry when a game requests a move",
+                    exception
+            );
         }
+    }
 
+    /** Parses the legacy option JSON and ensures the shared Java engine is ready. */
+    public String setup(String jsonParams) throws IOException {
+        limits = parseLimits(jsonParams);
+        try {
+            initializeSharedEngine();
+        } catch (EngineException | RuntimeException exception) {
+            throw new IOException("Unable to initialize the Java Sunfish engine", exception);
+        }
         return "setup ok";
     }
 
-    // Interaction method: Sends position and go, returns bestmove or error
+    /** Searches the supplied SFEN directly in the current JVM and returns a USI move. */
     public String interact(String sfen, String moves) throws IOException, InterruptedException {
-        if (process == null || !process.isAlive()) {
-            throw new IllegalStateException("Engine not setup or stopped.");
+        SunfishEngine engine = sharedEngine;
+        if (engine == null || engine.state() != EngineState.READY) {
+            throw new IllegalStateException("Engine not set up or no longer available");
         }
 
-        // Build position command
-        StringBuilder positionCmd = new StringBuilder("position sfen ");
-        positionCmd.append(sfen);
-        if (moves != null && !moves.isEmpty()) {
-            // Restrict to one move as per requirement
-            positionCmd.append(" moves ").append(moves);
-        }
-
-        // Send position
-        writer.println(positionCmd.toString());
-
-        // Check for immediate error with timeout
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        Future<String> future = executor.submit(() -> reader.readLine());
-        String errorLine = null;
+        List<String> moveList = splitMoves(moves);
+        SearchResult result;
         try {
-            errorLine = future.get(100, TimeUnit.MILLISECONDS); // Short timeout to check if output is available
-        } catch (TimeoutException e) {
-            // No immediate output, assume no error
-        } catch (ExecutionException | InterruptedException e) {
-            throw new IOException("Error reading from engine", e);
-        } finally {
-            if (!future.isDone()) {
-                future.cancel(true);
-            }
-            executor.shutdownNow();
+            CancellationToken cancellation = () -> Thread.currentThread().isInterrupted();
+            result = engine.search(new SearchRequest(sfen, moveList, limits), cancellation);
+        } catch (EngineException | IllegalArgumentException | IllegalStateException exception) {
+            throw new IOException("Java Sunfish search failed", exception);
         }
 
-        Pattern errorPattern = Pattern.compile("info string Error! : (.*)");
-        if (errorLine != null) {
-            Matcher matcher = errorPattern.matcher(errorLine);
-            if (matcher.matches()) {
-                // Error detected, return immediately
-                writer.println("stop"); // Send stop to engine if needed
-                return "Error: " + matcher.group(1);
-            } else {
-                // Unexpected output, but continue or handle as needed
-                // For now, proceed, but could log or something
-            }
-        }
+        TouhouLittleMaidShogi.LOGGER.info(
+                "Java Sunfish search: outcome={}, move={}, depth={}, nodes={}, elapsed={} ms",
+                result.outcome(),
+                result.bestMove().orElse("-"),
+                result.depth(),
+                result.nodes(),
+                result.elapsed().toMillis()
+        );
 
-        // If no error, send go
-        writer.println("go movetime 3000");
-
-        // Wait for bestmove
-        Pattern bestmovePattern = Pattern.compile("bestmove (\\S+).*");
-        String line;
-        while ((line = reader.readLine()) != null) {
-            System.out.println("[Engine] "+ line);
-            Matcher matcher = bestmovePattern.matcher(line);
-            if (matcher.matches()) {
-                String bestMove = matcher.group(1);
-                if ("resign".equals(bestMove) || "win".equals(bestMove)) {
-                    return bestMove;
-                }
-                return bestMove;
-            }
-        }
-
-        throw new IOException("No bestmove received.");
+        return switch (result.outcome()) {
+            case MOVE -> result.bestMove().orElseThrow();
+            case RESIGN -> "resign";
+            case WIN -> "win";
+            case CANCELLED -> throw new InterruptedException("Java Sunfish search was cancelled");
+        };
     }
 
-    // Stop method: Sends quit and destroys the process
+    /** Kept for call-site compatibility; the shared Java engine is intentionally reused. */
     public String stop() {
-        if (process != null && process.isAlive()) {
-            writer.println("quit");
-            // No need to wait for response as per requirement
-            process.destroy();
-            // Wait briefly to ensure destruction
-            try {
-                process.waitFor(1, TimeUnit.SECONDS);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-            if (process.isAlive()) {
-                process.destroyForcibly();
-            }
-        }
         return "stop ok";
     }
 
+    private static SearchLimits parseLimits(String jsonParams) {
+        if (jsonParams == null || jsonParams.isBlank()) {
+            return DEFAULT_LIMITS;
+        }
+
+        try {
+            JsonObject options = new Gson().fromJson(jsonParams, JsonObject.class);
+            if (options == null) {
+                return DEFAULT_LIMITS;
+            }
+            int hashMiB = intOption(options, "USI_Hash", DEFAULT_LIMITS.transpositionTableMiB());
+            long nodes = longOption(options, "NodesLimit", DEFAULT_LIMITS.maximumNodes());
+            int depth = intOption(options, "DepthLimit", DEFAULT_LIMITS.maximumDepth());
+            long moveTimeMillis = longOption(options, "MoveTime", DEFAULT_LIMITS.moveTime().toMillis());
+            return new SearchLimits(Duration.ofMillis(moveTimeMillis), depth, nodes, hashMiB, 1);
+        } catch (JsonSyntaxException | NumberFormatException exception) {
+            throw new IllegalArgumentException("Invalid engine option JSON", exception);
+        }
+    }
+
+    private static int intOption(JsonObject options, String name, int fallback) {
+        return options.has(name) ? options.get(name).getAsInt() : fallback;
+    }
+
+    private static long longOption(JsonObject options, String name, long fallback) {
+        return options.has(name) ? options.get(name).getAsLong() : fallback;
+    }
+
+    private static List<String> splitMoves(String moves) {
+        if (moves == null || moves.isBlank()) {
+            return List.of();
+        }
+        return Arrays.stream(moves.strip().split("\\s+"))
+                .filter(move -> !move.isBlank())
+                .toList();
+    }
 }

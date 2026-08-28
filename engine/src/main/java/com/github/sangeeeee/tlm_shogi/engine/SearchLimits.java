@@ -32,6 +32,6 @@ public record SearchLimits(
 
     /** Matches the limits currently used by the mod's casual maid game. */
     public static SearchLimits casualPlay() {
-        return new SearchLimits(Duration.ofSeconds(3), 8, 30_000, 256, 1);
+        return new SearchLimits(Duration.ofSeconds(3), 8, 30_000, 64, 1);
     }
 }

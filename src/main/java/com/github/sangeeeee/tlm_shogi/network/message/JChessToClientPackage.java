@@ -1,7 +1,7 @@
 package com.github.sangeeeee.tlm_shogi.network.message;
 
+import com.github.sangeeeee.tlm_shogi.TouhouLittleMaidShogi;
 import com.github.sangeeeee.tlm_shogi.api.game.jchess.Position;
-import com.github.sangeeeee.tlm_shogi.api.game.jchess.ShogiEnginePlatform;
 import com.github.sangeeeee.tlm_shogi.api.game.jchess.ShogiEngineInteractor;
 import com.github.sangeeeee.tlm_shogi.util.JChessUtil;
 import io.netty.buffer.ByteBuf;
@@ -61,36 +61,41 @@ public record JChessToClientPackage(BlockPos pos, String fenData) implements Cus
             maidLost = true;
         }
 
-        if (!ShogiEnginePlatform.isSupported()) {
-            move = "not windows";
-        } else if (!maidLost) {
+        if (!maidLost) {
             // TODO: 暂时不做女仆的棋技系统
 
             ShogiEngineInteractor interactor = new ShogiEngineInteractor();
+            boolean setupCompleted = false;
             try {
-                String json = "{\"USI_Hash\": \"256\", \"NodesLimit\": \"30000\", \"DepthLimit\": \"8\"}";
+                String json = "{\"USI_Hash\": \"64\", \"NodesLimit\": \"30000\", \"DepthLimit\": \"8\"}";
                 interactor.setup(json);
+                setupCompleted = true;
                 move = interactor.interact(message.fenData, null);
-                interactor.stop();
 
-                position.makeMove(move);
+                if (position.makeMove(move) < 0) {
+                    throw new IOException("Java engine returned an invalid move: " + move);
+                }
                 if (position.isCheck() && position.isMate() && JChessUtil.isPlayer(position)) {
                     playerLost = true;
                 }
 
                 // 如果时间还有剩余，那么 sleep 一会儿
                 long timeRemain = Math.max(0, levelTime - (int) (System.currentTimeMillis() - timeStart));
-                try {
-                    if (timeRemain > 0) {
-                        Thread.sleep(timeRemain);
-                    }
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+                if (timeRemain > 0) {
+                    Thread.sleep(timeRemain);
                 }
             } catch (IOException e) {
-                move = "no engine";
-            } catch (Exception e) {
+                TouhouLittleMaidShogi.LOGGER.error("Java shogi engine data or search failed", e);
+                move = setupCompleted ? "engine error" : "no engine";
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                TouhouLittleMaidShogi.LOGGER.warn("Java shogi engine search was interrupted", e);
                 move = "engine error";
+            } catch (Exception e) {
+                TouhouLittleMaidShogi.LOGGER.error("Unexpected Java shogi engine error", e);
+                move = "engine error";
+            } finally {
+                interactor.stop();
             }
         }
 

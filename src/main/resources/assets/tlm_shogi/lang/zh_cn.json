@@ -5,9 +5,7 @@
   "message.tlm_shogi.jchess.move_limit": "二百手限制！",
   "message.tlm_shogi.jchess.reset": "右击棋墩左右任意一侧进行重置",
   "gui.tlm_shogi.jchess.promote": "是否晋升？",
-  "message.tlm_shogi.jchess.notwindows": "仅Windows系统可下将棋",
-  "message.tlm_shogi.jchess.unsupported_platform": "当前平台不支持游玩将棋",
   "message.tlm_shogi.jchess.engineerr": "思考引擎出现错误",
-  "message.tlm_shogi.jchess.noengine": "未找到将棋引擎"
+  "message.tlm_shogi.jchess.noengine": "无法加载将棋引擎数据"
 
 }

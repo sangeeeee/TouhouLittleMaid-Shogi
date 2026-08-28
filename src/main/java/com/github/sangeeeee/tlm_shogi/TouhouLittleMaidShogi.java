@@ -1,10 +1,8 @@
 package com.github.sangeeeee.tlm_shogi;
 
-import com.github.sangeeeee.tlm_shogi.api.game.jchess.PlayerPlatformSupport;
 import com.github.sangeeeee.tlm_shogi.init.*;
 import com.github.sangeeeee.tlm_shogi.network.NetworkHandler;
 import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.neoforge.common.NeoForge;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -13,8 +11,6 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.ModContainer;
 
-
-import java.util.List;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(TouhouLittleMaidShogi.MOD_ID)
@@ -26,8 +22,6 @@ public class TouhouLittleMaidShogi {
 
     public TouhouLittleMaidShogi(IEventBus modEventBus, ModContainer modContainer) {
         initRegister(modEventBus);
-        NeoForge.EVENT_BUS.addListener(PlayerPlatformSupport::onPlayerLoggedIn);
-        NeoForge.EVENT_BUS.addListener(PlayerPlatformSupport::onPlayerLoggedOut);
 //        registerConfiguration(modContainer);
 //        CommonDefaultPack.initCommonDefaultPack();
 //        AquacultureCompat.init(modEventBus);

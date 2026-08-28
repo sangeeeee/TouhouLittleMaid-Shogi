@@ -472,7 +472,7 @@ public final class EngineSelfTest {
         equal(Duration.ofSeconds(3), limits.moveTime(), "move time");
         equal(8, limits.maximumDepth(), "maximum depth");
         equal(30_000L, limits.maximumNodes(), "maximum nodes");
-        equal(256, limits.transpositionTableMiB(), "hash size");
+        equal(64, limits.transpositionTableMiB(), "hash size");
         equal(1, limits.threads(), "thread count");
     }
 

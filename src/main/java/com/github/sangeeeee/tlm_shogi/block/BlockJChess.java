@@ -1,7 +1,6 @@
 package com.github.sangeeeee.tlm_shogi.block;
 
 import com.github.sangeeeee.tlm_shogi.advancements.maid.TriggerType;
-import com.github.sangeeeee.tlm_shogi.api.game.jchess.PlayerPlatformSupport;
 import com.github.tartaricacid.touhoulittlemaid.api.block.IBoardGameBlock;
 import com.github.sangeeeee.tlm_shogi.api.game.jchess.Position;
 import com.github.tartaricacid.touhoulittlemaid.block.BlockJoy;
@@ -116,12 +115,14 @@ public class BlockJChess extends BlockJoy implements IBoardGameBlock {
             }
 
             int toPos = chessData.makeMove(move);
-            if (toPos != -1) {
-                chess.setSelectChessPoint(toPos);
-                if (chessData.isCheck() ){
-                    player.sendSystemMessage(Component.translatable("message.touhou_little_maid.cchess.check"));
-                    level.playSound(null, pos, SoundEvents.NOTE_BLOCK_BELL.value(), SoundSource.BLOCKS, 1.0f, 0.8F + level.random.nextFloat() * 0.4F);
-                }
+            if (toPos == -1) {
+                player.sendSystemMessage(Component.translatable("message.tlm_shogi.jchess.engineerr"));
+                return;
+            }
+            chess.setSelectChessPoint(toPos);
+            if (chessData.isCheck() ){
+                player.sendSystemMessage(Component.translatable("message.touhou_little_maid.cchess.check"));
+                level.playSound(null, pos, SoundEvents.NOTE_BLOCK_BELL.value(), SoundSource.BLOCKS, 1.0f, 0.8F + level.random.nextFloat() * 0.4F);
             }
             chess.setCheckmate(playerLost);
             if (level instanceof ServerLevel serverLevel && serverLevel.getEntity(sitId) instanceof EntitySit sit && sit.getFirstPassenger() instanceof EntityMaid maid) {
@@ -223,10 +224,6 @@ public class BlockJChess extends BlockJoy implements IBoardGameBlock {
                 return ItemInteractionResult.FAIL;
             }
 
-            // 女仆思考时间，不允许玩家操作
-            if (!chess.isPlayerTurn() && !chess.isCheckmate()) {
-                return ItemInteractionResult.FAIL;
-            }
             ItemStack heldItem = player.getMainHandItem();
 
             // TODO: 如果是诘将棋道具，那么直接设置诘将棋道具
@@ -272,9 +269,9 @@ public class BlockJChess extends BlockJoy implements IBoardGameBlock {
                 return ItemInteractionResult.SUCCESS;
             }
 
-            // 引擎运行在玩家客户端，因此必须先于女仆检查验证客户端平台。
-            if (!PlayerPlatformSupport.isSupported(player)) {
-                player.sendSystemMessage(Component.translatable("message.tlm_shogi.jchess.unsupported_platform"));
+            // 女仆思考时间不允许走子，但仍允许重置；异步搜索稍后
+            // 返回的旧结果会被 maidMove 中的回合检查安全忽略。
+            if (!chess.isPlayerTurn() && !chess.isCheckmate()) {
                 return ItemInteractionResult.FAIL;
             }
 

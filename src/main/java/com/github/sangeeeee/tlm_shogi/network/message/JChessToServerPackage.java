@@ -43,8 +43,6 @@ public record JChessToServerPackage(BlockPos pos, String move, boolean maidLost,
                     return;
                 }
                 switch (message.move) {
-                    case "not windows" ->
-                            sender.sendSystemMessage(Component.translatable("message.tlm_shogi.jchess.notwindows"));
                     case "no engine" ->
                             sender.sendSystemMessage(Component.translatable("message.tlm_shogi.jchess.noengine"));
                     case "engine error" ->
