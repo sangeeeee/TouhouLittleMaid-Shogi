@@ -1,0 +1,12 @@
+{
+  "type": "neoforge:add_table",
+  "conditions": [
+    {
+      "condition": "touhou_little_maid:loot_table_type",
+      "loot_table_add": "tlm_shogi:chest/random_tsume_masterpiece",
+      "loot_table_id": "minecraft:chests/village/village_cartographer",
+      "loot_table_type": "minecraft:chest"
+    }
+  ],
+  "table": "tlm_shogi:chest/random_tsume_masterpiece"
+}

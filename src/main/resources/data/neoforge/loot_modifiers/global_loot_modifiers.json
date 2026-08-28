@@ -1,7 +1,11 @@
 {
   "replace": false,
   "entries": [
+    "tlm_shogi:village_cartographer_tsume",
+    "tlm_shogi:village_cartographer_tsume_masterpiece",
+    "tlm_shogi:village_cartographer_microcosmos",
     "tlm_shogi:stronghold_library_tsume",
-    "tlm_shogi:stronghold_library_tsume_masterpiece"
+    "tlm_shogi:stronghold_library_tsume_masterpiece",
+    "tlm_shogi:stronghold_library_microcosmos"
   ]
 }
