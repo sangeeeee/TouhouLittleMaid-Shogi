@@ -567,7 +567,7 @@ public class BlockJChess extends BlockJoy implements IBoardGameBlock {
         if (!chess.isTsumeMode()) {
             return true;
         }
-        return com.github.sangeeeee.tlm_shogi.engine.core.Position.parse(position.toUSI()).inCheck();
+        return position.isCheck();
     }
 
     private static boolean hasPiece(Position position, int pieceId) {
@@ -581,10 +581,8 @@ public class BlockJChess extends BlockJoy implements IBoardGameBlock {
 
     /** Uses the lightweight engine rule core for an exact legal-evasion check, never a search. */
     private static TsumeCheckStatus inspectTsumePosition(Position gamePosition) {
-        com.github.sangeeeee.tlm_shogi.engine.core.Position position =
-                com.github.sangeeeee.tlm_shogi.engine.core.Position.parse(gamePosition.toUSI());
-        boolean inCheck = position.inCheck();
-        return new TsumeCheckStatus(inCheck, inCheck && position.legalMoves().isEmpty());
+        boolean inCheck = gamePosition.isCheck();
+        return new TsumeCheckStatus(inCheck, inCheck && gamePosition.isMate());
     }
 
     private record TsumeCheckStatus(boolean inCheck, boolean checkmate) {

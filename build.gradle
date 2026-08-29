@@ -181,9 +181,18 @@ tasks.register('handSelectionGeometryTest', JavaExec) {
     mainClass = 'com.github.sangeeeee.tlm_shogi.util.HandSelectionGeometrySelfTest'
 }
 
+tasks.register('jChessPositionCompatibilityTest', JavaExec) {
+    group = 'verification'
+    description = 'Verifies the Minecraft-facing shogi position compatibility shell.'
+    dependsOn selfTestClasses
+    classpath = sourceSets.selfTest.runtimeClasspath
+    mainClass = 'com.github.sangeeeee.tlm_shogi.api.game.jchess.JChessPositionCompatibilitySelfTest'
+}
+
 tasks.named('check') {
     dependsOn microcosmosGameplayTest
     dependsOn handSelectionGeometryTest
+    dependsOn jChessPositionCompatibilityTest
 }
 
 // Example configuration to allow publishing using the maven-publish plugin

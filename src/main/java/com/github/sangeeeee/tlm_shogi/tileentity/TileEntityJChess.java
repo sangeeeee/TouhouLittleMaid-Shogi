@@ -66,6 +66,7 @@ public class TileEntityJChess extends TileEntityJoy implements IBoardGameEntityB
         super(TYPE, pos, blockState);
         this.chessData = new Position();
         this.chessData.applyUSI(JChessUtil.INIT);
+        this.repetitionHistory.add(this.chessData.toUSI());
     }
 
     @Override
@@ -120,6 +121,9 @@ public class TileEntityJChess extends TileEntityJoy implements IBoardGameEntityB
                 repetitionHistory.add(tag.getAsString());
             }
         }
+        if (!tsumeMode && repetitionHistory.isEmpty()) {
+            repetitionHistory.add(chessData.toUSI());
+        }
     }
 
     public void reset() {
@@ -130,6 +134,7 @@ public class TileEntityJChess extends TileEntityJoy implements IBoardGameEntityB
         this.moveNumberLimit = false;
         this.chessData.applyUSI(JChessUtil.INIT);
         this.repetitionHistory.clear();
+        this.repetitionHistory.add(this.chessData.toUSI());
         clearTsumeState();
     }
 
