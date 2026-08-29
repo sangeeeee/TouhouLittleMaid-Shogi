@@ -107,7 +107,8 @@ public record JChessToClientPackage(BlockPos pos, String fenData, boolean tsume,
             ShogiEngineInteractor interactor = new ShogiEngineInteractor();
             boolean setupCompleted = false;
             try {
-                String json = "{\"USI_Hash\": \"64\", \"NodesLimit\": \"30000\", \"DepthLimit\": \"8\"}";
+                String json = "{\"USI_Hash\": \"64\", \"NodesLimit\": \"30000\", "
+                        + "\"DepthLimit\": \"8\", \"UseBook\": \"true\"}";
                 interactor.setup(json);
                 setupCompleted = true;
                 move = interactor.interact(message.fenData, null);

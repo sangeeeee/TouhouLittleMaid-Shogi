@@ -1,5 +1,6 @@
 package com.github.sangeeeee.tlm_shogi.engine;
 
+import com.github.sangeeeee.tlm_shogi.engine.book.SunfishBook;
 import com.github.sangeeeee.tlm_shogi.engine.core.Bitboard;
 import com.github.sangeeeee.tlm_shogi.engine.core.Direction;
 import com.github.sangeeeee.tlm_shogi.engine.core.Hand;
@@ -19,6 +20,7 @@ import com.github.sangeeeee.tlm_shogi.engine.search.SunfishEvaluator;
 import com.github.sangeeeee.tlm_shogi.engine.search.SunfishScore;
 import com.github.sangeeeee.tlm_shogi.engine.search.TranspositionTable;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -53,6 +55,7 @@ public final class EngineSelfTest {
         casualLimitsMatchTheCurrentModConfiguration();
         requestDefensivelyCopiesMoveHistory();
         resultRejectsMoveOutcomeWithoutMove();
+        sunfishOpeningBookLoadsAndSelectsByCount();
         sunfishEvaluationLoadsAndIsSymmetric();
         transpositionTableMatchesSunfishSemantics();
         alphaBetaSearchFindsMaterialAndHonorsLimits();
@@ -483,6 +486,7 @@ public final class EngineSelfTest {
 
         equal(List.of("7g7f"), request.moves(), "request move copy");
         expect(UnsupportedOperationException.class, () -> request.moves().add("3c3d"));
+        check(request.useBook(), "opening book is enabled by default");
     }
 
     private void resultRejectsMoveOutcomeWithoutMove() {
@@ -495,6 +499,57 @@ public final class EngineSelfTest {
                 Duration.ZERO,
                 List.of()
         ));
+    }
+
+    private void sunfishOpeningBookLoadsAndSelectsByCount() throws Exception {
+        Position afterPawn = Position.startPosition();
+        afterPawn.makeMove(Move.parseSfen("7g7f").orElseThrow());
+        String afterPawnBookSfen = afterPawn.toSfen().replace(" w - 2", " w - 1");
+        String content = """
+                sfen %s
+                7g7f 3
+                2g2f 1
+                7g7f 2
+                sfen %s
+                3c3d 4
+                """.formatted(Position.START_SFEN, afterPawnBookSfen);
+
+        SunfishBook synthetic = SunfishBook.load(
+                new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)),
+                "synthetic book"
+        );
+        equal(2, synthetic.positionCount(), "synthetic book position count");
+        equal(3, synthetic.moveCount(), "synthetic book distinct move count");
+
+        List<SunfishBook.BookMove> startMoves = synthetic.moves(Position.startPosition());
+        equal(2, startMoves.size(), "synthetic start candidates");
+        equal("7g7f", startMoves.get(0).move().toSfen(), "duplicate move keeps first position");
+        equal(5, startMoves.get(0).count(), "duplicate move counts are merged");
+        equal(1, startMoves.get(1).count(), "second move count");
+        equal("7g7f", synthetic.select(Position.startPosition(), () -> 0L)
+                .orElseThrow().toSfen(), "zero ticket selects first weighted move");
+        expect(UnsupportedOperationException.class,
+                () -> startMoves.add(new SunfishBook.BookMove(
+                        Move.parseSfen("5g5f").orElseThrow(), 1)));
+
+        Position differentMoveNumber = Position.fromSfen(Position.START_SFEN.replace(" - 1", " - 42"));
+        equal(startMoves, synthetic.moves(differentMoveNumber), "book lookup ignores SFEN move number");
+        equal("3c3d", synthetic.select(afterPawn, () -> 0L).orElseThrow().toSfen(),
+                "history position uses normalized book key");
+        check(synthetic.moves(Position.fromSfen("k8/9/9/9/9/9/9/9/4K4 b - 1")).isEmpty(),
+                "unknown position misses book");
+        expect(EngineException.class, () -> SunfishBook.load(
+                new ByteArrayInputStream("7g7f 1\n".getBytes(StandardCharsets.UTF_8)),
+                "moves before position"
+        ));
+
+        SunfishBook bundled = SunfishBook.load(repositoryResources());
+        equal(32_480, bundled.positionCount(), "bundled book position count");
+        equal(52_968, bundled.moveCount(), "bundled book move count");
+        List<SunfishBook.BookMove> bundledStart = bundled.moves(Position.startPosition());
+        equal(29, bundledStart.size(), "bundled start-position candidates");
+        equal("2g2f", bundledStart.get(0).move().toSfen(), "most frequent start move");
+        equal(27_937, bundledStart.get(0).count(), "most frequent start move count");
     }
 
     private void sunfishEvaluationLoadsAndIsSymmetric() throws Exception {
@@ -631,8 +686,20 @@ public final class EngineSelfTest {
         equal(SearchOutcome.CANCELLED, cancelled.outcome(), "cancelled outcome");
 
         SearchLimits limits = new SearchLimits(Duration.ofSeconds(2), 2, 5_000, 1, 1);
+        SearchResult bookResult = engine.search(
+                SearchRequest.currentPosition("startpos", limits),
+                CancellationToken.none()
+        );
+        equal(SearchOutcome.MOVE, bookResult.outcome(), "opening-book outcome");
+        equal(0, bookResult.depth(), "opening-book move bypasses alpha-beta depth");
+        equal(0L, bookResult.nodes(), "opening-book move bypasses alpha-beta nodes");
+        Move selectedBookMove = Move.parseSfen(bookResult.bestMove().orElseThrow()).orElseThrow();
+        check(Position.startPosition().validateMove(selectedBookMove), "opening book returns a legal move");
+        equal(List.of(selectedBookMove.toSfen()), bookResult.principalVariation(),
+                "opening-book principal variation");
+
         SearchResult result = engine.search(
-                new SearchRequest("startpos", List.of("7g7f"), limits),
+                new SearchRequest("startpos", List.of("7g7f"), limits, false),
                 CancellationToken.none()
         );
         equal(SearchOutcome.MOVE, result.outcome(), "engine search outcome");

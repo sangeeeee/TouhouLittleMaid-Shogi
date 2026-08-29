@@ -1,5 +1,6 @@
 package com.github.sangeeeee.tlm_shogi.engine;
 
+import com.github.sangeeeee.tlm_shogi.engine.book.SunfishBook;
 import com.github.sangeeeee.tlm_shogi.engine.core.Move;
 import com.github.sangeeeee.tlm_shogi.engine.core.Piece;
 import com.github.sangeeeee.tlm_shogi.engine.core.Position;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -26,7 +28,9 @@ public final class SunfishEngine implements ShogiEngine {
     private final AtomicReference<EngineState> state = new AtomicReference<>(EngineState.NEW);
     private volatile SunfishResourceInfo resourceInfo;
     private SunfishEvaluator evaluator;
+    private SunfishBook openingBook;
     private TranspositionTable transpositionTable;
+    private final Random bookRandom = new Random();
 
     public SunfishEngine(SunfishResources resources) {
         this.resources = Objects.requireNonNull(resources, "resources");
@@ -54,8 +58,10 @@ public final class SunfishEngine implements ShogiEngine {
 
         SunfishResourceInfo inspected = resources.inspect();
         SunfishEvaluator loadedEvaluator = SunfishEvaluator.load(resources);
+        SunfishBook loadedBook = SunfishBook.load(resources);
         resourceInfo = inspected;
         evaluator = loadedEvaluator;
+        openingBook = loadedBook;
         state.set(EngineState.READY);
     }
 
@@ -73,8 +79,25 @@ public final class SunfishEngine implements ShogiEngine {
             throw new EngineException("The baseline Java Sunfish search currently supports exactly one thread");
         }
 
+        long startedAt = System.nanoTime();
         PreparedPosition prepared = preparePosition(request, cancellationToken);
         if (prepared == null) return SearchResult.cancelled(Duration.ZERO, 0);
+
+        if (request.useBook()) {
+            Optional<Move> bookMove = openingBook.select(prepared.position(), bookRandom);
+            if (bookMove.isPresent()) {
+                String notation = bookMove.orElseThrow().toSfen();
+                return new SearchResult(
+                        SearchOutcome.MOVE,
+                        Optional.of(notation),
+                        0,
+                        0,
+                        0,
+                        Duration.ofNanos(System.nanoTime() - startedAt),
+                        List.of(notation)
+                );
+            }
+        }
 
         try {
             if (transpositionTable == null) {
@@ -101,6 +124,7 @@ public final class SunfishEngine implements ShogiEngine {
     public synchronized void close() {
         resourceInfo = null;
         evaluator = null;
+        openingBook = null;
         transpositionTable = null;
         state.set(EngineState.CLOSED);
     }

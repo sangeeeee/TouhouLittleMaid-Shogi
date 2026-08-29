@@ -4,7 +4,12 @@ import java.util.List;
 import java.util.Objects;
 
 /** A USI-compatible position description and its search limits. */
-public record SearchRequest(String sfen, List<String> moves, SearchLimits limits) {
+public record SearchRequest(String sfen, List<String> moves, SearchLimits limits, boolean useBook) {
+    /** Creates a request with Sunfish's opening book enabled by default. */
+    public SearchRequest(String sfen, List<String> moves, SearchLimits limits) {
+        this(sfen, moves, limits, true);
+    }
+
     public SearchRequest {
         Objects.requireNonNull(sfen, "sfen");
         Objects.requireNonNull(moves, "moves");
@@ -22,6 +27,6 @@ public record SearchRequest(String sfen, List<String> moves, SearchLimits limits
     }
 
     public static SearchRequest currentPosition(String sfen, SearchLimits limits) {
-        return new SearchRequest(sfen, List.of(), limits);
+        return new SearchRequest(sfen, List.of(), limits, true);
     }
 }

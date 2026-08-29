@@ -39,17 +39,19 @@ make/undo, check detection, legal move generation, drops, promotion, the
 pawn-drop-mate rule, and verified start-position perft through depth five.
 
 The direct engine API now reads Sunfish's complete optimized `eval.bin` feature
-vector, uses a three-slot depth-preferred transposition table, and performs a
-single-threaded iterative-deepening Alpha-Beta search with quiescence, move
-ordering, fourfold-repetition draws, principal variations, and hard time/node/
-cancellation limits. It remains independent of Minecraft.
+vector and `book.bin` opening book. Book positions use Sunfish's canonical SFEN
+key and candidate moves are selected randomly in proportion to their recorded
+counts; a miss falls through to the normal search. The search uses a three-slot
+depth-preferred transposition table and performs single-threaded iterative-
+deepening Alpha-Beta with quiescence, move ordering, fourfold-repetition draws,
+principal variations, and hard time/node/cancellation limits. It remains
+independent of Minecraft.
 Resources may be supplied either as ordinary files for standalone tools or as
 classpath streams. The mod uses the latter so its evaluation and book data stay
 inside the distributable JAR and never need to be extracted to `config`.
 
 This is the correctness-oriented search baseline. Sunfish's advanced pruning,
-parallel search, perpetual-check adjudication, and opening-book selection are
-left for later stages.
+parallel search, and perpetual-check adjudication are left for later stages.
 
 ## License and attribution
 

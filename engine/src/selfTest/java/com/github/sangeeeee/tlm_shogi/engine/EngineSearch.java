@@ -2,6 +2,7 @@ package com.github.sangeeeee.tlm_shogi.engine;
 
 import java.nio.file.Path;
 import java.time.Duration;
+import java.util.List;
 
 /** Runs one real eval.bin-backed search without loading Minecraft or NeoForge. */
 public final class EngineSearch {
@@ -31,7 +32,7 @@ public final class EngineSearch {
         try (SunfishEngine engine = new SunfishEngine(SunfishResources.fromDirectory(resourceDirectory))) {
             engine.initialize();
             SearchResult result = engine.search(
-                    SearchRequest.currentPosition(sfen, limits),
+                    new SearchRequest(sfen, List.of(), limits, false),
                     CancellationToken.none()
             );
             double seconds = Math.max(0.001, result.elapsed().toNanos() / 1_000_000_000.0);

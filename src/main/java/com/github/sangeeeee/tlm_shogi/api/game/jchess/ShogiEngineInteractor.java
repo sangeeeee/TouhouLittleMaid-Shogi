@@ -29,6 +29,7 @@ public final class ShogiEngineInteractor {
 
     private static volatile SunfishEngine sharedEngine;
     private SearchLimits limits = DEFAULT_LIMITS;
+    private boolean useBook = true;
 
     /** Loads the engine once for the whole client. Safe to call from a worker thread. */
     public static void initializeSharedEngine() throws EngineException {
@@ -77,7 +78,9 @@ public final class ShogiEngineInteractor {
 
     /** Parses the legacy option JSON and ensures the shared Java engine is ready. */
     public String setup(String jsonParams) throws IOException {
-        limits = parseLimits(jsonParams);
+        EngineOptions options = parseOptions(jsonParams);
+        limits = options.limits();
+        useBook = options.useBook();
         try {
             initializeSharedEngine();
         } catch (EngineException | RuntimeException exception) {
@@ -97,7 +100,7 @@ public final class ShogiEngineInteractor {
         SearchResult result;
         try {
             CancellationToken cancellation = () -> Thread.currentThread().isInterrupted();
-            result = engine.search(new SearchRequest(sfen, moveList, limits), cancellation);
+            result = engine.search(new SearchRequest(sfen, moveList, limits, useBook), cancellation);
         } catch (EngineException | IllegalArgumentException | IllegalStateException exception) {
             throw new IOException("Java Sunfish search failed", exception);
         }
@@ -124,21 +127,25 @@ public final class ShogiEngineInteractor {
         return "stop ok";
     }
 
-    private static SearchLimits parseLimits(String jsonParams) {
+    private static EngineOptions parseOptions(String jsonParams) {
         if (jsonParams == null || jsonParams.isBlank()) {
-            return DEFAULT_LIMITS;
+            return new EngineOptions(DEFAULT_LIMITS, true);
         }
 
         try {
             JsonObject options = new Gson().fromJson(jsonParams, JsonObject.class);
             if (options == null) {
-                return DEFAULT_LIMITS;
+                return new EngineOptions(DEFAULT_LIMITS, true);
             }
             int hashMiB = intOption(options, "USI_Hash", DEFAULT_LIMITS.transpositionTableMiB());
             long nodes = longOption(options, "NodesLimit", DEFAULT_LIMITS.maximumNodes());
             int depth = intOption(options, "DepthLimit", DEFAULT_LIMITS.maximumDepth());
             long moveTimeMillis = longOption(options, "MoveTime", DEFAULT_LIMITS.moveTime().toMillis());
-            return new SearchLimits(Duration.ofMillis(moveTimeMillis), depth, nodes, hashMiB, 1);
+            boolean parsedUseBook = booleanOption(options, "UseBook", true);
+            return new EngineOptions(
+                    new SearchLimits(Duration.ofMillis(moveTimeMillis), depth, nodes, hashMiB, 1),
+                    parsedUseBook
+            );
         } catch (JsonSyntaxException | NumberFormatException exception) {
             throw new IllegalArgumentException("Invalid engine option JSON", exception);
         }
@@ -152,6 +159,10 @@ public final class ShogiEngineInteractor {
         return options.has(name) ? options.get(name).getAsLong() : fallback;
     }
 
+    private static boolean booleanOption(JsonObject options, String name, boolean fallback) {
+        return options.has(name) ? options.get(name).getAsBoolean() : fallback;
+    }
+
     private static List<String> splitMoves(String moves) {
         if (moves == null || moves.isBlank()) {
             return List.of();
@@ -159,5 +170,8 @@ public final class ShogiEngineInteractor {
         return Arrays.stream(moves.strip().split("\\s+"))
                 .filter(move -> !move.isBlank())
                 .toList();
+    }
+
+    private record EngineOptions(SearchLimits limits, boolean useBook) {
     }
 }
