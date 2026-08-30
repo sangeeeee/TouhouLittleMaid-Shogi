@@ -30,16 +30,6 @@ public final class TsumePlayerProgress {
         return true;
     }
 
-    public static boolean hasSolved(ServerPlayer player, String puzzleId) {
-        ListTag solved = player.getPersistentData().getList(SOLVED_KEY, Tag.TAG_STRING);
-        for (Tag value : solved) {
-            if (value instanceof StringTag string && string.getAsString().equals(puzzleId)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     /** Player entities are recreated on death; retain the server-side puzzle history. */
     @SubscribeEvent
     public static void onPlayerClone(PlayerEvent.Clone event) {

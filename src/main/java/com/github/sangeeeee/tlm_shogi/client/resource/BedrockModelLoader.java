@@ -3,11 +3,6 @@ package com.github.sangeeeee.tlm_shogi.client.resource;
 import com.github.sangeeeee.tlm_shogi.TouhouLittleMaidShogi;
 import com.github.tartaricacid.simplebedrockmodel.client.manager.BedrockEntityModelRegister;
 import com.github.tartaricacid.simplebedrockmodel.client.manager.BedrockEntityModelRegisterEvent;
-import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.client.model.BroomModel;
-import com.github.tartaricacid.touhoulittlemaid.client.model.EntityBoxModel;
-import com.github.tartaricacid.touhoulittlemaid.client.model.EntityFairyModel;
-import com.github.tartaricacid.touhoulittlemaid.client.model.NewEntityFairyModel;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.SimpleBedrockModel;
 import com.google.common.collect.Maps;
 import net.minecraft.resources.ResourceLocation;
@@ -27,7 +22,7 @@ import java.util.function.Function;
  */
 @EventBusSubscriber(value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
 @OnlyIn(Dist.CLIENT)
-public class BedrockModelLoader {
+public final class BedrockModelLoader {
     // 内部数据
     private static final Map<ResourceLocation, Function<InputStream, ? extends SimpleBedrockModel<? extends Entity>>> ALL_MODELS = Maps.newHashMap();
 
@@ -35,28 +30,16 @@ public class BedrockModelLoader {
     public static final ResourceLocation JCHESS = registerSimpleBlockModel("jchess");
     public static final ResourceLocation JCHESS_PIECES = registerSimpleBlockModel("jchess_pieces");
 
+    private BedrockModelLoader() {
+    }
+
     public static ResourceLocation registerSimpleBlockModel(String name) {
         ResourceLocation location = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaidShogi.MOD_ID, "bedrock/block/" + name);
         return registerSimpleModel(location);
     }
 
-    public static ResourceLocation registerSimpleEntityModel(String name) {
-        ResourceLocation location = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaidShogi.MOD_ID, "bedrock/entity/" + name);
-        return registerSimpleModel(location);
-    }
-
     public static ResourceLocation registerSimpleModel(ResourceLocation location) {
         return registerModel(location, SimpleBedrockModel::new);
-    }
-
-    public static ResourceLocation registerBlockModel(String name, Function<InputStream, ? extends SimpleBedrockModel<? extends Entity>> function) {
-        ResourceLocation location = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaidShogi.MOD_ID, "bedrock/block/" + name);
-        return registerModel(location, function);
-    }
-
-    public static ResourceLocation registerEntityModel(String name, Function<InputStream, ? extends SimpleBedrockModel<? extends Entity>> function) {
-        ResourceLocation location = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaidShogi.MOD_ID, "bedrock/entity/" + name);
-        return registerModel(location, function);
     }
 
     public static ResourceLocation registerModel(ResourceLocation location, Function<InputStream, ? extends SimpleBedrockModel<? extends Entity>> function) {

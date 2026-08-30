@@ -11,8 +11,13 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 public final class InitItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(TouhouLittleMaidShogi.MOD_ID);
 
-    public static DeferredItem<Item> JCHESS = ITEMS.register("jchess", () -> new BlockItem(InitBlocks.JCHESS.get(), new Item.Properties()));
-    public static DeferredItem<Item> JCHESS_BOARD_STATE = ITEMS.register("jchess_board_state", ItemTsumeBoardState::new);
-    public static DeferredItem<Item> MICROCOSMOS = ITEMS.register("microcosmos", ItemMicrocosmos::new);
+    public static final DeferredItem<Item> JCHESS = ITEMS.register("jchess",
+            () -> new BlockItem(InitBlocks.JCHESS.get(), new Item.Properties()));
+    public static final DeferredItem<Item> JCHESS_BOARD_STATE =
+            ITEMS.register("jchess_board_state", ItemTsumeBoardState::new);
+    public static final DeferredItem<Item> MICROCOSMOS =
+            ITEMS.register("microcosmos", ItemMicrocosmos::new);
 
+    private InitItems() {
+    }
 }

@@ -144,8 +144,6 @@ tasks.named('processResources', ProcessResources).configure {
         into 'assets/tlm_shogi/sunfish'
     }
 
-    // Do not ship the superseded Windows-only YaneuraOu executable and NNUE data.
-    exclude 'assets/tlm_shogi/shogi_engine/**'
 }
 
 tasks.named('jar', Jar).configure {

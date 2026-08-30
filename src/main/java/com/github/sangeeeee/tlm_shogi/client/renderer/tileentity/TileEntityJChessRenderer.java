@@ -1,7 +1,6 @@
 package com.github.sangeeeee.tlm_shogi.client.renderer.tileentity;
 
 import com.github.sangeeeee.tlm_shogi.TouhouLittleMaidShogi;
-import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.block.BlockGomoku;
 import com.github.sangeeeee.tlm_shogi.client.model.JChessPiecesModel;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.SimpleBedrockModel;
@@ -121,7 +120,6 @@ public class TileEntityJChessRenderer implements BlockEntityRenderer<TileEntityJ
 
             float p1 = 0.2053F;
             float p2 = 0.5205F;
-//            float s0 = 0.0320f;
             float s1 = 0.0662f;
             float s2 = 0.0505f;
             float s3 = 0.1096f;

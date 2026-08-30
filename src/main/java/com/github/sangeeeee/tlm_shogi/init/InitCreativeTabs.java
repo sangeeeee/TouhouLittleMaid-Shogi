@@ -12,15 +12,14 @@ import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 
 @EventBusSubscriber(modid = TouhouLittleMaidShogi.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class InitCreativeTabs {
-    // 类似于原模组的 DeferredRegister，但这里是事件处理
+    private InitCreativeTabs() {
+    }
 
     @SubscribeEvent
     public static void onBuildCreativeTabContents(BuildCreativeModeTabContentsEvent event) {
-        ResourceLocation tabId = event.getTabKey().location();  // 获取 Tab 的 ResourceLocation
+        ResourceLocation tabId = event.getTabKey().location();
 
-        // 使用工厂方法替换构造函数（假设 Tab 名为 "main"，详见下文确认方式）
         if (tabId.equals(ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "main"))) {
-            // 添加你的物品
             event.accept(new ItemStack(InitItems.JCHESS.get()));
             event.accept(new ItemStack(InitItems.JCHESS_BOARD_STATE.get()));
             event.accept(new ItemStack(InitItems.MICROCOSMOS.get()));

@@ -98,36 +98,21 @@ public final class Position {
 
     public Position copy() { return new Position(this); }
     public Turn turn() { return turn; }
-    public Turn getTurn() { return turn; }
     public int moveNumber() { return moveNumber; }
 
     public Piece pieceAt(Square square) {
         return board[requireSquare(square)];
     }
 
-    public Piece getPieceOnBoard(Square square) { return pieceAt(square); }
-
     public Piece[] boardCopy() { return Arrays.copyOf(board, board.length); }
-
-    public Hand hand(Turn side) {
-        return (side == Turn.BLACK ? blackHand : whiteHand).copy();
-    }
 
     public int handCount(Turn side, PieceType pieceType) {
         return handInternal(side).get(pieceType);
     }
 
-    public int getBlackHandPieceCount(PieceType pieceType) { return blackHand.get(pieceType); }
-    public int getWhiteHandPieceCount(PieceType pieceType) { return whiteHand.get(pieceType); }
-    public Hand getBlackHand() { return blackHand.copy(); }
-    public Hand getWhiteHand() { return whiteHand.copy(); }
-
     public Square kingSquare(Turn side) {
         return side == Turn.BLACK ? blackKingSquare : whiteKingSquare;
     }
-
-    public Square getBlackKingSquare() { return kingSquare(Turn.BLACK); }
-    public Square getWhiteKingSquare() { return kingSquare(Turn.WHITE); }
 
     public Bitboard occupied() {
         return occupiedBySide[0].or(occupiedBySide[1]);
@@ -136,9 +121,6 @@ public final class Position {
     public Bitboard occupied(Turn side) {
         return occupiedBySide[sideIndex(side)].copy();
     }
-
-    public Bitboard getBOccupiedBitboard() { return occupied(Turn.BLACK); }
-    public Bitboard getWOccupiedBitboard() { return occupied(Turn.WHITE); }
 
     public RotatedBitboard get90RotatedBitboard() { return new RotatedBitboard(rotated90); }
     public RotatedBitboard getRight45RotatedBitboard() { return new RotatedBitboard(rotatedRight45); }
@@ -157,9 +139,6 @@ public final class Position {
         Piece pawn = side == Turn.BLACK ? Piece.BLACK_PAWN : Piece.WHITE_PAWN;
         return pieceBitboards[pawn.raw()].containsAnyOnFile(file);
     }
-
-    public boolean hasBlackPawnInFile(int file) { return hasPawnInFile(Turn.BLACK, file); }
-    public boolean hasWhitePawnInFile(int file) { return hasPawnInFile(Turn.WHITE, file); }
 
     public boolean isSquareAttacked(Square target, Turn attacker) {
         requireSquare(target);
@@ -279,11 +258,9 @@ public final class Position {
     public List<Move> legalMoves() { return MoveGenerator.generateLegal(this); }
     public boolean isMate() { return inCheck() && legalMoves().isEmpty(); }
 
-    public long hash() { return getHash(); }
-    public long getHash() { return boardHash ^ handHash ^ getTurnHash(); }
+    public long getHash() { return boardHash ^ handHash ^ Zobrist.turn(turn); }
     public long getBoardHash() { return boardHash; }
     public long getHandHash() { return handHash; }
-    public long getTurnHash() { return Zobrist.turn(turn); }
 
     public String toSfen() {
         StringBuilder result = new StringBuilder(100);
@@ -307,8 +284,6 @@ public final class Position {
         result.append(' ').append(moveNumber);
         return result.toString();
     }
-
-    public String toStringSfen() { return toSfen(); }
 
     @Override
     public String toString() { return toSfen(); }

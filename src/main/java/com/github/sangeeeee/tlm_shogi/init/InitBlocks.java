@@ -15,6 +15,10 @@ public final class InitBlocks {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(TouhouLittleMaidShogi.MOD_ID);
     public static final DeferredRegister<BlockEntityType<?>> TILE_ENTITIES = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, TouhouLittleMaidShogi.MOD_ID);
 
-    public static DeferredBlock<Block> JCHESS = BLOCKS.register("jchess", BlockJChess::new);
-    public static Supplier<BlockEntityType<TileEntityJChess>> JCHESS_TE = TILE_ENTITIES.register("jchess", () -> TileEntityJChess.TYPE);
+    public static final DeferredBlock<Block> JCHESS = BLOCKS.register("jchess", BlockJChess::new);
+    public static final Supplier<BlockEntityType<TileEntityJChess>> JCHESS_TE =
+            TILE_ENTITIES.register("jchess", () -> TileEntityJChess.TYPE);
+
+    private InitBlocks() {
+    }
 }

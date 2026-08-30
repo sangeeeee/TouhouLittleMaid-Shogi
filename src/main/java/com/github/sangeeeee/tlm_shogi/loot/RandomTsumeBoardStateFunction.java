@@ -5,7 +5,6 @@ import com.github.sangeeeee.tlm_shogi.datapack.TsumeBoardStateRecord;
 import com.github.sangeeeee.tlm_shogi.init.InitDataComponents;
 import com.github.sangeeeee.tlm_shogi.init.InitLootModifiers;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemBoardState;
-import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -13,7 +12,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
@@ -78,24 +76,5 @@ public final class RandomTsumeBoardStateFunction extends LootItemConditionalFunc
     @Override
     public LootItemFunctionType<? extends LootItemConditionalFunction> getType() {
         return InitLootModifiers.TSUME_BOARD_STATE_RANDOMLY.get();
-    }
-
-    public static final class Builder extends LootItemConditionalFunction.Builder<Builder> {
-        private final List<String> tags = Lists.newArrayList();
-
-        @Override
-        protected Builder getThis() {
-            return this;
-        }
-
-        public Builder addTag(String tag) {
-            tags.add(tag);
-            return this;
-        }
-
-        @Override
-        public LootItemFunction build() {
-            return new RandomTsumeBoardStateFunction(getConditions(), tags);
-        }
     }
 }

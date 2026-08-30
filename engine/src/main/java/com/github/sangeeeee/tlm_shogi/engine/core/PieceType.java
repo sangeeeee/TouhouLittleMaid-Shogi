@@ -26,7 +26,6 @@ public record PieceType(int raw) {
     public static final PieceType DRAGON = new PieceType(14);
     public static final PieceType EMPTY = new PieceType(32);
 
-    public static final int TYPE_END = 15;
     public static final int HAND_END = 7;
 
     private static final List<PieceType> TYPES = List.of(
@@ -74,10 +73,6 @@ public record PieceType(int raw) {
 
     public PieceType next() {
         return new PieceType(raw == PRO_SILVER.raw ? raw + 2 : raw + 1);
-    }
-
-    public PieceType nextUnsafe() {
-        return new PieceType(raw + 1);
     }
 
     public String toCsa() {

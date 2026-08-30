@@ -9,30 +9,34 @@ import com.github.sangeeeee.tlm_shogi.engine.SearchRequest;
 import com.github.sangeeeee.tlm_shogi.engine.SearchResult;
 import com.github.sangeeeee.tlm_shogi.engine.SunfishEngine;
 import com.github.sangeeeee.tlm_shogi.engine.SunfishResources;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 import java.io.IOException;
-import java.time.Duration;
-import java.util.Arrays;
-import java.util.List;
 
-/** Compatibility facade for the old USI-process call site, backed by Java. */
+/** Owns the client-wide Java shogi engine and runs maid move searches. */
 @OnlyIn(Dist.CLIENT)
 public final class ShogiEngineInteractor {
     private static final String BUNDLED_RESOURCE_DIRECTORY = "assets/tlm_shogi/sunfish";
     private static final Object ENGINE_LOCK = new Object();
-    private static final SearchLimits DEFAULT_LIMITS = SearchLimits.casualPlay();
+    private static final SearchLimits GAME_LIMITS = SearchLimits.casualPlay();
 
     private static volatile SunfishEngine sharedEngine;
-    private SearchLimits limits = DEFAULT_LIMITS;
-    private boolean useBook = true;
+
+    private ShogiEngineInteractor() {
+    }
+
+    /** Ensures that the shared engine is ready for searches. */
+    public static void initialize() throws IOException {
+        try {
+            initializeSharedEngine();
+        } catch (EngineException | RuntimeException exception) {
+            throw new IOException("Unable to initialize the Java Sunfish engine", exception);
+        }
+    }
 
     /** Loads the engine once for the whole client. Safe to call from a worker thread. */
-    public static void initializeSharedEngine() throws EngineException {
+    private static void initializeSharedEngine() throws EngineException {
         SunfishEngine existing = sharedEngine;
         if (existing != null && existing.state() == EngineState.READY) {
             return;
@@ -67,8 +71,8 @@ public final class ShogiEngineInteractor {
     /** Best-effort startup warm-up; a later search retries initialization on failure. */
     public static void warmUp() {
         try {
-            initializeSharedEngine();
-        } catch (EngineException | RuntimeException exception) {
+            initialize();
+        } catch (IOException exception) {
             TouhouLittleMaidShogi.LOGGER.error(
                     "Unable to warm up the Java Sunfish engine; it will retry when a game requests a move",
                     exception
@@ -76,31 +80,17 @@ public final class ShogiEngineInteractor {
         }
     }
 
-    /** Parses the legacy option JSON and ensures the shared Java engine is ready. */
-    public String setup(String jsonParams) throws IOException {
-        EngineOptions options = parseOptions(jsonParams);
-        limits = options.limits();
-        useBook = options.useBook();
-        try {
-            initializeSharedEngine();
-        } catch (EngineException | RuntimeException exception) {
-            throw new IOException("Unable to initialize the Java Sunfish engine", exception);
-        }
-        return "setup ok";
-    }
-
     /** Searches the supplied SFEN directly in the current JVM and returns a USI move. */
-    public String interact(String sfen, String moves) throws IOException, InterruptedException {
+    public static String search(String sfen) throws IOException, InterruptedException {
         SunfishEngine engine = sharedEngine;
         if (engine == null || engine.state() != EngineState.READY) {
             throw new IllegalStateException("Engine not set up or no longer available");
         }
 
-        List<String> moveList = splitMoves(moves);
         SearchResult result;
         try {
             CancellationToken cancellation = () -> Thread.currentThread().isInterrupted();
-            result = engine.search(new SearchRequest(sfen, moveList, limits, useBook), cancellation);
+            result = engine.search(SearchRequest.currentPosition(sfen, GAME_LIMITS), cancellation);
         } catch (EngineException | IllegalArgumentException | IllegalStateException exception) {
             throw new IOException("Java Sunfish search failed", exception);
         }
@@ -120,58 +110,5 @@ public final class ShogiEngineInteractor {
             case WIN -> "win";
             case CANCELLED -> throw new InterruptedException("Java Sunfish search was cancelled");
         };
-    }
-
-    /** Kept for call-site compatibility; the shared Java engine is intentionally reused. */
-    public String stop() {
-        return "stop ok";
-    }
-
-    private static EngineOptions parseOptions(String jsonParams) {
-        if (jsonParams == null || jsonParams.isBlank()) {
-            return new EngineOptions(DEFAULT_LIMITS, true);
-        }
-
-        try {
-            JsonObject options = new Gson().fromJson(jsonParams, JsonObject.class);
-            if (options == null) {
-                return new EngineOptions(DEFAULT_LIMITS, true);
-            }
-            int hashMiB = intOption(options, "USI_Hash", DEFAULT_LIMITS.transpositionTableMiB());
-            long nodes = longOption(options, "NodesLimit", DEFAULT_LIMITS.maximumNodes());
-            int depth = intOption(options, "DepthLimit", DEFAULT_LIMITS.maximumDepth());
-            long moveTimeMillis = longOption(options, "MoveTime", DEFAULT_LIMITS.moveTime().toMillis());
-            boolean parsedUseBook = booleanOption(options, "UseBook", true);
-            return new EngineOptions(
-                    new SearchLimits(Duration.ofMillis(moveTimeMillis), depth, nodes, hashMiB, 1),
-                    parsedUseBook
-            );
-        } catch (JsonSyntaxException | NumberFormatException exception) {
-            throw new IllegalArgumentException("Invalid engine option JSON", exception);
-        }
-    }
-
-    private static int intOption(JsonObject options, String name, int fallback) {
-        return options.has(name) ? options.get(name).getAsInt() : fallback;
-    }
-
-    private static long longOption(JsonObject options, String name, long fallback) {
-        return options.has(name) ? options.get(name).getAsLong() : fallback;
-    }
-
-    private static boolean booleanOption(JsonObject options, String name, boolean fallback) {
-        return options.has(name) ? options.get(name).getAsBoolean() : fallback;
-    }
-
-    private static List<String> splitMoves(String moves) {
-        if (moves == null || moves.isBlank()) {
-            return List.of();
-        }
-        return Arrays.stream(moves.strip().split("\\s+"))
-                .filter(move -> !move.isBlank())
-                .toList();
-    }
-
-    private record EngineOptions(SearchLimits limits, boolean useBook) {
     }
 }

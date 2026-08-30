@@ -1,6 +1,5 @@
 package com.github.sangeeeee.tlm_shogi.mateengine;
 
-import com.github.sangeeeee.tlm_shogi.engine.core.Move;
 import com.github.sangeeeee.tlm_shogi.engine.core.Piece;
 import com.github.sangeeeee.tlm_shogi.engine.core.Position;
 import com.github.sangeeeee.tlm_shogi.engine.core.Turn;

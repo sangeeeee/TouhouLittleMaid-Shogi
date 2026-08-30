@@ -104,14 +104,11 @@ public record JChessToClientPackage(BlockPos pos, String fenData, boolean tsume,
         if (!maidLost) {
             // TODO: 暂时不做女仆的棋技系统
 
-            ShogiEngineInteractor interactor = new ShogiEngineInteractor();
             boolean setupCompleted = false;
             try {
-                String json = "{\"USI_Hash\": \"64\", \"NodesLimit\": \"30000\", "
-                        + "\"DepthLimit\": \"8\", \"UseBook\": \"true\"}";
-                interactor.setup(json);
+                ShogiEngineInteractor.initialize();
                 setupCompleted = true;
-                move = interactor.interact(message.fenData, null);
+                move = ShogiEngineInteractor.search(message.fenData);
 
                 if (JChessUiAdapter.applyUsiMove(position, move) < 0) {
                     throw new IOException("Java engine returned an invalid move: " + move);
@@ -132,8 +129,6 @@ public record JChessToClientPackage(BlockPos pos, String fenData, boolean tsume,
             } catch (Exception e) {
                 TouhouLittleMaidShogi.LOGGER.error("Unexpected Java shogi engine error", e);
                 move = "engine error";
-            } finally {
-                interactor.stop();
             }
         }
 

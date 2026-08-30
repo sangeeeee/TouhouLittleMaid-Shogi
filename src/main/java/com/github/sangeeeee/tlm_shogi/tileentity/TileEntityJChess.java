@@ -265,10 +265,6 @@ public class TileEntityJChess extends TileEntityJoy implements IBoardGameEntityB
         return moveNumberLimit;
     }
 
-    public void setMoveNumberLimit(boolean moveNumberLimit) {
-        this.moveNumberLimit = moveNumberLimit;
-    }
-
     public boolean isTsumeMode() {
         return tsumeMode;
     }

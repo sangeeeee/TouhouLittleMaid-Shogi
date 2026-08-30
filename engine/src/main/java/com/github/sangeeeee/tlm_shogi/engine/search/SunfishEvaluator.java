@@ -17,7 +17,6 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -113,15 +112,13 @@ public final class SunfishEvaluator {
     private static final int[] WHITE_HAND_INDEX = {18, 40, 48, 56, 64, 70, 74};
     private static final int[] HAND_TYPE_INDEX = {0, 18, 22, 26, 30, 34, 36};
 
-    private final Path source;
     private final short[] weights;
     private final boolean positionalEnabled;
     private final long[] cacheKeys = new long[CACHE_SIZE];
     private final int[] cacheScores = new int[CACHE_SIZE];
     private final byte[] cacheValid = new byte[CACHE_SIZE];
 
-    private SunfishEvaluator(Path source, short[] weights, boolean positionalEnabled) {
-        this.source = source;
+    private SunfishEvaluator(short[] weights, boolean positionalEnabled) {
         this.weights = weights;
         this.positionalEnabled = positionalEnabled;
     }
@@ -133,7 +130,7 @@ public final class SunfishEvaluator {
         try {
             long size = Files.size(normalized);
             try (InputStream input = Files.newInputStream(normalized)) {
-                return load(input, size, normalized.toString(), normalized);
+                return load(input, size, normalized.toString());
             }
         } catch (IOException exception) {
             throw new EngineException("Failed to load Sunfish evaluation data: " + normalized, exception);
@@ -145,7 +142,7 @@ public final class SunfishEvaluator {
         Objects.requireNonNull(resources, "resources");
         long size = resources.evalBytes();
         try (InputStream input = resources.openEval()) {
-            return load(input, size, resources.evalDescription(), null);
+            return load(input, size, resources.evalDescription());
         } catch (IOException exception) {
             throw new EngineException(
                     "Failed to close Sunfish evaluation data: " + resources.evalDescription(),
@@ -159,11 +156,6 @@ public final class SunfishEvaluator {
      * The caller remains responsible for closing the stream.
      */
     public static SunfishEvaluator load(InputStream input, long size, String description) throws EngineException {
-        return load(input, size, description, null);
-    }
-
-    private static SunfishEvaluator load(InputStream input, long size, String description, Path source)
-            throws EngineException {
         Objects.requireNonNull(input, "input");
         Objects.requireNonNull(description, "description");
         if (size != EXPECTED_FILE_BYTES) {
@@ -204,7 +196,7 @@ public final class SunfishEvaluator {
             if (input.read() != -1) {
                 throw new EngineException("eval.bin contains data after its expected feature vector");
             }
-            return new SunfishEvaluator(source, loadedWeights, true);
+            return new SunfishEvaluator(loadedWeights, true);
         } catch (IOException exception) {
             throw new EngineException("Failed to load Sunfish evaluation data: " + description, exception);
         }
@@ -212,11 +204,7 @@ public final class SunfishEvaluator {
 
     /** A material-only evaluator useful for isolated search tests. */
     public static SunfishEvaluator materialOnly() {
-        return new SunfishEvaluator(null, null, false);
-    }
-
-    public Path source() {
-        return source;
+        return new SunfishEvaluator(null, false);
     }
 
     public int weightCount() {
@@ -311,10 +299,6 @@ public final class SunfishEvaluator {
         sum += evaluateKingEffects(meta, blackKingSquare, whiteKingSquare, blackEffects, whiteEffects);
 
         return (short) (sum / POSITIONAL_SCORE_SCALE);
-    }
-
-    public void clearCache() {
-        Arrays.fill(cacheValid, (byte) 0);
     }
 
     static int materialValue(PieceType type) {

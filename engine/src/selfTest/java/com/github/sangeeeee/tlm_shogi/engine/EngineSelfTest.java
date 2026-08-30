@@ -290,7 +290,7 @@ public final class EngineSelfTest {
         equal(Piece.WHITE_KING, start.pieceAt(Square.of(5, 1)), "white king placement");
         equal(Piece.BLACK_ROOK, start.pieceAt(Square.of(2, 8)), "black rook placement");
         equal(Square.of(5, 9), start.kingSquare(Turn.BLACK), "black king square");
-        check(start.hasBlackPawnInFile(1), "initial black pawn file");
+        check(start.hasPawnInFile(Turn.BLACK, 1), "initial black pawn file");
         check(!start.inCheck(), "initial position is not check");
 
         String handSfen = "4k4/6+B2/9/9/9/3+p5/9/9/4K4 b P2G15p3n 1";
@@ -316,7 +316,7 @@ public final class EngineSelfTest {
         equal(Turn.WHITE, start.turn(), "turn changed after move");
         start.undoMove(undo);
         equal(before, start, "position restored by undo");
-        equal(before.hash(), start.hash(), "position hash restored by undo");
+        equal(before.getHash(), start.getHash(), "position hash restored by undo");
 
         Position capture = Position.fromSfen("k8/9/9/9/9/9/4s4/4R4/4K4 b - 1");
         Position captureBefore = capture.copy();
@@ -409,7 +409,7 @@ public final class EngineSelfTest {
         long initialHash = position.getHash();
         check(position.verifyIncrementalState(), "initial incremental state");
         equal(9, position.pieceBitboard(Piece.BLACK_PAWN).count(), "incremental black pawn bitboard");
-        equal(20, position.getBOccupiedBitboard().count(), "incremental black occupancy");
+        equal(20, position.occupied(Turn.BLACK).count(), "incremental black occupancy");
         equal(recomputeBoardHash(position), position.getBoardHash(), "initial board hash recomputation");
         equal(recomputeHandHash(position), position.getHandHash(), "initial hand hash recomputation");
 

@@ -12,7 +12,7 @@ import java.util.concurrent.CompletableFuture;
 @Mod(value = TouhouLittleMaidShogi.MOD_ID, dist = Dist.CLIENT)
 public class TouhouLittleMaidShogiClient {
     public TouhouLittleMaidShogiClient(IEventBus modEventBus, ModContainer modContainer) {
-        // Copy/load the Java engine on a client worker so game startup is not
+        // Load the Java engine on a client worker so game startup is not
         // blocked by the roughly 45 MiB evaluation table.
         CompletableFuture.runAsync(ShogiEngineInteractor::warmUp, Util.backgroundExecutor());
     }

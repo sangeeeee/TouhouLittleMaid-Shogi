@@ -1,8 +1,10 @@
 package com.github.sangeeeee.tlm_shogi;
 
-import com.github.sangeeeee.tlm_shogi.init.*;
+import com.github.sangeeeee.tlm_shogi.init.InitBlocks;
+import com.github.sangeeeee.tlm_shogi.init.InitDataComponents;
+import com.github.sangeeeee.tlm_shogi.init.InitItems;
+import com.github.sangeeeee.tlm_shogi.init.InitLootModifiers;
 import com.github.sangeeeee.tlm_shogi.network.NetworkHandler;
-import net.neoforged.fml.loading.FMLEnvironment;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -17,17 +19,9 @@ import net.neoforged.fml.ModContainer;
 public class TouhouLittleMaidShogi {
     public static final String MOD_ID = "tlm_shogi";
     public static final Logger LOGGER = LogUtils.getLogger();
-    public static boolean DEBUG = !FMLEnvironment.production;
-
 
     public TouhouLittleMaidShogi(IEventBus modEventBus, ModContainer modContainer) {
         initRegister(modEventBus);
-//        registerConfiguration(modContainer);
-//        CommonDefaultPack.initCommonDefaultPack();
-//        AquacultureCompat.init(modEventBus);
-
-
-
     }
 
     private static void initRegister(IEventBus eventBus) {
