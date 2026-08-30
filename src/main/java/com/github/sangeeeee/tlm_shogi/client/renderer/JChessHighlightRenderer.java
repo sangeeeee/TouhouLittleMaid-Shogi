@@ -4,6 +4,8 @@ import com.github.sangeeeee.tlm_shogi.TouhouLittleMaidShogi;
 import com.github.sangeeeee.tlm_shogi.block.BlockJChess;
 import com.github.sangeeeee.tlm_shogi.block.properties.ShogiPart;
 import com.github.sangeeeee.tlm_shogi.tileentity.TileEntityJChess;
+import com.github.sangeeeee.tlm_shogi.engine.core.Turn;
+import com.github.sangeeeee.tlm_shogi.util.JChessUiAdapter;
 import com.github.sangeeeee.tlm_shogi.util.JChessUtil;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
@@ -51,13 +53,13 @@ public final class JChessHighlightRenderer {
         Vec3 clickPos = JChessUtil.toPlayerOrientedClick(
                 hit.getLocation(), blockPos, part, state.getValue(BlockJChess.FACING));
         int handIndex = JChessUtil.getPlayerHandPosition(clickPos, chess.getChessData());
-        List<int[]> hand = chess.getChessData().getBlackHand();
+        List<JChessUiAdapter.HandStack> hand = JChessUiAdapter.handStacks(chess.getChessData(), Turn.BLACK);
         if (handIndex < 0 || handIndex >= hand.size()) {
             return;
         }
 
         VoxelShape stackShape = BlockJChess.getPlayerHandStackShape(
-                state, handIndex, hand.get(handIndex)[0]);
+                state, handIndex, hand.get(handIndex).count());
         if (stackShape.isEmpty()) {
             return;
         }

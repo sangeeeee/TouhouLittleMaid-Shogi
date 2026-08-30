@@ -1,16 +1,16 @@
 package com.github.sangeeeee.tlm_shogi.tsume;
 
-import com.github.sangeeeee.tlm_shogi.api.game.jchess.Position;
 import com.github.sangeeeee.tlm_shogi.engine.core.Move;
-import com.github.sangeeeee.tlm_shogi.engine.core.PieceType;
+import com.github.sangeeeee.tlm_shogi.engine.core.Position;
 import com.github.sangeeeee.tlm_shogi.engine.core.Turn;
+import com.github.sangeeeee.tlm_shogi.util.JChessUiAdapter;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
+import java.util.Optional;
 
-/** Replays the fixed record through the legacy board class used by mouse input and rendering. */
+/** Replays the fixed record through the same engine-to-UI adapter used by mouse input. */
 public final class MicrocosmosGameplaySelfTest {
     private MicrocosmosGameplaySelfTest() {
     }
@@ -32,10 +32,8 @@ public final class MicrocosmosGameplaySelfTest {
         require(MicrocosmosRecord.defenseAfter(MicrocosmosRecord.MAXIMUM_PLY).isEmpty(),
                 "a defender response was exposed after the final mate");
 
-        Position board = new Position();
-        board.applyUSI(initial);
-        com.github.sangeeeee.tlm_shogi.engine.core.Position rules =
-                com.github.sangeeeee.tlm_shogi.engine.core.Position.parse(initial);
+        Position board = Position.parse(initial);
+        Position rules = Position.parse(initial);
 
         for (int index = 0; index < plies; index++) {
             int ply = index + 1;
@@ -46,14 +44,12 @@ public final class MicrocosmosGameplaySelfTest {
             if (rules.turn() == Turn.BLACK) {
                 applyPlayerMove(board, move, ply);
             } else {
-                require(board.makeMove(notation) >= 0,
+                require(JChessUiAdapter.applyUsiMove(board, notation) >= 0,
                         "board rejected recorded defense at ply " + ply + ": " + notation);
             }
             rules.makeMove(move);
 
-            String boardSfen = com.github.sangeeeee.tlm_shogi.engine.core.Position
-                    .parse(board.toUSI()).toSfen();
-            require(rules.toSfen().equals(boardSfen),
+            require(rules.toSfen().equals(board.toSfen()),
                     "board state diverged after ply " + ply + ": " + notation);
         }
 
@@ -63,51 +59,21 @@ public final class MicrocosmosGameplaySelfTest {
     }
 
     private static void applyPlayerMove(Position board, Move move, int ply) {
-        int to = boardPoint(move.to().file(), move.to().rank());
+        int to = JChessUiAdapter.pointFromSquare(move.to());
         int from;
         if (move.isDrop()) {
-            int pieceId = blackPieceId(move.droppingPieceType());
-            from = 81 + findHandIndex(board.getBlackHand(), pieceId);
+            int handIndex = JChessUiAdapter.handIndex(board, Turn.BLACK, move.droppingPieceType());
+            require(handIndex >= 0,
+                    "recorded drop piece is absent from the player hand at ply " + ply);
+            from = 81 + handIndex;
         } else {
-            from = boardPoint(move.from().file(), move.from().rank());
+            from = JChessUiAdapter.pointFromSquare(move.from());
         }
 
-        require(board.isLegalMove(from, to),
-                "mouse-input rules rejected player move at ply " + ply + ": " + move.toSfen());
-        boolean canPromote = board.canPromote(from, to);
-        boolean mustPromote = board.mustPromote(from, to);
-        require(!mustPromote || move.isPromotion(),
-                "record omitted a mandatory promotion at ply " + ply);
-        require(!move.isPromotion() || canPromote || mustPromote,
-                "record requested an unavailable promotion at ply " + ply);
-        require(board.move(from, to, move.isPromotion()) >= 0,
-                "board failed to apply player move at ply " + ply + ": " + move.toSfen());
-    }
-
-    private static int boardPoint(int file, int rank) {
-        return (rank - 1) * 9 + (9 - file);
-    }
-
-    private static int findHandIndex(List<int[]> hand, int pieceId) {
-        for (int index = 0; index < hand.size(); index++) {
-            if (hand.get(index)[0] > 0 && hand.get(index)[1] == pieceId) {
-                return index;
-            }
-        }
-        throw new AssertionError("recorded drop piece is absent from the player hand: " + pieceId);
-    }
-
-    private static int blackPieceId(PieceType type) {
-        return switch (type.raw()) {
-            case 0 -> 17;
-            case 1 -> 16;
-            case 2 -> 15;
-            case 3 -> 12;
-            case 4 -> 11;
-            case 5 -> 14;
-            case 6 -> 13;
-            default -> throw new AssertionError("piece cannot be dropped: " + type);
-        };
+        Optional<Move> selected = JChessUiAdapter.legalMove(board, from, to, move.isPromotion());
+        require(selected.filter(move::equals).isPresent(),
+                "mouse-input path rejected player move at ply " + ply + ": " + move.toSfen());
+        board.makeMoveUnchecked(selected.orElseThrow());
     }
 
     private static void require(boolean condition, String message) {

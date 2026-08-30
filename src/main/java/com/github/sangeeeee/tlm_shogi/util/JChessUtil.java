@@ -1,7 +1,8 @@
 package com.github.sangeeeee.tlm_shogi.util;
 
-import com.github.sangeeeee.tlm_shogi.api.game.jchess.Position;
 import com.github.sangeeeee.tlm_shogi.block.properties.ShogiPart;
+import com.github.sangeeeee.tlm_shogi.engine.core.Position;
+import com.github.sangeeeee.tlm_shogi.engine.core.Turn;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
@@ -10,9 +11,6 @@ import net.minecraft.world.phys.Vec3;
 import java.util.List;
 
 public final class JChessUtil {
-    public static final String INIT = com.github.sangeeeee.tlm_shogi.engine.core.Position.START_SFEN;
-//    public static final String INIT = "4k4/1R7/9/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b B2G2S2N2L9P 1";
-
     /**
      * Player-hand layout in the board's player-oriented coordinate system.
      * The slot pitch preserves the rendered 3x3 layout, while the smaller
@@ -66,12 +64,12 @@ public final class JChessUtil {
     /** Returns the occupied player-hand stack hit by this point, or {@code -1}. */
     public static int getPlayerHandPosition(Vec3 clickPos, Position position) {
         int handIndex = getPlayerHandSlot(clickPos.x, clickPos.z);
-        List<int[]> hand = position.getBlackHand();
+        List<JChessUiAdapter.HandStack> hand = JChessUiAdapter.handStacks(position, Turn.BLACK);
         if (handIndex < 0 || handIndex >= hand.size()) {
             return -1;
         }
 
-        int count = hand.get(handIndex)[0];
+        int count = hand.get(handIndex).count();
         if (count < 1
                 || clickPos.y + CLICK_EPSILON < BOARD_SURFACE_Y
                 || clickPos.y - CLICK_EPSILON > handStackTopY(count)) {
@@ -117,19 +115,4 @@ public final class JChessUtil {
                 .yRot(facing.toYRot() * Mth.DEG_TO_RAD);
     }
 
-    public static boolean isWhite(int piecesIndex) {
-        return 24 <= piecesIndex && piecesIndex <= 37;
-    }
-
-    public static boolean isBlack(int piecesIndex) {
-        return 10 <= piecesIndex && piecesIndex <= 23;
-    }
-
-    public static boolean isPlayer(Position position) {
-        return position.isPlayer();
-    }
-
-    public static boolean isMaid(Position position) {
-        return !position.isPlayer();
-    }
 }

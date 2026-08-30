@@ -2,12 +2,14 @@ package com.github.sangeeeee.tlm_shogi.client.renderer.tileentity;
 
 import com.github.sangeeeee.tlm_shogi.TouhouLittleMaidShogi;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.sangeeeee.tlm_shogi.api.game.jchess.Position;
 import com.github.tartaricacid.touhoulittlemaid.block.BlockGomoku;
 import com.github.sangeeeee.tlm_shogi.client.model.JChessPiecesModel;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.SimpleBedrockModel;
 import com.github.sangeeeee.tlm_shogi.client.resource.BedrockModelLoader;
+import com.github.sangeeeee.tlm_shogi.engine.core.Position;
+import com.github.sangeeeee.tlm_shogi.engine.core.Turn;
 import com.github.sangeeeee.tlm_shogi.tileentity.TileEntityJChess;
+import com.github.sangeeeee.tlm_shogi.util.JChessUiAdapter;
 import com.github.sangeeeee.tlm_shogi.util.JChessUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -163,7 +165,8 @@ public class TileEntityJChessRenderer implements BlockEntityRenderer<TileEntityJ
             Position position = jchess.getChessData();
             for (int i = 0; i < 9; i++) {
                 for (int j = 0; j < 9; j++) {
-                    int pieceId = position.getPieceAt(j, i);
+                    int pieceId = JChessUiAdapter.modelId(position.pieceAt(
+                            JChessUiAdapter.squareFromGrid(j, i)));
                     if (pieceId == 0) {
                         poseStack.translate(s, 0, 0);
                         continue;
@@ -200,7 +203,7 @@ public class TileEntityJChessRenderer implements BlockEntityRenderer<TileEntityJ
             if (facing == Direction.SOUTH || facing == Direction.NORTH) {
                 poseStack.mulPose(Axis.YN.rotationDegrees(180));
             }
-            renderHand(position.getBlackHand(), poseStack, piecesBuff,
+            renderHand(JChessUiAdapter.handStacks(position, Turn.BLACK), poseStack, piecesBuff,
                     combinedLightIn, combinedOverlayIn, s1, s2, s3, selectOnHand, selectedPoint);
 
             poseStack.popPose();
@@ -226,13 +229,13 @@ public class TileEntityJChessRenderer implements BlockEntityRenderer<TileEntityJ
             if (facing == Direction.SOUTH || facing == Direction.NORTH) {
                 poseStack.mulPose(Axis.YN.rotationDegrees(180));
             }
-            renderHand(position.getWhiteHand(), poseStack, piecesBuff,
+            renderHand(JChessUiAdapter.handStacks(position, Turn.WHITE), poseStack, piecesBuff,
                     combinedLightIn, combinedOverlayIn, s1, s2, s3, false, -1);
             poseStack.popPose();
         }
     }
 
-    private void renderHand(java.util.List<int[]> handList,
+    private void renderHand(java.util.List<JChessUiAdapter.HandStack> handList,
                             PoseStack poseStack, VertexConsumer buff,
                             int light, int overlay,
                             float s1, float s2, float s3, boolean selectOnHand, int selectedPoint) {
@@ -243,9 +246,9 @@ public class TileEntityJChessRenderer implements BlockEntityRenderer<TileEntityJ
         float rowOffset = 0f;
 
         while (index < handList.size()) {
-            int[] pair = handList.get(index);
-            int count = pair[0];
-            int pieceId = pair[1];
+            JChessUiAdapter.HandStack stack = handList.get(index);
+            int count = stack.count();
+            int pieceId = stack.modelId();
 
             // Preserve the established visual spacing; picking uses a separate
             // tight footprint fitted to the rendered piece rather than this pitch.

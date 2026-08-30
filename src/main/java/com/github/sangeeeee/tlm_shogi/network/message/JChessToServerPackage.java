@@ -43,7 +43,7 @@ public record JChessToServerPackage(BlockPos pos, String expectedSfen, String mo
                     return;
                 }
                 if (!(level.getBlockEntity(message.pos) instanceof TileEntityJChess chess)
-                        || !chess.getChessData().toUSI().equals(message.expectedSfen)) {
+                        || !chess.getChessData().toSfen().equals(message.expectedSfen)) {
                     // The board was reset or advanced while the client was searching.
                     return;
                 }

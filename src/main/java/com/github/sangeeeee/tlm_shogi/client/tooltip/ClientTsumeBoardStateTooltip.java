@@ -1,8 +1,11 @@
 package com.github.sangeeeee.tlm_shogi.client.tooltip;
 
 import com.github.sangeeeee.tlm_shogi.TouhouLittleMaidShogi;
-import com.github.sangeeeee.tlm_shogi.api.game.jchess.Position;
+import com.github.sangeeeee.tlm_shogi.engine.core.PieceType;
+import com.github.sangeeeee.tlm_shogi.engine.core.Position;
+import com.github.sangeeeee.tlm_shogi.engine.core.Turn;
 import com.github.sangeeeee.tlm_shogi.inventory.tooltip.TsumeBoardStateTooltip;
+import com.github.sangeeeee.tlm_shogi.util.JChessUiAdapter;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.Util;
@@ -12,8 +15,6 @@ import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
 
@@ -49,27 +50,19 @@ public final class ClientTsumeBoardStateTooltip implements ClientTooltipComponen
 
     private static PreviewData decode(String sfen) {
         try {
-            Position position = new Position();
-            position.applyUSI(sfen);
+            Position position = Position.parse(sfen);
             int[][] board = new int[9][9];
             for (int y = 0; y < 9; y++) {
                 for (int x = 0; x < 9; x++) {
-                    board[y][x] = position.getPieceAt(x, y);
+                    board[y][x] = JChessUiAdapter.modelId(position.pieceAt(
+                            JChessUiAdapter.squareFromGrid(x, y)));
                 }
             }
-            return new PreviewData(true, board, copyHand(position.getBlackHand()));
+            return new PreviewData(true, board, JChessUiAdapter.handStacks(position, Turn.BLACK));
         } catch (RuntimeException exception) {
             TouhouLittleMaidShogi.LOGGER.warn("Unable to render invalid tsume SFEN tooltip", exception);
             return PreviewData.invalid();
         }
-    }
-
-    private static List<int[]> copyHand(List<int[]> hand) {
-        List<int[]> copy = new ArrayList<>(hand.size());
-        for (int[] entry : hand) {
-            copy.add(entry.clone());
-        }
-        return List.copyOf(copy);
     }
 
     @Override
@@ -151,16 +144,11 @@ public final class ClientTsumeBoardStateTooltip implements ClientTooltipComponen
         pose.popPose();
     }
 
-    private static String formatHand(String side, List<int[]> hand) {
-        List<int[]> ordered = new ArrayList<>(hand);
-        ordered.sort(Comparator.comparingInt(entry -> handOrder(entry[1])));
+    private static String formatHand(String side, List<JChessUiAdapter.HandStack> hand) {
         StringBuilder text = new StringBuilder(side).append("持駒：");
         boolean any = false;
-        for (int[] entry : ordered) {
-            if (entry.length < 2 || entry[0] <= 0) {
-                continue;
-            }
-            String name = handPieceName(entry[1]);
+        for (JChessUiAdapter.HandStack stack : hand) {
+            String name = handPieceName(stack.type());
             if (name.isEmpty()) {
                 continue;
             }
@@ -168,8 +156,8 @@ public final class ClientTsumeBoardStateTooltip implements ClientTooltipComponen
                 text.append(' ');
             }
             text.append(name);
-            if (entry[0] > 1) {
-                text.append(japaneseNumber(entry[0]));
+            if (stack.count() > 1) {
+                text.append(japaneseNumber(stack.count()));
             }
             any = true;
         }
@@ -179,30 +167,15 @@ public final class ClientTsumeBoardStateTooltip implements ClientTooltipComponen
         return text.toString();
     }
 
-    private static int handOrder(int pieceId) {
-        int normalized = pieceId >= 24 ? pieceId - 14 : pieceId;
-        return switch (normalized) {
-            case 13 -> 0; // 飛
-            case 14 -> 1; // 角
-            case 11 -> 2; // 金
-            case 12 -> 3; // 銀
-            case 15 -> 4; // 桂
-            case 16 -> 5; // 香
-            case 17 -> 6; // 歩
-            default -> 99;
-        };
-    }
-
-    private static String handPieceName(int pieceId) {
-        int normalized = pieceId >= 24 ? pieceId - 14 : pieceId;
-        return switch (normalized) {
-            case 13 -> "飛";
-            case 14 -> "角";
-            case 11 -> "金";
-            case 12 -> "銀";
-            case 15 -> "桂";
-            case 16 -> "香";
-            case 17 -> "歩";
+    private static String handPieceName(PieceType type) {
+        return switch (type.raw()) {
+            case 6 -> "飛";
+            case 5 -> "角";
+            case 4 -> "金";
+            case 3 -> "銀";
+            case 2 -> "桂";
+            case 1 -> "香";
+            case 0 -> "歩";
             default -> "";
         };
     }
@@ -218,7 +191,7 @@ public final class ClientTsumeBoardStateTooltip implements ClientTooltipComponen
         return Integer.toString(value);
     }
 
-    private record PreviewData(boolean valid, int[][] board, List<int[]> blackHand) {
+    private record PreviewData(boolean valid, int[][] board, List<JChessUiAdapter.HandStack> blackHand) {
         static PreviewData invalid() {
             return new PreviewData(false, new int[9][9], List.of());
         }

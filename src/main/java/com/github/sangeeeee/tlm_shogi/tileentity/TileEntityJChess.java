@@ -1,16 +1,16 @@
 package com.github.sangeeeee.tlm_shogi.tileentity;
 
 import com.github.tartaricacid.touhoulittlemaid.api.block.IBoardGameEntityBlock;
-import com.github.sangeeeee.tlm_shogi.api.game.jchess.Position;
+import com.github.sangeeeee.tlm_shogi.engine.core.Piece;
+import com.github.sangeeeee.tlm_shogi.engine.core.Position;
+import com.github.sangeeeee.tlm_shogi.engine.core.Turn;
 import com.github.sangeeeee.tlm_shogi.init.InitBlocks;
 import com.github.sangeeeee.tlm_shogi.tsume.MicrocosmosRecord;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityJoy;
-import com.github.sangeeeee.tlm_shogi.util.JChessUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -38,9 +38,9 @@ public class TileEntityJChess extends TileEntityJoy implements IBoardGameEntityB
     private static final String MICROCOSMOS_ON_RECORD = "MicrocosmosOnRecord";
 
 
-    private final Position chessData;
+    private Position chessData;
 
-    private List<String> repetitionHistory = new ArrayList<>();  // 局面历史
+    private final List<Long> repetitionHistory = new ArrayList<>();
 
     // 回合计数器 将棋从1开始
     private int chessCounter = 1;
@@ -64,15 +64,14 @@ public class TileEntityJChess extends TileEntityJoy implements IBoardGameEntityB
 
     public TileEntityJChess(BlockPos pos, BlockState blockState) {
         super(TYPE, pos, blockState);
-        this.chessData = new Position();
-        this.chessData.applyUSI(JChessUtil.INIT);
-        this.repetitionHistory.add(this.chessData.toUSI());
+        this.chessData = Position.startPosition();
+        this.repetitionHistory.add(this.chessData.getHash());
     }
 
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
         CompoundTag data = getPersistentData();
-        data.putString(CHESS_DATA, chessData.toUSI());
+        data.putString(CHESS_DATA, chessData.toSfen());
         data.putInt(CHESS_COUNTER, chessCounter);
         data.putInt(SELECT_CHESS_POINT, selectChessPoint);
         data.putBoolean(CHECKMATE, checkmate);
@@ -87,9 +86,11 @@ public class TileEntityJChess extends TileEntityJoy implements IBoardGameEntityB
         data.putBoolean(TSUME_MICROCOSMOS, tsumeMicrocosmos);
         data.putBoolean(MICROCOSMOS_ON_RECORD, microcosmosOnRecord);
 
-        ListTag histTag = new ListTag();
-        for (String key : repetitionHistory) histTag.add(StringTag.valueOf(key));
-        data.put(REPETITION_HISTORY, histTag);
+        long[] hashes = new long[repetitionHistory.size()];
+        for (int index = 0; index < repetitionHistory.size(); index++) {
+            hashes[index] = repetitionHistory.get(index);
+        }
+        data.putLongArray(REPETITION_HISTORY, hashes);
 
         super.saveAdditional(tag, provider);
     }
@@ -100,7 +101,8 @@ public class TileEntityJChess extends TileEntityJoy implements IBoardGameEntityB
         CompoundTag data = getPersistentData();
         chessCounter = data.getInt(CHESS_COUNTER);
         selectChessPoint = data.getInt(SELECT_CHESS_POINT);
-        chessData.applyUSI(data.getString(CHESS_DATA));
+        String savedSfen = data.getString(CHESS_DATA);
+        chessData = savedSfen.isBlank() ? Position.startPosition() : Position.parse(savedSfen);
         checkmate = data.getBoolean(CHECKMATE);
         repeat = data.getBoolean(REPEAT);
         moveNumberLimit = data.getBoolean(MOVE_NUMBER_LIMIT);
@@ -114,15 +116,23 @@ public class TileEntityJChess extends TileEntityJoy implements IBoardGameEntityB
         microcosmosOnRecord = tsumeMicrocosmos && data.getBoolean(MICROCOSMOS_ON_RECORD);
         // 读取局面历史
         repetitionHistory.clear();
-        if (data.contains(REPETITION_HISTORY, Tag.TAG_LIST)) {
+        if (data.contains(REPETITION_HISTORY, Tag.TAG_LONG_ARRAY)) {
+            for (long hash : data.getLongArray(REPETITION_HISTORY)) {
+                repetitionHistory.add(hash);
+            }
+        } else if (data.contains(REPETITION_HISTORY, Tag.TAG_LIST)) {
+            // Migrate saves written by the former SFEN-string history.
             ListTag histTag = data.getList(REPETITION_HISTORY, Tag.TAG_STRING);
             for (Tag value : histTag) {
-                StringTag tag = (StringTag) value;
-                repetitionHistory.add(tag.getAsString());
+                try {
+                    repetitionHistory.add(Position.parse(value.getAsString()).getHash());
+                } catch (RuntimeException ignored) {
+                    // A corrupt historical entry must not prevent the board from loading.
+                }
             }
         }
         if (!tsumeMode && repetitionHistory.isEmpty()) {
-            repetitionHistory.add(chessData.toUSI());
+            repetitionHistory.add(chessData.getHash());
         }
     }
 
@@ -132,9 +142,9 @@ public class TileEntityJChess extends TileEntityJoy implements IBoardGameEntityB
         this.checkmate = false;
         this.repeat = false;
         this.moveNumberLimit = false;
-        this.chessData.applyUSI(JChessUtil.INIT);
+        this.chessData = Position.startPosition();
         this.repetitionHistory.clear();
-        this.repetitionHistory.add(this.chessData.toUSI());
+        this.repetitionHistory.add(this.chessData.getHash());
         clearTsumeState();
     }
 
@@ -143,23 +153,22 @@ public class TileEntityJChess extends TileEntityJoy implements IBoardGameEntityB
         if (maximumPly < 1 || (maximumPly & 1) == 0) {
             throw new IllegalArgumentException("Tsume maximum ply must be a positive odd number");
         }
-        Position replacement = new Position();
-        replacement.applyUSI(sfen);
-        if (!replacement.isPlayer()) {
+        Position replacement = Position.parse(sfen);
+        if (replacement.turn() != Turn.BLACK) {
             throw new IllegalArgumentException("Tsume positions must start with the player (black) to move");
         }
         int defendingKings = 0;
-        for (int point = 0; point < 81; point++) {
-            if (replacement.getPieceByPointNum(point) == 24) {
+        for (Piece piece : replacement.boardCopy()) {
+            if (piece.equals(Piece.WHITE_KING)) {
                 defendingKings++;
             }
         }
         if (defendingKings != 1) {
             throw new IllegalArgumentException("Tsume defender must have exactly one king");
         }
-        this.chessData.applyUSI(replacement.toUSI());
+        this.chessData = replacement;
 
-        this.chessCounter = this.chessData.getMoveNumber();
+        this.chessCounter = this.chessData.moveNumber();
         this.selectChessPoint = -1;
         this.checkmate = false;
         this.repeat = false;
@@ -196,15 +205,19 @@ public class TileEntityJChess extends TileEntityJoy implements IBoardGameEntityB
 
     public void addHistoryAfterMove() {
         Position data = getChessData();
-        repetitionHistory.add(data.toUSI());
+        long currentHash = data.getHash();
+        repetitionHistory.add(currentHash);
         // 限制历史长度（优化内存，最近1000步够用）
         if (repetitionHistory.size() > 1000) {
             repetitionHistory.removeFirst();
         }
 
-        // 检查千日手
-        if (data.isRepetition(repetitionHistory)) {
-            setRepeat(true);
+        int occurrences = 0;
+        for (long hash : repetitionHistory) {
+            if (hash == currentHash && ++occurrences >= 4) {
+                setRepeat(true);
+                break;
+            }
         }
     }
 
@@ -221,7 +234,7 @@ public class TileEntityJChess extends TileEntityJoy implements IBoardGameEntityB
     }
 
     public boolean isPlayerTurn() {
-        return this.chessData.isPlayer();
+        return this.chessData.turn() == Turn.BLACK;
     }
 
     public int getChessCounter() {

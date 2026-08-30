@@ -1,12 +1,13 @@
 package com.github.sangeeeee.tlm_shogi.network.message;
 
 import com.github.sangeeeee.tlm_shogi.TouhouLittleMaidShogi;
-import com.github.sangeeeee.tlm_shogi.api.game.jchess.Position;
 import com.github.sangeeeee.tlm_shogi.api.game.jchess.ShogiEngineInteractor;
+import com.github.sangeeeee.tlm_shogi.engine.core.Position;
+import com.github.sangeeeee.tlm_shogi.engine.core.Turn;
 import com.github.sangeeeee.tlm_shogi.mateengine.MateEngine;
 import com.github.sangeeeee.tlm_shogi.mateengine.MateSearchLimits;
 import com.github.sangeeeee.tlm_shogi.mateengine.MateSearchResult;
-import com.github.sangeeeee.tlm_shogi.util.JChessUtil;
+import com.github.sangeeeee.tlm_shogi.util.JChessUiAdapter;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
@@ -89,15 +90,14 @@ public record JChessToClientPackage(BlockPos pos, String fenData, boolean tsume,
             return;
         }
 
-        Position position = new Position();
-        position.applyUSI(message.fenData);
+        Position position = Position.parse(message.fenData);
 
         // 先判断玩家是否赢了
         // 是的，我放客户端，减轻服务端压力，理论上你可直接传布尔值判断女仆输掉来作弊
         // sange: 这河里吗，，，不管了那我也放这儿吧
         boolean maidLost = false;
         boolean playerLost = false;
-        if (position.isCheck() && position.isMate() && JChessUtil.isMaid(position)) {
+        if (position.inCheck() && position.isMate() && position.turn() == Turn.WHITE) {
             maidLost = true;
         }
 
@@ -113,10 +113,10 @@ public record JChessToClientPackage(BlockPos pos, String fenData, boolean tsume,
                 setupCompleted = true;
                 move = interactor.interact(message.fenData, null);
 
-                if (position.makeMove(move) < 0) {
+                if (JChessUiAdapter.applyUsiMove(position, move) < 0) {
                     throw new IOException("Java engine returned an invalid move: " + move);
                 }
-                if (position.isCheck() && position.isMate() && JChessUtil.isPlayer(position)) {
+                if (position.inCheck() && position.isMate() && position.turn() == Turn.BLACK) {
                     playerLost = true;
                 }
 
