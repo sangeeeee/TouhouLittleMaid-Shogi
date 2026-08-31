@@ -48,7 +48,12 @@ public final class JChessUiAdapterSelfTest {
         equal(27, JChessUiAdapter.modelIdAt(hands, 90), "white hand point model");
 
         Position copy = start.copy();
-        check(JChessUiAdapter.applyUsiMove(copy, "7g7f") >= 0, "copy accepts legal move");
+        JChessUiAdapter.AppliedMove opening = JChessUiAdapter.applyUsiMoveWithPoints(copy, "7g7f")
+                .orElseThrow(() -> new AssertionError("copy rejects legal move"));
+        checks++;
+        equal(point(7, 7), opening.originPoint(), "board move retains its rendered origin");
+        equal(point(7, 6), opening.destinationPoint(), "board move retains its rendered destination");
+        equal(0, opening.originHandStackCount(), "board origin has no stack height");
         check(!copy.toSfen().equals(start.toSfen()), "engine copy is independent");
     }
 
@@ -99,6 +104,17 @@ public final class JChessUiAdapterSelfTest {
         drop.makeMoveUnchecked(goldDrop);
         equal(11, JChessUiAdapter.modelIdAt(drop, center), "gold appears on board");
         check(JChessUiAdapter.handStacks(drop, Turn.BLACK).isEmpty(), "gold is removed from hand");
+
+        Position stackedDrop = Position.parse("k8/9/9/9/9/9/9/9/4K4 b 2G 1");
+        JChessUiAdapter.AppliedMove dropPoints =
+                JChessUiAdapter.applyUsiMoveWithPoints(stackedDrop, "G*5e")
+                        .orElseThrow(() -> new AssertionError("stacked gold drop is unavailable"));
+        checks++;
+        equal(81, dropPoints.originPoint(), "drop retains its original hand slot");
+        equal(center, dropPoints.destinationPoint(), "drop retains its board destination");
+        equal(2, dropPoints.originHandStackCount(), "drop retains its pre-move stack height");
+        equal(1, JChessUiAdapter.handStacks(stackedDrop, Turn.BLACK).getFirst().count(),
+                "drop leaves one gold in hand");
 
         Position whiteDrop = Position.parse("4k4/9/9/9/9/9/9/9/4K4 w p 1");
         Move whitePawnDrop = JChessUiAdapter.legalMove(whiteDrop, 90, center, false)

@@ -58,6 +58,10 @@ public class JChessPiecesModel {
         return new JChessPiecesModel("SELECTED");
     }
 
+    public static JChessPiecesModel getMoveOriginModel() {
+        return new JChessPiecesModel("MOVE_ORIGIN");
+    }
+
     public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         poseStack.pushPose();
         poseStack.scale(0.85f, 0.85f, 0.85f);

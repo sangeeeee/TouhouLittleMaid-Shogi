@@ -137,6 +137,25 @@ public final class JChessUiAdapter {
         return -1;
     }
 
+    /** Returns the rendered source location before a legal move mutates the position. */
+    public static MoveOrigin moveOrigin(Position position, Move move) {
+        if (position == null || move == null || move.isNone()) {
+            throw new IllegalArgumentException("position and move must describe a real move");
+        }
+        if (!move.isDrop()) {
+            return new MoveOrigin(pointFromSquare(move.from()), 0);
+        }
+
+        Turn side = position.turn();
+        List<HandStack> stacks = handStacks(position, side);
+        int index = handIndex(position, side, move.droppingPieceType());
+        if (index < 0) {
+            throw new IllegalArgumentException("dropped piece is not present in the moving side's hand");
+        }
+        int point = (side == Turn.BLACK ? 81 : 90) + index;
+        return new MoveOrigin(point, stacks.get(index).count());
+    }
+
     public static Optional<Move> moveFromPoints(Position position, int fromPoint,
                                                 int toPoint, boolean promote) {
         if (position == null || !isBoardPoint(toPoint)) {
@@ -183,21 +202,47 @@ public final class JChessUiAdapter {
 
     /** Applies one legal USI move and returns its UI destination point, or {@code -1}. */
     public static int applyUsiMove(Position position, String moveText) {
+        return applyUsiMoveWithPoints(position, moveText)
+                .map(AppliedMove::destinationPoint)
+                .orElse(-1);
+    }
+
+    /** Applies one legal USI move while retaining its rendered source and destination. */
+    public static Optional<AppliedMove> applyUsiMoveWithPoints(Position position, String moveText) {
         if (position == null || moveText == null) {
-            return -1;
+            return Optional.empty();
         }
         try {
             Optional<Move> parsed = Move.parseSfen(moveText.trim())
                     .filter(move -> !move.isNone())
                     .filter(position::validateMove);
             if (parsed.isEmpty()) {
-                return -1;
+                return Optional.empty();
             }
             Move move = parsed.orElseThrow();
+            MoveOrigin origin = moveOrigin(position, move);
             position.makeMoveUnchecked(move);
-            return pointFromSquare(move.to());
+            return Optional.of(new AppliedMove(
+                    origin.point(), pointFromSquare(move.to()), origin.handStackCount()));
         } catch (RuntimeException exception) {
-            return -1;
+            return Optional.empty();
+        }
+    }
+
+    public record MoveOrigin(int point, int handStackCount) {
+        public MoveOrigin {
+            if (point < 0 || point > 98 || handStackCount < 0) {
+                throw new IllegalArgumentException("invalid rendered move origin");
+            }
+        }
+    }
+
+    public record AppliedMove(int originPoint, int destinationPoint, int originHandStackCount) {
+        public AppliedMove {
+            if (originPoint < 0 || originPoint > 98
+                    || !isBoardPoint(destinationPoint) || originHandStackCount < 0) {
+                throw new IllegalArgumentException("invalid rendered move points");
+            }
         }
     }
 

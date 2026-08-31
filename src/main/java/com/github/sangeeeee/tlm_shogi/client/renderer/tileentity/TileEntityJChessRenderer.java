@@ -38,11 +38,13 @@ public class TileEntityJChessRenderer implements BlockEntityRenderer<TileEntityJ
     private final SimpleBedrockModel<Entity> chessModel;
     private final JChessPiecesModel[] chessPiecesModels;
     private final JChessPiecesModel selectedModels;
+    private final JChessPiecesModel moveOriginModel;
 
     public TileEntityJChessRenderer(BlockEntityRendererProvider.Context context) {
         chessModel = BedrockModelLoader.getModel(BedrockModelLoader.JCHESS);
         chessPiecesModels = JChessPiecesModel.initModel();
         selectedModels = JChessPiecesModel.getSelectedModel();
+        moveOriginModel = JChessPiecesModel.getMoveOriginModel();
         dispatcher = context.getBlockEntityRenderDispatcher();
         font = context.getFont();
     }
@@ -126,16 +128,28 @@ public class TileEntityJChessRenderer implements BlockEntityRenderer<TileEntityJ
             JChessPiecesModel chessPiecesModel;
 
             int selectedPoint = jchess.getSelectChessPoint();
-
-            boolean selectOnHand = false;
-            int selected_x = -1;
-            int selected_y = -1;
+            int selectedX = -1;
+            int selectedY = -1;
+            int selectedHandIndex = -1;
             if (0 <= selectedPoint && selectedPoint < 81) {
-                selected_x = selectedPoint % 9;
-                selected_y = selectedPoint / 9;
+                selectedX = selectedPoint % 9;
+                selectedY = selectedPoint / 9;
             } else if (81 <= selectedPoint && selectedPoint <= 89) {
-                selectedPoint -= 81;
-                selectOnHand = true;
+                selectedHandIndex = selectedPoint - 81;
+            }
+
+            int originPoint = jchess.getLastMoveOriginPoint();
+            int originX = -1;
+            int originY = -1;
+            int blackOriginHandIndex = -1;
+            int whiteOriginHandIndex = -1;
+            if (0 <= originPoint && originPoint < 81) {
+                originX = originPoint % 9;
+                originY = originPoint / 9;
+            } else if (81 <= originPoint && originPoint <= 89) {
+                blackOriginHandIndex = originPoint - 81;
+            } else if (90 <= originPoint && originPoint <= 98) {
+                whiteOriginHandIndex = originPoint - 90;
             }
 
             VertexConsumer piecesBuff = bufferIn.getBuffer(RenderType.entityCutoutNoCull(PIECES_TEXTURE));
@@ -165,14 +179,18 @@ public class TileEntityJChessRenderer implements BlockEntityRenderer<TileEntityJ
                 for (int j = 0; j < 9; j++) {
                     int pieceId = JChessUiAdapter.modelId(position.pieceAt(
                             JChessUiAdapter.squareFromGrid(j, i)));
-                    if (pieceId == 0) {
-                        poseStack.translate(s, 0, 0);
-                        continue;
+                    if (pieceId != 0) {
+                        chessPiecesModel = this.chessPiecesModels[pieceId];
+                        chessPiecesModel.renderToBuffer(poseStack, piecesBuff, combinedLightIn,
+                                combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
                     }
-                    chessPiecesModel = this.chessPiecesModels[pieceId];
-                    chessPiecesModel.renderToBuffer(poseStack, piecesBuff, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
-                    if (!selectOnHand && i == selected_y && j == selected_x) {
-                        selectedModels.renderToBuffer(poseStack, piecesBuff, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
+                    if (i == originY && j == originX) {
+                        moveOriginModel.renderToBuffer(poseStack, piecesBuff, combinedLightIn,
+                                combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
+                    }
+                    if (i == selectedY && j == selectedX) {
+                        selectedModels.renderToBuffer(poseStack, piecesBuff, combinedLightIn,
+                                combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
                     }
 
                     poseStack.translate(s, 0, 0);
@@ -202,7 +220,8 @@ public class TileEntityJChessRenderer implements BlockEntityRenderer<TileEntityJ
                 poseStack.mulPose(Axis.YN.rotationDegrees(180));
             }
             renderHand(JChessUiAdapter.handStacks(position, Turn.BLACK), poseStack, piecesBuff,
-                    combinedLightIn, combinedOverlayIn, s1, s2, s3, selectOnHand, selectedPoint);
+                    combinedLightIn, combinedOverlayIn, s1, s2, s3,
+                    selectedHandIndex, blackOriginHandIndex, jchess.getLastMoveOriginStackCount());
 
             poseStack.popPose();
             poseStack.pushPose();
@@ -228,7 +247,8 @@ public class TileEntityJChessRenderer implements BlockEntityRenderer<TileEntityJ
                 poseStack.mulPose(Axis.YN.rotationDegrees(180));
             }
             renderHand(JChessUiAdapter.handStacks(position, Turn.WHITE), poseStack, piecesBuff,
-                    combinedLightIn, combinedOverlayIn, s1, s2, s3, false, -1);
+                    combinedLightIn, combinedOverlayIn, s1, s2, s3,
+                    -1, whiteOriginHandIndex, jchess.getLastMoveOriginStackCount());
             poseStack.popPose();
         }
     }
@@ -236,13 +256,15 @@ public class TileEntityJChessRenderer implements BlockEntityRenderer<TileEntityJ
     private void renderHand(java.util.List<JChessUiAdapter.HandStack> handList,
                             PoseStack poseStack, VertexConsumer buff,
                             int light, int overlay,
-                            float s1, float s2, float s3, boolean selectOnHand, int selectedPoint) {
-        if (handList.isEmpty()) return;
+                            float s1, float s2, float s3,
+                            int selectedIndex, int originIndex, int originStackCount) {
+        if (handList.isEmpty() && originIndex < 0) return;
 
         int index = 0;
         int rowCount = 0;
         float rowOffset = 0f;
 
+        poseStack.pushPose();
         while (index < handList.size()) {
             JChessUiAdapter.HandStack stack = handList.get(index);
             int count = stack.count();
@@ -263,9 +285,6 @@ public class TileEntityJChessRenderer implements BlockEntityRenderer<TileEntityJ
                 }
                 model.renderToBuffer(poseStack, buff, light, overlay, 1, 1, 1, 1);
             }
-            if (count > 0 && selectOnHand && selectedPoint == index) {
-                selectedModels.renderToBuffer(poseStack, buff, light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
-            }
             poseStack.popPose();
             poseStack.translate(s2, 0, 0);
             rowOffset += s2;
@@ -280,6 +299,33 @@ public class TileEntityJChessRenderer implements BlockEntityRenderer<TileEntityJ
                 rowCount = 0;
             }
         }
+        poseStack.popPose();
+
+        if (originIndex >= 0) {
+            renderHandMarker(moveOriginModel, originIndex, Math.max(1, originStackCount),
+                    poseStack, buff, light, overlay, s1, s2, s3);
+        }
+        if (selectedIndex >= 0 && selectedIndex < handList.size()) {
+            renderHandMarker(selectedModels, selectedIndex, handList.get(selectedIndex).count(),
+                    poseStack, buff, light, overlay, s1, s2, s3);
+        }
+    }
+
+    private static void renderHandMarker(JChessPiecesModel marker, int index, int stackCount,
+                                         PoseStack poseStack, VertexConsumer buff,
+                                         int light, int overlay,
+                                         float s1, float s2, float s3) {
+        if (index < 0 || index >= JChessUtil.HAND_COLUMNS * JChessUtil.HAND_ROWS) {
+            return;
+        }
+        int column = index % JChessUtil.HAND_COLUMNS;
+        int row = index / JChessUtil.HAND_COLUMNS;
+        poseStack.pushPose();
+        poseStack.translate(s1 + column * (s1 + s2),
+                -(stackCount - 1) * JChessUtil.HAND_STACK_LAYER_HEIGHT,
+                -row * s3);
+        marker.renderToBuffer(poseStack, buff, light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
+        poseStack.popPose();
     }
 
     private void renderChessboard(PoseStack poseStack, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn, Direction facing) {

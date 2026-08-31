@@ -148,12 +148,15 @@ public class BlockJChess extends BlockJoy implements IBoardGameBlock {
                 return;
             }
 
-            int toPos = JChessUiAdapter.applyUsiMove(chessData, move);
-            if (toPos == -1) {
+            Optional<JChessUiAdapter.AppliedMove> applied =
+                    JChessUiAdapter.applyUsiMoveWithPoints(chessData, move);
+            if (applied.isEmpty()) {
                 player.sendSystemMessage(Component.translatable("message.tlm_shogi.jchess.engineerr"));
                 return;
             }
-            chess.setSelectChessPoint(toPos);
+            JChessUiAdapter.AppliedMove movePoints = applied.orElseThrow();
+            chess.setMoveHighlight(movePoints.originPoint(), movePoints.destinationPoint(),
+                    movePoints.originHandStackCount());
             if (chessData.inCheck()) {
                 player.sendSystemMessage(Component.translatable("message.touhou_little_maid.cchess.check"));
                 level.playSound(null, pos, SoundEvents.NOTE_BLOCK_BELL.value(), SoundSource.BLOCKS, 1.0f, 0.8F + level.random.nextFloat() * 0.4F);
@@ -181,14 +184,18 @@ public class BlockJChess extends BlockJoy implements IBoardGameBlock {
             player.sendSystemMessage(Component.translatable("message.tlm_shogi.jchess.engineerr"));
             return;
         }
-        int toPos = JChessUiAdapter.applyUsiMove(chess.getChessData(), move);
-        if (toPos < 0) {
+        Optional<JChessUiAdapter.AppliedMove> applied =
+                JChessUiAdapter.applyUsiMoveWithPoints(chess.getChessData(), move);
+        if (applied.isEmpty()) {
             player.sendSystemMessage(Component.translatable("message.tlm_shogi.jchess.engineerr"));
             return;
         }
 
+        JChessUiAdapter.AppliedMove movePoints = applied.orElseThrow();
+
         chess.advanceTsumePly();
-        chess.setSelectChessPoint(toPos);
+        chess.setMoveHighlight(movePoints.originPoint(), movePoints.destinationPoint(),
+                movePoints.originHandStackCount());
         chess.setChessCounter(chess.getChessData().moveNumber());
 
         // A legal defense that counter-mates the attacker is an incorrect solution.
@@ -466,6 +473,7 @@ public class BlockJChess extends BlockJoy implements IBoardGameBlock {
 
     private static boolean applyPlayerMove(TileEntityJChess chess, Position position, Move move,
                                            Level level, BlockPos pos, Player player, BlockPos centerPos) {
+        JChessUiAdapter.MoveOrigin origin = JChessUiAdapter.moveOrigin(position, move);
         Position copy = position.copy();
         copy.makeMoveUnchecked(move);
         if (isPlayerKingInvalidAfterMove(chess, copy) || !isCheckingTsumeMove(chess, copy)) {
@@ -473,13 +481,14 @@ public class BlockJChess extends BlockJoy implements IBoardGameBlock {
         }
         position.makeMoveUnchecked(move);
         int destination = JChessUiAdapter.pointFromSquare(move.to());
-        finishMove(chess, destination, level, pos, player, centerPos, move.toSfen());
+        finishMove(chess, origin, destination, level, pos, player, centerPos, move.toSfen());
         return true;
     }
 
-    private static void finishMove(TileEntityJChess chess, int nowClick, Level level, BlockPos pos,
+    private static void finishMove(TileEntityJChess chess, JChessUiAdapter.MoveOrigin origin,
+                                   int nowClick, Level level, BlockPos pos,
                                    Player player, BlockPos centerPos, String playerMove) {
-        chess.setSelectChessPoint(nowClick);
+        chess.setMoveHighlight(origin.point(), nowClick, origin.handStackCount());
         chess.setChessCounter(chess.getChessData().moveNumber());
         if (chess.isTsumeMode()) {
             chess.advanceTsumePly();

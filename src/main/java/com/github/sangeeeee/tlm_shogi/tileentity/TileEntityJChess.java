@@ -24,6 +24,8 @@ public class TileEntityJChess extends TileEntityJoy implements IBoardGameEntityB
     private static final String CHESS_DATA = "ChessData";
     private static final String CHESS_COUNTER = "ChessCounter";
     private static final String SELECT_CHESS_POINT = "SelectChessPoint";
+    private static final String LAST_MOVE_ORIGIN_POINT = "LastMoveOriginPoint";
+    private static final String LAST_MOVE_ORIGIN_STACK_COUNT = "LastMoveOriginStackCount";
     private static final String CHECKMATE = "Checkmate";
     private static final String REPEAT = "Repeat";
     private static final String MOVE_NUMBER_LIMIT = "MoveNumberLimit";
@@ -46,6 +48,9 @@ public class TileEntityJChess extends TileEntityJoy implements IBoardGameEntityB
     private int chessCounter = 1;
     // 当前选中的棋子
     private int selectChessPoint = -1;
+    // 最近一步的起点；落子前的蓝框在走完后会以红框保留在这里。
+    private int lastMoveOriginPoint = -1;
+    private int lastMoveOriginStackCount = 0;
     // 将死（依据下棋方，判断谁输谁赢）
     private boolean checkmate = false;
     // 长打（判和）
@@ -74,6 +79,8 @@ public class TileEntityJChess extends TileEntityJoy implements IBoardGameEntityB
         data.putString(CHESS_DATA, chessData.toSfen());
         data.putInt(CHESS_COUNTER, chessCounter);
         data.putInt(SELECT_CHESS_POINT, selectChessPoint);
+        data.putInt(LAST_MOVE_ORIGIN_POINT, lastMoveOriginPoint);
+        data.putInt(LAST_MOVE_ORIGIN_STACK_COUNT, lastMoveOriginStackCount);
         data.putBoolean(CHECKMATE, checkmate);
         data.putBoolean(REPEAT, repeat);
         data.putBoolean(MOVE_NUMBER_LIMIT, moveNumberLimit);
@@ -101,6 +108,10 @@ public class TileEntityJChess extends TileEntityJoy implements IBoardGameEntityB
         CompoundTag data = getPersistentData();
         chessCounter = data.getInt(CHESS_COUNTER);
         selectChessPoint = data.getInt(SELECT_CHESS_POINT);
+        lastMoveOriginPoint = data.contains(LAST_MOVE_ORIGIN_POINT, Tag.TAG_INT)
+                ? data.getInt(LAST_MOVE_ORIGIN_POINT) : -1;
+        lastMoveOriginStackCount = data.contains(LAST_MOVE_ORIGIN_STACK_COUNT, Tag.TAG_INT)
+                ? Math.max(0, data.getInt(LAST_MOVE_ORIGIN_STACK_COUNT)) : 0;
         String savedSfen = data.getString(CHESS_DATA);
         chessData = savedSfen.isBlank() ? Position.startPosition() : Position.parse(savedSfen);
         checkmate = data.getBoolean(CHECKMATE);
@@ -139,6 +150,8 @@ public class TileEntityJChess extends TileEntityJoy implements IBoardGameEntityB
     public void reset() {
         this.chessCounter = 1;
         this.selectChessPoint = -1;
+        this.lastMoveOriginPoint = -1;
+        this.lastMoveOriginStackCount = 0;
         this.checkmate = false;
         this.repeat = false;
         this.moveNumberLimit = false;
@@ -170,6 +183,8 @@ public class TileEntityJChess extends TileEntityJoy implements IBoardGameEntityB
 
         this.chessCounter = this.chessData.moveNumber();
         this.selectChessPoint = -1;
+        this.lastMoveOriginPoint = -1;
+        this.lastMoveOriginStackCount = 0;
         this.checkmate = false;
         this.repeat = false;
         this.moveNumberLimit = false;
@@ -251,6 +266,22 @@ public class TileEntityJChess extends TileEntityJoy implements IBoardGameEntityB
 
     public void setSelectChessPoint(int selectChessPoint) {
         this.selectChessPoint = selectChessPoint;
+        this.lastMoveOriginPoint = -1;
+        this.lastMoveOriginStackCount = 0;
+    }
+
+    public int getLastMoveOriginPoint() {
+        return lastMoveOriginPoint;
+    }
+
+    public int getLastMoveOriginStackCount() {
+        return lastMoveOriginStackCount;
+    }
+
+    public void setMoveHighlight(int originPoint, int destinationPoint, int originStackCount) {
+        this.lastMoveOriginPoint = originPoint;
+        this.lastMoveOriginStackCount = Math.max(0, originStackCount);
+        this.selectChessPoint = destinationPoint;
     }
 
     public boolean isRepeat() {
